@@ -3477,8 +3477,8 @@ window.AC_MERD = {
       </div>
 
       <div class="pager">
-        <button ${prev ? `data-go="point/${prev.c}"` : 'disabled'}>← ${prev ? prev.n : '—'}<span style="display:block;font-size:9.5px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;letter-spacing:.02em;margin-top:1px">Prev: ${prev ? (((window.AC_EN.P[prev.c] || {}).en) || '') : ''}</span></button>
-        <button ${next ? `data-go="point/${next.c}"` : 'disabled'}>${next ? next.n : '—'} →<span style="display:block;font-size:9.5px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;letter-spacing:.02em;margin-top:1px">Next: ${next ? (((window.AC_EN.P[next.c] || {}).en) || '') : ''}</span></button>
+        <button ${prev ? `data-go="point/${prev.c}"` : 'disabled'} style="justify-content:flex-start">${prev ? `${prev.c} ${prev.n}` : '—'} ←</button>
+        <button ${next ? `data-go="point/${next.c}"` : 'disabled'} style="justify-content:flex-end">${next ? `→ ${next.c} ${next.n}` : '—'}</button>
       </div>
       <div style="height:10px"></div>
     `;
