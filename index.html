@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
 <title>腧穴 361 · 一穴多面 一处多解 | Acupoints 361</title>
 <meta name="description" content="腧穴 361：十四经 361 个腧穴的中英双语多维度学习工具。一穴多面，一处多解。">
 <meta name="theme-color" content="#f4efe4">
@@ -47,6 +47,9 @@ body {
     repeating-linear-gradient(45deg, rgba(255,255,255,.16) 0 2px, transparent 2px 6px);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 允许双指缩放；禁用双击缩放，避免点到按钮时误放大 */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 .serif { font-family: 'Palatino', 'Palatino Linotype', 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', Georgia, serif; }
