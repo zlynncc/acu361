@@ -14,6 +14,22 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<!-- 分享卡片：微信 / iMessage / 社交平台抓取这些信息 -->
+<meta name="description" content="腧穴 361 · 一穴多面，一处多解。十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="腧穴 361">
+<meta property="og:title" content="腧穴 361 · 一穴多面，一处多解">
+<meta property="og:description" content="十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
+<meta property="og:image" content="/share-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="腧穴 361 · 一穴多面，一处多解">
+<meta name="twitter:description" content="十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
+<meta name="twitter:image" content="/share-cover.png">
+<meta name="theme-color" content="#f4efe4">
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -632,6 +648,212 @@ body {
 .btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
 .btn.primary.done { background: var(--cinnabar); border-color: var(--cinnabar); }
 .btn.fav.on { background: var(--cinnabar-soft); border-color: #eccabd; color: var(--cinnabar); }
+.btn.ghost { background: transparent; box-shadow: none; color: var(--ink2); }
+
+/* 分享卡片 */
+.share-box {
+  margin-top: 18px;
+  padding: 15px 16px 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+}
+.share-t { font-size: 14px; font-weight: 600; letter-spacing: .08em; color: var(--ink); }
+.share-t span { font-family: Georgia, 'Palatino', serif; font-style: italic; font-size: 11px; color: var(--ink3); letter-spacing: .04em; margin-left: 4px; }
+.share-d { margin-top: 6px; font-size: 11.5px; line-height: 1.85; color: var(--ink2); }
+.share-btns { display: flex; gap: 9px; margin-top: 12px; }
+.share-btns .btn { height: 42px; font-size: 12.5px; letter-spacing: .06em; }
+
+/* 轻提示 */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 12px);
+  max-width: 84vw;
+  padding: 10px 16px;
+  background: rgba(35, 42, 48, .93);
+  color: #fff;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: .03em;
+  border-radius: 11px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s, transform .22s;
+  z-index: 999;
+  text-align: center;
+}
+#toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- 添加到主屏幕引导 ---------- */
+.a2hs-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 130%);
+  width: min(420px, calc(100vw - 24px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px 11px 14px;
+  background: rgba(255, 253, 248, .97);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(70, 55, 30, .06), 0 14px 34px -14px rgba(70, 55, 30, .3);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .42s cubic-bezier(.22, .8, .3, 1), opacity .32s;
+  z-index: 900;
+}
+.a2hs-bar.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.a2hs-ic {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--paper-deep);
+  color: var(--gold);
+  font-size: 15px;
+  line-height: 1;
+}
+.a2hs-tx { flex: 1 1 auto; min-width: 0; }
+.a2hs-t {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--ink);
+  font-family: 'Palatino', 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif;
+  white-space: nowrap;
+}
+.a2hs-s {
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: var(--ink3);
+  letter-spacing: .02em;
+  font-style: italic;
+  font-family: Georgia, 'Palatino', serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.a2hs-how {
+  flex: 0 0 auto;
+  height: 30px;
+  padding: 0 13px;
+  border: 1px solid var(--cinnabar);
+  background: var(--cinnabar);
+  color: #fff;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.a2hs-how:active { transform: scale(.97); }
+.a2hs-x {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--ink3);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.a2hs-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 42, 48, .38);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .26s;
+  z-index: 950;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.a2hs-mask.on { opacity: 1; pointer-events: auto; }
+.a2hs-sheet {
+  width: min(460px, 100%);
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 22px 22px calc(24px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(100%);
+  transition: transform .34s cubic-bezier(.22, .8, .3, 1);
+  max-height: 82vh;
+  overflow-y: auto;
+}
+.a2hs-mask.on .a2hs-sheet { transform: translateY(0); }
+.a2hs-sheet h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  font-family: 'Palatino', 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif;
+}
+.a2hs-sheet .sub {
+  margin-top: 4px;
+  font-size: 10.5px;
+  color: var(--ink3);
+  letter-spacing: .1em;
+  font-style: italic;
+  font-family: Georgia, 'Palatino', serif;
+}
+.a2hs-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+.a2hs-num {
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  font-family: Georgia, serif;
+}
+.a2hs-step .tx { font-size: 13px; line-height: 1.65; color: var(--ink); letter-spacing: .02em; }
+.a2hs-step .tx b { color: var(--cinnabar); font-weight: 600; }
+.a2hs-step .tx .en {
+  display: block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--ink3);
+  font-style: italic;
+  font-family: Georgia, 'Palatino', serif;
+  line-height: 1.6;
+}
+.a2hs-sheet .close {
+  width: 100%;
+  height: 44px;
+  margin-top: 22px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink2);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
 
 .pager {
   display: flex;
@@ -931,6 +1153,21 @@ body {
 <main class="view" id="view"></main>
 <nav class="tabbar" id="tabbar"></nav>
 </div></div>
+
+<!-- 添加到主屏幕 · 引导 -->
+<div class="a2hs-bar" id="a2hsBar">
+  <div class="a2hs-ic">☰</div>
+  <div class="a2hs-tx">
+    <div class="a2hs-t">置于主屏，随手可查</div>
+    <div class="a2hs-s">Add to Home Screen · 像 App 一样打开</div>
+  </div>
+  <button class="a2hs-how" id="a2hsHow">怎样装</button>
+  <button class="a2hs-x" id="a2hsLater" aria-label="关闭">×</button>
+</div>
+
+<div class="a2hs-mask" id="a2hsMask">
+  <div class="a2hs-sheet" id="a2hsSheet"></div>
+</div>
 <script>
 /* meridians.js */
 /* 十四经元数据 */
@@ -3157,7 +3394,8 @@ window.AC_MERD = {
     setTopbar({ title: p.n, titleEn: p.py, back: 'mer/' + p.m, sub: p.c });
     setTab('home');
 
-    const sibs = POINTS.filter(q => q.m === p.m);
+    const sibs = POINTS.filter(q => q.m === p.m)
+      .sort((a, b) => parseInt(a.c.replace(/^[A-Z]+/, '')) - parseInt(b.c.replace(/^[A-Z]+/, '')));
     const idx = sibs.findIndex(q => q.c === p.c);
     const prev = sibs[idx - 1], next = sibs[idx + 1];
     const isLearned = learned.has(p.c);
@@ -3775,7 +4013,7 @@ window.AC_MERD = {
     view.innerHTML = `
       <section class="hero" style="padding-bottom:4px">
         <div class="kicker">ACUPUNCTURE QUESTION BANK</div>
-        <h2 class="serif">针灸综合题库</h2>
+        <h2 class="serif" style="font-size:26px">针灸综合题库</h2>
         <p>穴位 · 配穴 · 针灸技术 · 洁针技术 · 全部实时生成 · 无限练习<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">Points · prescriptions · needling · CNT — all generated live, unlimited practice</span></p>
       </section>
 
@@ -3966,6 +4204,57 @@ window.AC_MERD = {
     view.scrollTop = 0;
   }
 
+  /* ---------------- 分享 ---------------- */
+  const SHARE_URL = 'https://acu361.vercel.app/';
+  const SHARE_TITLE = '腧穴 361 · 一穴多面，一处多解';
+  const SHARE_TEXT = '十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。';
+
+  function toast(msg) {
+    let t = document.getElementById('toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => t.classList.remove('on'), 2000);
+  }
+
+  async function doShare() {
+    /* 优先调用系统分享面板（iOS/Android 均可直接选微信、短信、邮件） */
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL });
+        return;
+      } catch (err) {
+        /* 用户取消就不提示；其他错误落到复制 */
+        if (err && err.name === 'AbortError') return;
+      }
+    }
+    copyLink();
+  }
+
+  async function copyLink() {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(SHARE_URL);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = SHARE_URL;
+        ta.style.cssText = 'position:fixed;top:-999px;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      toast('链接已复制，去微信粘贴发送 · Link copied');
+    } catch (e) {
+      toast('请手动复制：' + SHARE_URL);
+    }
+  }
+
   /* ---------------- 我的 ---------------- */
   let meTab = 'fav';
 
@@ -4017,8 +4306,18 @@ window.AC_MERD = {
         </div>`;
       })()}
 
-      <div style="display:flex;gap:10px;margin-top:16px">
-        <button class="btn" data-act="reset">清空学习记录 · Reset</button>
+      <div class="share-box">
+        <div class="share-t">分享给同学 <span>Share</span></div>
+        <div class="share-d">把「腧穴 361」发给同学、同事或学生，打开即可用，无需注册。<br>
+          <span style="font-style:italic">Send Acupoints 361 to classmates or students — opens instantly, no sign-up.</span></div>
+        <div class="share-btns">
+          <button class="btn" data-act="share">分享链接 · Share</button>
+          <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn ghost" data-act="reset">清空学习记录 · Reset</button>
       </div>
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3)">
         所有记录保存在本机浏览器中，不会上传；更换设备或清除浏览器数据后将重置，请留意。<br>
@@ -4196,7 +4495,7 @@ window.AC_MERD = {
     view.innerHTML = `
       <section class="hero" style="padding-bottom:4px">
         <div class="kicker">CALIFORNIA REQUIRED · NEEDLING &amp; CNT</div>
-        <h2 class="serif">针灸技术与<br>洁针技术</h2>
+        <h2 class="serif" style="font-size:26px">针灸技术与<br>洁针技术</h2>
         <p>加州执业要求的两大技能体系 · 针刺手法 ${TECH[0].items.length} 章 + 洁针技术 ${TECH[1].items.length} 章 · 中英对照<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">The two skill systems required for California licensure · ${TECH[0].items.length} needling chapters + ${TECH[1].items.length} CNT chapters · bilingual</span></p>
       </section>
       ${TECH.map(c => `
@@ -4381,14 +4680,14 @@ window.AC_MERD = {
     view.innerHTML = `
       <section class="hero" style="padding-bottom:4px">
         <div class="kicker">POINT PRESCRIPTIONS · 配方</div>
-        <h2 class="serif">配穴处方</h2>
+        <h2 class="serif" style="font-size:26px">配穴处方</h2>
         <p>按科别分级 · ${RX_TOTAL} 张常用处方 · 主穴 / 加减 / 方义 · 中英对照<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">By category · ${RX_TOTAL} prescriptions · principal points, modifications &amp; rationale · bilingual</span></p>
       </section>
       ${RX.map(c => `
         <div class="card subj-row" data-rxcat="${c.cat}" style="padding:14px 15px;border-radius:16px">
           <span class="subj-icon" style="width:38px;height:38px;font-size:17px">${c.icon}</span>
           <div class="subj-text">
-            <div class="subj-name" style="font-size:16px">${c.cat}<span class="subj-en">${c.en}</span></div>
+            <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${c.cat}<span class="subj-en">${c.en}</span></div>
             <div class="subj-desc">${c.items.map(x => x.t).join(' · ')}</div>
           </div>
           <div class="subj-count">${c.items.length} 方 · RX</div>
@@ -4416,7 +4715,7 @@ window.AC_MERD = {
           <div class="subj-row" data-rxitem="${c.cat}" data-rxidx="${i}">
             <span class="subj-icon">${c.icon}</span>
             <div class="subj-text">
-              <div class="subj-name">${x.t}<span class="subj-en">${x.en}</span></div>
+              <div class="subj-name" style="font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${x.t}<span class="subj-en">${x.en}</span></div>
               <div class="subj-desc">主穴 Principal：${x.p.map(pt => pt[0]).join('、')}</div>
             </div>
             <span class="chev">${ICON.chev}</span>
@@ -4583,6 +4882,10 @@ window.AC_MERD = {
           learned.clear(); fav.clear(); persist();
           viewMe();
         }
+      } else if (a === 'share') {
+        doShare();
+      } else if (a === 'copy') {
+        copyLink();
       } else if (a === 'learn' || a === 'fav') {
         const { arg } = parseHash();
         const p = byCode[arg];
@@ -4598,7 +4901,116 @@ window.AC_MERD = {
 
   view.addEventListener('scroll', () => {
     topbar.classList.toggle('scrolled', view.scrollTop > 4);
+    checkA2HS();
   }, { passive: true });
+
+  /* ---------------- 添加到主屏幕引导 ---------------- */
+  const A2HS_KEY = 'acu361.a2hs';       /* 记录：later=7 天后再问 / done=不再问 */
+  const IS_STANDALONE = window.matchMedia('(display-mode: standalone)').matches ||
+                        window.navigator.standalone === true;
+  const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const A2HS_SCROLL_TRIGGER = 260;      /* 首页滑过约 260px 时才出现，不打扰首屏 */
+  let a2hsShown = false;
+  let deferredPrompt = null;
+
+  function a2hsState() {
+    try { return localStorage.getItem(A2HS_KEY) || ''; } catch (e) { return ''; }
+  }
+  function a2hsSet(v) {
+    try { localStorage.setItem(A2HS_KEY, v); } catch (e) {}
+  }
+
+  function showA2HS() {
+    if (a2hsShown || IS_STANDALONE) return;
+    if (a2hsState() === 'done') return;
+    const later = Number(a2hsState().split(':')[1] || 0);
+    if (a2hsState().startsWith('later') && Date.now() < later) return;
+    a2hsShown = true;
+    document.getElementById('a2hsBar').classList.add('on');
+  }
+  function hideA2HS() {
+    document.getElementById('a2hsBar').classList.remove('on');
+  }
+
+  /* 只在首页（未进入具体穴位/章节）且滑过阈值时提示 */
+  function checkA2HS() {
+    if (a2hsShown) return;
+    const h = location.hash.replace(/^#\/?/, '').split('/')[0] || 'home';
+    if (h !== 'home') return;
+    if (view.scrollTop > A2HS_SCROLL_TRIGGER) showA2HS();
+  }
+
+  function a2hsSheetHTML() {
+    const ios = IS_IOS;
+    const steps = ios ? [
+      ['点底部中间的 <b>分享按钮</b>（方框带向上箭头）', 'Tap the Share button in Safari’s toolbar'],
+      ['在菜单里向下滑，选 <b>添加到主屏幕</b>', 'Scroll down and choose “Add to Home Screen”'],
+      ['右上角点 <b>添加</b>，桌面就会出现「腧穴 361」', 'Tap “Add” — the app icon appears on your Home Screen']
+    ] : [
+      ['点右上角 <b>⋮ 菜单</b>', 'Tap the ⋮ menu in Chrome'],
+      ['选 <b>添加到主屏幕 / 安装应用</b>', 'Choose “Add to Home screen” or “Install app”'],
+      ['点 <b>安装</b>，桌面就会出现「腧穴 361」', 'Tap “Install” — the app icon appears on your Home Screen']
+    ];
+    return `
+      <h3>装到主屏幕</h3>
+      <div class="sub">ADD TO HOME SCREEN · ${ios ? 'iOS / Safari' : 'ANDROID / Chrome'}</div>
+      ${steps.map((s, i) => `
+        <div class="a2hs-step">
+          <div class="a2hs-num">${i + 1}</div>
+          <div class="tx">${s[0]}<span class="en">${s[1]}</span></div>
+        </div>`).join('')}
+      <div style="margin-top:16px;padding:10px 12px;background:var(--paper);border-radius:10px;font-size:11px;line-height:1.75;color:var(--ink2)">
+        装好后从桌面图标打开，就没有浏览器地址栏，和 App 一样，也能双指放大。
+      </div>
+      <button class="close" id="a2hsClose">知道了 · Got it</button>
+    `;
+  }
+
+  function openA2HSSheet() {
+    const mask = document.getElementById('a2hsMask');
+    document.getElementById('a2hsSheet').innerHTML = a2hsSheetHTML();
+    mask.classList.add('on');
+    document.getElementById('a2hsClose').onclick = () => {
+      mask.classList.remove('on');
+      hideA2HS();
+      a2hsSet('done');
+    };
+  }
+
+  document.getElementById('a2hsHow').addEventListener('click', async () => {
+    /* Android/Chrome 支持原生安装，直接调起；否则显示图文步骤 */
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const r = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (r && r.outcome === 'accepted') { a2hsSet('done'); hideA2HS(); }
+      return;
+    }
+    openA2HSSheet();
+  });
+
+  document.getElementById('a2hsLater').addEventListener('click', () => {
+    hideA2HS();
+    a2hsSet('later:' + (Date.now() + 7 * 24 * 3600 * 1000));
+  });
+
+  document.getElementById('a2hsMask').addEventListener('click', e => {
+    if (e.target.id === 'a2hsMask') e.currentTarget.classList.remove('on');
+  });
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    a2hsSet('done');
+    hideA2HS();
+  });
+
+  /* 首屏若内容不足一屏（大屏），滚动事件不会触发：进来 3 秒后补一次判断 */
+  setTimeout(() => { if (view.scrollHeight <= view.clientHeight + 40) showA2HS(); }, 3000);
 
   window.addEventListener('hashchange', () => { mapSide = 'f'; render(); });
   /* 外部脚本延迟到页面就绪后再插入时，数据可能晚到：重新渲染一次 */
