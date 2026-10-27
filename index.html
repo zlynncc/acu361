@@ -4307,11 +4307,11 @@ window.AC_MERD = {
       })()}
 
       <div class="share-box">
-        <div class="share-t">分享给同学 <span>Share</span></div>
-        <div class="share-d">把「腧穴 361」发给同学、同事或学生，打开即可用，无需注册。<br>
-          <span style="font-style:italic">Send Acupoints 361 to classmates or students — opens instantly, no sign-up.</span></div>
+        <div class="share-t">分享 <span>Share</span></div>
+        <div class="share-d">打开即可用，无需注册。<br>
+          <span style="font-style:italic">Opens instantly, no sign-up.</span></div>
         <div class="share-btns">
-          <button class="btn" data-act="share">分享链接 · Share</button>
+          <button class="btn" data-act="share">分享 · Share</button>
           <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
         </div>
       </div>
@@ -4884,6 +4884,8 @@ window.AC_MERD = {
         }
       } else if (a === 'share') {
         doShare();
+      } else if (a === 'wa') {
+        window.open('https://wa.me/?text=' + encodeURIComponent(SHARE_TITLE + '\n' + SHARE_TEXT + '\n' + SHARE_URL), '_blank');
       } else if (a === 'copy') {
         copyLink();
       } else if (a === 'learn' || a === 'fav') {
