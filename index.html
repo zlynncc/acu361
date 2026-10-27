@@ -724,7 +724,7 @@ body {
 }
 .a2hs-tx { flex: 1 1 auto; min-width: 0; }
 .a2hs-t {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: .06em;
   color: var(--ink);
@@ -1158,10 +1158,10 @@ body {
 <div class="a2hs-bar" id="a2hsBar">
   <div class="a2hs-ic">☰</div>
   <div class="a2hs-tx">
-    <div class="a2hs-t">置于主屏，随手可查</div>
-    <div class="a2hs-s">Add to Home Screen · 像 App 一样打开</div>
+    <div class="a2hs-t">添加到手机主屏幕</div>
+    <div class="a2hs-s">像 App 一样打开 · Add to Home Screen</div>
   </div>
-  <button class="a2hs-how" id="a2hsHow">怎样装</button>
+  <button class="a2hs-how" id="a2hsHow">查看步骤</button>
   <button class="a2hs-x" id="a2hsLater" aria-label="关闭">×</button>
 </div>
 
@@ -4955,7 +4955,7 @@ window.AC_MERD = {
       ['点 <b>安装</b>，桌面就会出现「腧穴 361」', 'Tap “Install” — the app icon appears on your Home Screen']
     ];
     return `
-      <h3>装到主屏幕</h3>
+      <h3>添加到手机主屏幕</h3>
       <div class="sub">ADD TO HOME SCREEN · ${ios ? 'iOS / Safari' : 'ANDROID / Chrome'}</div>
       ${steps.map((s, i) => `
         <div class="a2hs-step">
@@ -4963,7 +4963,7 @@ window.AC_MERD = {
           <div class="tx">${s[0]}<span class="en">${s[1]}</span></div>
         </div>`).join('')}
       <div style="margin-top:16px;padding:10px 12px;background:var(--paper);border-radius:10px;font-size:11px;line-height:1.75;color:var(--ink2)">
-        装好后从桌面图标打开，就没有浏览器地址栏，和 App 一样，也能双指放大。
+        完成后，手机桌面上会出现「腧穴 361」图标，以后从图标打开，就像正常 App 一样，没有地址栏，也能双指放大。
       </div>
       <button class="close" id="a2hsClose">知道了 · Got it</button>
     `;
