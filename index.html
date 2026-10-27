@@ -19,14 +19,14 @@
 <meta name="description" content="腧穴 361 · 一穴多面，一处多解。十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="腧穴 361">
-<meta property="og:title" content="腧穴 361 · 一穴多面，一处多解">
+<meta property="og:title" content="腧穴 361 · 多维研习">
 <meta property="og:description" content="十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
 <meta property="og:image" content="/share-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="腧穴 361 · 一穴多面，一处多解">
+<meta name="twitter:title" content="腧穴 361 · 多维研习">
 <meta name="twitter:description" content="十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。">
 <meta name="twitter:image" content="/share-cover.png">
 <meta name="theme-color" content="#f4efe4">
@@ -4206,8 +4206,9 @@ window.AC_MERD = {
 
   /* ---------------- 分享 ---------------- */
   const SHARE_URL = 'https://acu361.vercel.app/';
-  const SHARE_TITLE = '腧穴 361 · 一穴多面，一处多解';
+  const SHARE_TITLE = '腧穴 361 · 多维研习';
   const SHARE_TEXT = '十四经 361 个腧穴的定位、主治、特定穴属性与针灸技术，中英对照，随学随测。';
+  const SHARE_COVER = '/share-cover.png';
 
   function toast(msg) {
     let t = document.getElementById('toast');
@@ -4226,6 +4227,18 @@ window.AC_MERD = {
     /* 优先调用系统分享面板（iOS/Android 均可直接选微信、短信、邮件） */
     if (navigator.share) {
       try {
+        /* 尝试连分享封面图一起带上（支持文件分享的平台会显示图片） */
+        try {
+          const resp = await fetch(SHARE_COVER);
+          if (resp.ok) {
+            const blob = await resp.blob();
+            const file = new File([blob], 'acu361-share.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({ files: [file], title: SHARE_TITLE, text: SHARE_TEXT + '\n' + SHARE_URL });
+              return;
+            }
+          }
+        } catch (e2) { /* 图片分享失败，继续走普通链接分享 */ }
         await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL });
         return;
       } catch (err) {
