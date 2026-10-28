@@ -3736,36 +3736,77 @@ window.AC_MERD = {
   }
 
   /* ---------------- 特定穴归类 ---------------- */
+  /* cats 可写字符串，也可写 {name, en, match:正则} 的子项；
+     name 支持 "标题||副标题" 形式，副标题（如「脉会·太渊」）会小字显示在分类名旁 */
   const SPEC_GROUPS = [
     { id: 'wushu', name: '五输穴', en: 'Five Shu Points',
       desc: '十二经肘膝以下五类要穴，经气由浅入深：井主急证发热、荥主身热、输主体重节痛、经主喘咳寒热、合主逆气而泄。',
       cats: ['井穴', '荥穴', '输穴', '经穴', '合穴'] },
-    { id: 'yuanluo', name: '原穴 · 络穴', en: 'Yuan-Source & Luo Points',
-      desc: '原穴为脏腑原气留止之处，络穴沟通表里两经；原络配穴（主客配穴）以先病经之原穴配表里经之络穴。',
-      cats: ['原穴', '络穴'] },
-    { id: 'beimu', name: '背俞穴 · 募穴', en: 'Back-Shu & Front-Mu Points',
-      desc: '背俞穴位于膀胱经第 1 侧线，主慢性虚损；募穴聚于胸腹，主急性实证。俞募前后相配，疗效更佳。',
-      cats: ['背俞穴', '募穴'] },
+    { id: 'yuan', name: '原穴', en: 'Yuan-Source Points',
+      desc: '脏腑原气经过和留止之处，十二经各一，共 12 穴。阴经以输穴为原，阳经于输穴之后另设原穴。原穴最能反映脏腑盛衰，「五脏有疾，当取之十二原」。',
+      cats: [{ name: '十二经原穴', en: 'Yuan-Source', match: /^原穴$|^原穴；|；原穴$|；原穴；/ }] },
+    { id: 'luo', name: '络穴', en: 'Luo-Connecting Points',
+      desc: '络脉由经脉别出之处，共 15 穴：十二经各一，加任脉络鸠尾、督脉络长强、脾之大络大包。络穴沟通表里两经，既治本经病，也治相表里经之病。',
+      cats: [{ name: '十五络穴', en: 'Luo-Connecting', match: /络（穴）?|络穴|脾之大络|督脉络|任脉络/ }] },
+    { id: 'beishu', name: '背俞穴', en: 'Back-Shu Points',
+      desc: '脏腑之气输注于腰背部的腧穴，均位于足太阳膀胱经第 1 侧线（后正中线旁开 1.5 寸），按脏腑位置高低排列，主治相应脏腑及其相关的五官、皮肉筋骨病，偏于慢性虚损。',
+      cats: [{ name: '十二背俞穴', en: 'Back-Shu', match: /背俞穴/ }] },
+    { id: 'mu', name: '募穴', en: 'Front-Mu Points',
+      desc: '脏腑之气汇聚于胸腹部的腧穴，共 12 穴，位置与所属脏腑大体相应，主治相应脏腑病证，偏于急性实证。「前募后俞」与此相配即为俞募配穴。',
+      cats: [{ name: '十二募穴', en: 'Front-Mu', match: /募穴/ }] },
     { id: 'xi', name: '郄穴', en: 'Xi-Cleft Points',
-      desc: '经气深聚之处，共 16 穴（含阴跷、阳跷、阴维、阳维各一），善治本经急性病证与血证。',
+      desc: '经气深聚之处，共 16 穴（十二经各一，加阴跷、阳跷、阴维、阳维各一），善治本经急性病证与血证。',
       cats: ['郄穴'] },
     { id: 'xiahe', name: '下合穴', en: 'Lower He-Sea Points',
       desc: '六腑之气下合于足三阳经的六个腧穴，「合治内腑」，是治疗六腑病的主要穴位。',
       cats: ['下合穴'] },
     { id: 'bahui', name: '八会穴', en: 'Eight Influential Points',
-      desc: '脏、腑、气、血、筋、脉、骨、髓八类精气汇聚之穴，与此八类相关的病变均可取之。',
-      cats: ['八会穴'] },
+      desc: '脏、腑、气、血、筋、脉、骨、髓八类精气所会之处，每类各有一穴，共 8 穴；与此八类相关的病变均可取其所会之穴。',
+      cats: [
+        { name: '脏会||章门', en: 'Zang', match: /八会穴之脏会/ },
+        { name: '腑会||中脘', en: 'Fu', match: /八会穴之腑会/ },
+        { name: '气会||膻中', en: 'Qi', match: /八会穴之气会/ },
+        { name: '血会||膈俞', en: 'Blood', match: /八会穴之血会/ },
+        { name: '筋会||阳陵泉', en: 'Sinew', match: /八会穴之筋会/ },
+        { name: '脉会||太渊', en: 'Vessel', match: /八会穴之脉会/ },
+        { name: '骨会||大杼', en: 'Bone', match: /八会穴之骨会/ },
+        { name: '髓会||悬钟', en: 'Marrow', match: /八会穴之髓会/ }
+      ] },
     { id: 'baimai', name: '八脉交会穴', en: 'Eight Confluent Points',
-      desc: '十二经与奇经八脉相通的八个腧穴，四对经典配伍：公孙配内关、后溪配申脉、足临泣配外关、列缺配照海。',
-      cats: ['八脉交会穴'] }
+      desc: '十二经与奇经八脉相通的八个腧穴，上下肢各四穴，两两相配为四对：公孙配内关（胃心胸）、后溪配申脉（目内眦、颈项、肩胛）、足临泣配外关（目外眦、耳后、颊、颈、肩）、列缺配照海（肺系、咽喉、胸膈）。',
+      cats: [
+        { name: '通任脉||列缺', en: 'Ren Mai', match: /八脉交会穴（通任脉）/ },
+        { name: '通督脉||后溪', en: 'Du Mai', match: /八脉交会穴（通督脉）/ },
+        { name: '通冲脉||公孙', en: 'Chong Mai', match: /八脉交会穴（通冲脉）/ },
+        { name: '通带脉||足临泣', en: 'Dai Mai', match: /八脉交会穴（通带脉）/ },
+        { name: '通阴维脉||内关', en: 'Yin Wei Mai', match: /八脉交会穴（通阴维脉）/ },
+        { name: '通阳维脉||外关', en: 'Yang Wei Mai', match: /八脉交会穴（通阳维脉）/ },
+        { name: '通阴跷脉||照海', en: 'Yin Qiao Mai', match: /八脉交会穴（通阴跷脉）/ },
+        { name: '通阳跷脉||申脉', en: 'Yang Qiao Mai', match: /八脉交会穴（通阳跷脉）/ }
+      ] }
   ];
+
+  /* 分类名 / 副标题拆分 */
+  function catTitle(cat) {
+    const raw = typeof cat === 'string' ? cat : cat.name;
+    const i = raw.indexOf('||');
+    return i < 0 ? [raw, ''] : [raw.slice(0, i), raw.slice(i + 2)];
+  }
+  function catEn(cat) { return typeof cat === 'string' ? '' : (cat.en || ''); }
+  function catKey(cat) { const [t] = catTitle(cat); return t; }
 
   /* 从 spec 提取某类别的穴位 */
   function pointsOfCat(cat) {
     const out = [];
-    const re = cat === '井穴' ? /(^|[；;、])井穴/ : new RegExp('(^|[；;、])' + cat);
+    const rule = (typeof cat === 'object' && cat && cat.match) ? cat.match : null;
+    cat = catKey(cat);
     POINTS.forEach(p => {
       if (!p.spec) return;
+      if (rule) {
+        const t = p.spec.split(/[；;]/).map(x => x.trim()).find(x => rule.test(x));
+        if (t) out.push({ p, label: t });
+        return;
+      }
       const parts = p.spec.split(/[；;]/);
       for (const x of parts) {
         const t = x.trim();
@@ -3844,7 +3885,8 @@ window.AC_MERD = {
           return `<div class="subj-row" data-speccat="${g.id}:${i}" style="background:var(--card);border-radius:16px;margin-top:10px">
             <span class="subj-icon" style="width:38px;height:38px;font-size:16px">◎</span>
             <div class="subj-text">
-              <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${c}<span class="subj-en">${CAT_EN[c] || ''}</span></div>
+              <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${catTitle(c)[0]}<span class="subj-en">${catEn(c) || CAT_EN[catKey(c)] || ''}</span></div>
+              ${catTitle(c)[1] ? `<div style="font-size:11.5px;color:var(--cinnabar);letter-spacing:.06em;margin-top:3px">${catTitle(c)[1]}</div>` : ''}
               <div class="subj-desc">${list.slice(0, 6).map(x => x.p.n).join(' · ')}${list.length > 6 ? ' …' : ''}</div>
             </div>
             <div class="subj-count">${list.length} 穴</div>
@@ -3858,8 +3900,8 @@ window.AC_MERD = {
 
     const c = (catIdx !== undefined && g.cats[Number(catIdx)]) ? g.cats[Number(catIdx)] : null;
     setTopbar({
-      title: c ? c : g.name,
-      titleEn: c ? (CAT_EN[c] || g.en) : g.en,
+      title: c ? catTitle(c)[0] + (catTitle(c)[1] ? ' · ' + catTitle(c)[1] : '') : g.name,
+      titleEn: c ? (catEn(c) || CAT_EN[catKey(c)] || g.en) : g.en,
       back: c ? 'spec/' + g.id : 'spec',
       sub: c ? (specCatList(c).length + ' 穴') : (g.cats.length + ' 类')
     });
@@ -3874,7 +3916,7 @@ window.AC_MERD = {
       ${cats.map(cc => {
         const list = specCatList(cc);
         if (!list.length) return '';
-        return `<div class="sec-head"><h3>${cc} <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">${list.length} 穴</span></h3></div>
+        return `<div class="sec-head"><h3>${catTitle(cc)[0]}${catTitle(cc)[1] ? ` <span style="font-size:.72em;color:var(--cinnabar);font-weight:400;letter-spacing:.05em">${catTitle(cc)[1]}</span>` : ''} <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">${list.length} 穴</span></h3></div>
         <div class="point-list">
           ${list.map(({ p, label }) => `
             <div class="point-row ${learned.has(p.c) ? 'learned' : ''}" data-go="point/${p.c}">
