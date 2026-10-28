@@ -3942,7 +3942,7 @@ window.AC_MERD = {
               <div class="code-badge">${p.c}</div>
               <div class="prow-text">
                 <div class="pname">${p.n}<span class="dot"></span>
-                  <span class="tag gold" style="font-size:9px;padding:1px 6px">${label.replace(/（[木火土金水相]+）$/, '')}</span>
+                ${/^[足手]?.*（[木火土金水相]+）$/.test(label) ? `<span class="tag gold" style="font-size:9px;padding:1px 6px">${(label.match(/（[木火土金水相]+）$/) || [''])[0]}</span>` : ''}
                 </div>
                 ${showMer ? `<div style="font-size:11.5px;color:var(--cinnabar);letter-spacing:.04em;margin-top:2px">${merOf(p)}<span style="color:var(--ink3);font-style:italic;font-size:10.5px;letter-spacing:.02em"> · ${merEn(p)}</span></div>` : ''}
                 <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
