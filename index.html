@@ -5008,8 +5008,8 @@ window.AC_MERD = {
           <div style="margin-top:9px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:11px;line-height:1.8;color:var(--ink3);font-style:italic;font-family:Georgia,'Palatino',serif">${x.e}</div>
         </div>`).join('')}
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
-        理论内容按《经络腧穴学》全国规划教材整理，中英对照仅供学习参考。<br>
-        <span style="font-style:italic">Compiled from standard meridian-acupoint textbooks; bilingual notes for study reference only.</span>
+        经络与腧穴名称遵循 WHO 世界卫生组织标准穴位命名体系，中英对照仅供学习参考。<br>
+        <span style="font-style:italic">Meridian and point nomenclature follows the WHO Standard Acupuncture Nomenclature; bilingual notes for study reference only.</span>
       </div>
       <div style="height:8px"></div>
     `;
@@ -5196,12 +5196,13 @@ window.AC_MERD = {
         zh: '角度与深度以「得气而不伤」为原则：以骨度与解剖标志为依据，凡穴下有重要脏器、血管、神经者，一律浅刺或按规定角度，切忌盲目深刺。',
         e: 'Perpendicular for most limb points, oblique near organs, transverse on thin areas; never needle deeply over the thorax, eye region or medulla.' },
       { t: '得气', en: 'Arrival of Qi (Deqi)',
-        ul: ['患者感：酸、麻、胀、重，或沿经传导（循经感传）', '医者感：针下沉紧，「如鱼吞钩饵」，气未至则针下虚滑', '候气：得气慢者留针片刻以待气至', '催气：循摄、弹柄、刮柄、震颤等手法促使得气', '「气至而有效」：得气与否与疗效密切相关；《灵枢》「刺之要，气至而有效」'],
+        ul: ['患者感：酸、麻、胀、重，或沿经传导（循经感传）', '医者感：针下沉紧，「如鱼吞钩饵」，气未至则针下虚滑', '候气：得气慢者留针片刻以待气至', '催气：循摄、弹柄、刮柄、震颤等手法促使得气', '「气至而有效」：得气与否与疗效密切相关；《灵枢》「刺之要，气至而有效」', '欧美临床共识：针感强度因人因穴而异，不强求强烈针感；感觉不明显时先复核取穴与角度深度，而非加大刺激'],
         ulEn: ["Patient: soreness, numbness, distension, heaviness, or sensation transmitting along the channel",
          "Practitioner: a tight heavy grip, “like a fish swallowing the bait”; without qi the shaft feels loose and slippery",
          "Waiting for qi (hou qi): retain the needle briefly when arrival is slow",
          "Urging qi (cui qi): pressing-along, flicking, scraping the handle, vibrating",
-         "“Qi arrival brings effect”: deqi closely correlates with the therapeutic result (Lingshu)"],
+         "“Qi arrival brings effect”: deqi closely correlates with the therapeutic result (Lingshu)",
+         "US clinical consensus: deqi intensity varies by person and point — do not force strong sensations; recheck location and angle first instead of increasing stimulation"],
         zh: '得气（气至）是针刺产生疗效的关键标志。不得气时应分析原因：取穴不准、角度深度不当、患者体质虚弱等，调整后再施手法。',
         e: 'Deqi — soreness, numbness, distension or heaviness with a tight grip on the needle — is the hallmark of effective stimulation.' },
       { t: '基本手法：提插与捻转', en: 'Basic Manipulations: Lifting-Thrusting and Twirling',
@@ -5223,25 +5224,26 @@ window.AC_MERD = {
         zh: '辅助手法是基本手法的补充，多用于促气至、行针气、增强针感。临床上常以循、刮、弹、飞等法配合，形成各人流派的行针风格。',
         e: 'Pressing-along, flicking, scraping, shaking, flying and vibrating supplement the basic maneuvers to promote and conduct qi.' },
       { t: '补泻手法', en: 'Reinforcing and Reducing Methods',
-        ul: ['提插补泻：补法——重插轻提、幅度小、频率慢；泻法——重提轻插、幅度大、频率快', '捻转补泻：补法——捻转角度小、用力轻；泻法——角度大、用力重（左转/右转之说依流派）', '徐疾补泻：补法——进针慢出针快；泻法——进针快出针慢', '迎随补泻：顺经而刺为补，逆经而刺为泻', '呼吸补泻：患者呼气时进针吸气时出针为补，反之为泻', '开阔补泻：出针后速按针孔为补，出针时摇大针孔不按为泻', '复式手法：烧山火（三进一退，治寒证虚证）、透天凉（三退一进，治热证实证）'],
+        ul: ['提插补泻：补法——重插轻提、幅度小、频率慢；泻法——重提轻插、幅度大、频率快', '捻转补泻：补法——捻转角度小、用力轻；泻法——角度大、用力重（左转/右转之说依流派）', '徐疾补泻：补法——进针慢出针快；泻法——进针快出针慢', '迎随补泻：顺经而刺为补，逆经而刺为泻', '呼吸补泻：患者呼气时进针吸气时出针为补，反之为泻', '开阔补泻：出针后速按针孔为补，出针时摇大针孔不按为泻', '平补平泻（even method）：提插捻转均匀适度，不偏于补泻，临床最常用（美国教材称 even/neutral technique）', '复式手法：烧山火（三进一退，治寒证虚证）、透天凉（三退一进，治热证实证）'],
         ulEn: ["Lift-thrust: reinforce — heavy thrust, light lift, small slow amplitude; drain — heavy lift, light thrust, large fast amplitude",
          "Twirl: reinforce — small angle, gentle force; drain — large angle, strong force (left/right-turn rules vary by school)",
          "Slow-fast: reinforce — insert slowly, withdraw quickly; drain — insert quickly, withdraw slowly",
          "Following-opposing: needle with the flow of the meridian to reinforce, against the flow to drain",
          "Breath: insert on the patient's exhale and withdraw on the inhale to reinforce; reverse to drain",
          "Closing-open: press the hole quickly on withdrawal to reinforce; enlarge it without pressing to drain",
+         "Even method (ping bu ping xie): uniform, moderate lifting-thrusting and twirling, neither reinforcing nor draining — the most commonly used technique in US practice (even/neutral technique)",
          "Compound methods: Shaoshanhuo (“burning mountain fire” — three in, one out; cold and deficiency) and Tiantianliang (“heaven-cooling” — three out, one in; heat and excess)"],
         zh: '总则「虚则补之，实则泻之」。临床常以提插、捻转结合徐疾、迎随综合运用；复式手法（烧山火、透天凉）为多层单式的组合，须在熟练基础上施用。',
         e: 'General rule: tonify deficiency, drain excess. The compound methods Shaoshanhuo (fire-burning) and Tiantianliang (heaven-cooling) layer the simple techniques.' },
       { t: '留针与出针', en: 'Retention and Withdrawal',
-        ul: ['留针一般10~20分钟；慢性、疼痛、痉挛性疾病可适当延长', '留针期间可间歇行针（每隔5~10分钟行针一次）以维持针感', '出针：先以消毒干棉球压于针孔旁，缓慢退针至皮下后快速拔出', '出针后立即用干棉球按压针孔，确认无出血', '核对针数：出针后清点用针数量，与进针数一致，防止遗漏（尤其背部多针）'],
-        ulEn: ["Retain 10-20 minutes generally; longer for chronic, painful or spasmodic conditions",
+        ul: ['留针一般15~30分钟（欧美常规）；慢性、疼痛、痉挛性疾病可适当延长', '留针期间可间歇行针（每隔5~10分钟行针一次）以维持针感', '出针：先以消毒干棉球压于针孔旁，缓慢退针至皮下后快速拔出', '出针后立即用干棉球按压针孔，确认无出血', '核对针数：出针后清点用针数量，与进针数一致，防止遗漏（尤其背部多针）'],
+        ulEn: ["Retain 15-30 minutes generally (standard in US practice); longer for chronic, painful or spasmodic conditions",
          "Manipulate intermittently during retention (every 5-10 minutes) to sustain the deqi",
          "Withdrawal: place a sterile dry cotton ball beside the hole, withdraw slowly to the subcutaneous level then remove promptly",
          "Press the hole immediately with the cotton ball after withdrawal and confirm no bleeding",
          "Count the needles after removal — must match the number inserted (especially multi-point back treatments)"],
         zh: '出针是治疗闭环的重要环节：按压止血、清点针数、观察患者反应缺一不可。面部、头皮等易出血部位出针后应延长按压时间。',
-        e: 'Retain 10–20 minutes (longer for pain/spasm), withdraw gently with cotton pressure, and always count needles before and after.' },
+        e: 'Retain 15–30 minutes (longer for pain/spasm), withdraw gently with cotton pressure, and always count needles before and after.' },
       { t: '常用特殊针法', en: 'Special Needling Techniques',
         ul: ['三棱针（放血）：点刺、散刺、刺络，治瘀阻、热证、急证（如少商点刺治咽痛）', '皮肤针（梅花针）：叩刺皮肤，循经或局部叩刺，治斑秃、近视、不寐', '皮内针：揿钉式/颗粒式留置于皮内，用于慢性、痛证持续刺激', '电针：针柄接微量电流，疏密波、连续波等，镇痛与神经肌肉疾病常用', '温针灸：针柄置艾炷点燃，温热经针体传导，治寒证、虚寒痛证'],
         ulEn: ["Three-edged needle (bloodletting): spot, scatter or vessel pricking for stasis, heat and acute conditions (prick LU11 for sore throat)",
@@ -5254,8 +5256,8 @@ window.AC_MERD = {
     ]},
     { cat: '洁针技术', en: 'CLEAN NEEDLE TECHNIQUE (CNT)', icon: '✚', items: [
       { t: 'CNT 概述与法规要求', en: 'Overview and Regulatory Requirements',
-        ul: ['洁针技术（Clean Needle Technique）是美国针灸执业的法定技能要求，加州执照申请者须完成 CNT 课程并通过考核', '核心目标：防止感染传播（血源性病原体如乙肝、丙肝、HIV），保护患者与医者', '核心原则：一次性无菌针具、严格皮肤消毒、针体不可触碰、锐器规范处置', '遵循标准预防（Standard Precautions）：视所有血液体液为有传染性'],
-        ulEn: ["CNT is a legally required skill for US acupuncture licensure; California applicants must complete a CNT course and pass its examination",
+        ul: ['洁针技术（Clean Needle Technique）是美国针灸执业的法定技能要求，依据 CCAOM《Clean Needle Technique Manual》（现行第 7 版）培训考核，NCCAOM 与加州执照申请者均须通过', '核心目标：防止感染传播（血源性病原体如乙肝、丙肝、HIV），保护患者与医者', '核心原则：一次性无菌针具、严格皮肤消毒、针体不可触碰、锐器规范处置', '遵循标准预防（Standard Precautions，CDC）：视所有血液体液为有传染性'],
+        ulEn: ["CNT is a legally required skill for US acupuncture licensure; training and examination follow the CCAOM Clean Needle Technique Manual (currently 7th edition) for both NCCAOM and California applicants",
          "Goal: prevent transmission of infection (bloodborne pathogens — HBV, HCV, HIV), protecting both patient and practitioner",
          "Core principles: single-use sterile needles, strict skin antisepsis, never touch the needle shaft, disciplined sharps disposal",
          "Follow Standard Precautions: treat all blood and body fluids as potentially infectious"],
@@ -5281,12 +5283,13 @@ window.AC_MERD = {
         zh: '「一次性」与「不触碰针体」是针具管理的两条铁律。挑针时只持针柄或针管，针体一旦触碰到皮肤以外的任何非无菌表面，立即弃用。',
         e: 'Single-use only: inspect the package, touch only the handle, discard any needle that contacts a non-sterile surface.' },
       { t: '皮肤消毒与无菌操作', en: 'Skin Antisepsis and Aseptic Technique',
-        ul: ['消毒范围：以穴位为中心、直径不小于5cm（约2英寸）', '消毒剂：75%酒精或碘伏棉签/棉球，由中心向外螺旋擦拭，不得来回涂擦', '消毒后须待干（约1分钟）再进针，忌用口吹干或扇干', '已消毒区域不得再触碰；需要定位时须重新消毒', '耳穴、头皮等特殊部位同样须消毒；去除局部油脂影响消毒效果时应先清洁', '拔罐、刺络部位操作前后均须消毒，接触血液的器具一次性使用'],
+        ul: ['消毒范围：以穴位为中心、直径不小于5cm（约2英寸）', '消毒剂：70%异丙醇（isopropyl alcohol）或碘伏棉签/棉球，由中心向外螺旋擦拭，不得来回涂擦', '消毒后须待干再进针，忌用口吹干或扇干', '已消毒区域不得再触碰；需要定位时须重新消毒（先定穴后消毒，或消毒后以无菌方式定位）', '无菌管针（guide tube）可接触皮肤辅助进针，但管身只能持尾端推出针体', '耳穴须分别消毒耳廓两面；起针后如贴耳豆（ear seeds），按压部位皮肤须完好', '拔罐、刺络部位操作前后均须消毒，接触血液的器具一次性使用'],
         ulEn: ["Prep field: a circle centered on the point with a diameter of at least 5 cm (about 2 inches)",
-         "Antiseptic: 75% alcohol or iodophor swab, one outward spiral from the center — never scrub back and forth",
-         "Let the site dry (about 1 minute) before needling; never blow or fan it dry",
-         "Do not re-touch the prepped area; if localization is needed, re-prep before insertion",
-         "Auricular and scalp points are disinfected the same way; cleanse oily skin before prep",
+         "Antiseptic: 70% isopropyl alcohol or iodophor swab, one outward spiral from the center — never scrub back and forth",
+         "Let the site air-dry fully before needling; never blow or fan it dry",
+         "Do not re-touch the prepped area; locate first then prep, or re-prep if localization is needed after prep",
+         "A sterile guide tube may touch the skin to assist insertion — hold only the tube end and push the needle out",
+         "Auricular points: disinfect both surfaces of the auricle; ear seeds are applied only to intact skin",
          "Disinfect before and after cupping or bloodletting; any tool that contacts blood is single-use"],
         zh: '消毒的基本动作是「由内向外、单向螺旋、待干进针」。范围不足、来回涂擦、湿针即刺是最常见的违规操作。',
         e: 'Antisepsize a ≥5 cm circular field in one outward spiral, allow it to dry fully, and never re-touch the prepped site.' },
@@ -5301,15 +5304,15 @@ window.AC_MERD = {
         zh: '从进针到出针的全过程中，无菌屏障必须始终完整：手只接触针柄，棉球一用一弃，出针必查针体完整并清点针数。',
         e: 'Touch only handles during treatment, withdraw with cotton pressure, verify needle integrity, and count needles.' },
       { t: '锐器与医疗废弃物处置', en: 'Sharps and Waste Disposal',
-        ul: ['用过的针直接投入锐器盒（Sharps Container），不得弯曲、回套针帽或徒手传递', '锐器盒达3/4满即封闭更换，不可摇晃压实', '刺络、放血用的三棱针、刀片等同样入锐器盒', '被血液污染的棉球、敷料入医疗废物袋（红袋），与普通垃圾分开处理', '发生针刺伤（职业暴露）：立即挤血、流水冲洗、消毒、报告并按流程评估（乙肝/丙肝/HIV监测）', '诊室须有书面的暴露控制计划（Exposure Control Plan）与应急流程'],
+        ul: ['用过的针直接投入锐器盒（Sharps Container），不得弯曲、回套针帽或徒手传递', '锐器盒达3/4满即封闭更换，不可摇晃压实', '刺络、放血用的三棱针、刀片等同样入锐器盒', '被血液污染的棉球、敷料入医疗废物袋（红袋），与普通垃圾分开处理', '发生针刺伤（职业暴露）：立即用肥皂和流水冲洗伤口（勿挤压揉搓、勿用消毒剂浸泡），消毒覆盖后报告，并按流程评估（乙肝/丙肝/HIV监测）', '诊室须有书面的暴露控制计划（Exposure Control Plan，OSHA 要求）与应急流程'],
         ulEn: ["Drop used needles straight into the sharps container — never bend, recap, or pass them by hand",
          "Replace the sharps container at 3/4 full; never shake it or compress the contents",
          "Lancets and blades used for bloodletting likewise go into the sharps container",
          "Blood-soaked cotton and dressings go into medical-waste (red) bags, separate from ordinary trash",
-         "Needlestick exposure: squeeze, flush under running water, disinfect, report, and follow the HBV/HCV/HIV monitoring protocol",
+         "Needlestick exposure (per CDC): wash with soap and running water immediately — do not squeeze or scrub; cover, report, and follow the HBV/HCV/HIV monitoring protocol",
          "The clinic must maintain a written Exposure Control Plan and emergency procedures"],
-        zh: '锐器处置的核心是「针与患者分离后，手不再接触针体」。针刺伤处理牢记五步：挤、冲、消、报、随（随访监测）。',
-        e: 'Never recap needles — deposit directly into the sharps container; after a needlestick: squeeze, flush, disinfect, report, and follow up.' },
+        zh: '锐器处置的核心是「针与患者分离后，手不再接触针体」。针刺伤处理牢记五步：冲（肥皂流水冲洗，勿挤压）、消、盖、报、随（随访监测）。',
+        e: 'Never recap needles — deposit directly into the sharps container; after a needlestick: wash (do not squeeze), cover, report, and follow up.' },
       { t: '针刺意外与应急处理', en: 'Needling Accidents and Emergency Management',
         ul: ['晕针：患者面色苍白、心慌头晕——立即出针、平卧、饮温水，重者掐水沟、灸百会；治疗前询问进食与紧张情况', '滞针：肌肉缠绕——循按周围、反向捻转、留针，忌强行拔出', '弯针：恢复进针时的体位，顺弯曲方向缓慢出针', '断针：保持镇静，残端外露用镊子取出；完全陷入须外科处理并X线定位', '血肿：小的按压止血即可，大血肿先冷敷后热敷', '气胸预防：胸背、锁骨上窝穴位按规定角度浅刺，出现呼吸困难立即转诊', '过敏：对酒精、碘伏、金属过敏者换用替代品，出现过敏反应及时处理'],
         ulEn: ["Syncope: pallor, palpitations, dizziness — withdraw all needles at once, lay flat, give warm water; severe: pinch GV26, moxa GV20; screen for fasting and anxiety before treatment",
@@ -5356,7 +5359,7 @@ window.AC_MERD = {
           <span class="chev">${ICON.chev}</span>
         </div>`).join('')}
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
-        内容按《刺法灸法学》规划教材与美国 CNT（Clean Needle Technique）规范整理，中英对照，供学习与操作自查参考；具体法规请以加州针灸局及 CNT 委员会最新版本为准。<br><span style="font-style:italic;font-family:Georgia,serif">Compiled from standard needling textbooks and the US Clean Needle Technique manual; always follow the latest rules of the California Acupuncture Board and the CNT committee.</span>
+        针刺手法按 Deadman《A Manual of Acupuncture》整理，术语与 NCCAOM 考试口径一致；洁针技术按 CCAOM《Clean Needle Technique Manual》（第 7 版）及 CDC/OSHA 规范整理，中英对照，供学习与操作自查参考；具体法规请以加州针灸局（California Acupuncture Board）及 CCAOM 最新版本为准。<br><span style="font-style:italic;font-family:Georgia,serif">Needling techniques follow Deadman's A Manual of Acupuncture (NCCAOM terminology); CNT follows the CCAOM Clean Needle Technique Manual (7th ed.) and CDC/OSHA standards. Always follow the latest rules of the California Acupuncture Board and CCAOM.</span>
       </div>
       <div style="height:8px"></div>`;
     view.scrollTop = 0;
@@ -5538,7 +5541,7 @@ window.AC_MERD = {
           <span class="chev">${ICON.chev}</span>
         </div>`).join('')}
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
-        处方按《针灸学》规划教材及《针灸处方学》常用方整理，仅供学习参考；临床应用须辨证加减，急重症及时就医。<br><span style="font-style:italic;font-family:Georgia,serif">Compiled from standard acupuncture textbooks for study reference; modify by pattern differentiation, and seek urgent care for acute conditions.</span>
+        处方为常用针灸基础方，仅供学习参考；临床应用须辨证加减，急重症及时就医。<br><span style="font-style:italic;font-family:Georgia,serif">Classic foundational prescriptions for study reference; modify by pattern differentiation, and seek urgent care for acute conditions.</span>
       </div>
       <div style="height:8px"></div>`;
     view.scrollTop = 0;
