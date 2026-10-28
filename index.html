@@ -21,14 +21,14 @@
 <meta property="og:site_name" content="腧穴 361">
 <meta property="og:title" content="腧穴 361 · 多维研习">
 <meta property="og:description" content="361 个腧穴的定位主治，针灸技术，中英双语，随学随测。">
-<meta property="og:image" content="https://acu361.vercel.app/share-cover.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://acu361.vercel.app/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="腧穴 361 · 多维研习">
 <meta name="twitter:description" content="361 个腧穴的定位主治，针灸技术，中英双语，随学随测。">
-<meta name="twitter:image" content="https://acu361.vercel.app/share-cover.png">
+<meta name="twitter:image" content="https://acu361.vercel.app/icon-512.png">
 <meta name="theme-color" content="#f4efe4">
 <style>
 *, *::before, *::after { box-sizing: border-box; }
@@ -4234,7 +4234,7 @@ window.AC_MERD = {
             const blob = await resp.blob();
             const file = new File([blob], 'acu361-share.png', { type: 'image/png' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-              await navigator.share({ files: [file], title: SHARE_TITLE, text: SHARE_TEXT + '\n' + SHARE_URL });
+              await navigator.share({ files: [file], title: SHARE_TITLE, text: SHARE_TITLE + '\n' + SHARE_TEXT + '\n' + SHARE_URL });
               return;
             }
           }
