@@ -3831,21 +3831,26 @@ window.AC_MERD = {
   }
 
   function viewSpec() {
-    setTopbar({ title: '特定穴归类', titleEn: 'Special Points', sub: '7 组 · Groups' });
+    setTopbar({ title: '特定穴归类', titleEn: 'Special Points', sub: SPEC_GROUPS.length + ' 组 · Groups' });
     setTab('theory');
     view.innerHTML = `
       <section class="hero" style="padding-bottom:4px">
         <div class="kicker">SPECIAL POINT CATEGORIES</div>
         <h2 class="serif" style="font-size:26px">特定穴归类</h2>
-        <p>五输 · 原络 · 俞募 · 郄 · 下合 · 八会 · 八脉交会<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">Cross-category reference of special point groups</span></p>
+        <p>五输 · 原 · 络 · 背俞 · 募 · 郄 · 下合 · 八会 · 八脉交会<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">Cross-category reference of special point groups</span></p>
       </section>
       ${SPEC_GROUPS.map(g => {
-        const total = g.cats.reduce((n, c) => n + pointsOfCat(c).length, 0);
+        const total = groupHoles(g);
+        /* 单类组（原/络/俞/募）首页即单独一张卡，点进直接是穴位列表 */
+        const target = (SPEC_FLAT[g.id] && g.cats.length === 1)
+          ? '#/spec/' + encodeURIComponent(g.id) + '/0'
+          : '#/spec/' + encodeURIComponent(g.id);
         return `<div class="subj-row" data-spec="${g.id}" style="background:var(--card);border-radius:16px;margin-top:10px">
           <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◎</span>
           <div class="subj-text">
             <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${g.name}<span class="subj-en">${g.en}</span></div>
             <div class="subj-desc">${g.desc}</div>
+            <div class="subj-desc" style="margin-top:3px;color:var(--cinnabar);letter-spacing:.05em">${groupPreview(g)}</div>
           </div>
           <div class="subj-count">${total} 穴</div>
           <span class="chev">${ICON.chev}</span>
@@ -3862,6 +3867,27 @@ window.AC_MERD = {
   /* 分类英文名 */
   const CAT_EN = { '井穴': 'Jing-Well', '荥穴': 'Ying-Spring', '输穴': 'Shu-Stream', '经穴': 'Jing-River', '合穴': 'He-Sea',
     '原穴': 'Yuan-Source', '络穴': 'Luo-Connecting', '背俞穴': 'Back-Shu', '募穴': 'Front-Mu' };
+
+  /* 经脉名查表（用于在原/络/俞/募等归类里标注所属经脉） */
+  const MER_NAME = {};   /* LU -> 手太阴肺经 */
+  (window.MERIDIANS || []).forEach(m => { MER_NAME[m.id] = m.name; });
+  const MER_EN = { LU: 'Lung', LI: 'Large Intestine', ST: 'Stomach', SP: 'Spleen', HT: 'Heart', SI: 'Small Intestine',
+    BL: 'Bladder', KI: 'Kidney', PC: 'Pericardium', TE: 'Triple Energizer', GB: 'Gallbladder', LR: 'Liver',
+    GV: 'Governing Vessel', CV: 'Conception Vessel' };
+  function merOf(p) { return MER_NAME[p.m] || ''; }
+  function merEn(p) { return MER_EN[p.m] ? MER_EN[p.m] + ' · ' + p.m : p.m; }
+
+  /* 这些归类每组只有一类，归到首页时直接算作一张独立卡片 */
+  const SPEC_FLAT = { yuan: 1, luo: 1, beishu: 1, mu: 1 };
+  function groupHoles(g) {
+    return g.cats.reduce((n, c) => n + pointsOfCat(c).length, 0);
+  }
+  function groupPreview(g) {
+    const names = [];
+    g.cats.forEach(c => pointsOfCat(c).forEach(x => { if (names.length < 6) names.push(x.p.n); }));
+    const total = groupHoles(g);
+    return names.join(' · ') + (total > names.length ? ' …' : '');
+  }
 
   function specCatList(c) { return pointsOfCat(c); }
 
@@ -3899,11 +3925,12 @@ window.AC_MERD = {
     }
 
     const c = (catIdx !== undefined && g.cats[Number(catIdx)]) ? g.cats[Number(catIdx)] : null;
+    const showMer = !!SPEC_FLAT[g.id];
     setTopbar({
-      title: c ? catTitle(c)[0] + (catTitle(c)[1] ? ' · ' + catTitle(c)[1] : '') : g.name,
-      titleEn: c ? (catEn(c) || CAT_EN[catKey(c)] || g.en) : g.en,
+      title: c ? (SPEC_FLAT[g.id] ? g.name : catTitle(c)[0] + (catTitle(c)[1] ? ' · ' + catTitle(c)[1] : '')) : g.name,
+      titleEn: c ? (SPEC_FLAT[g.id] ? g.en : (catEn(c) || CAT_EN[catKey(c)] || g.en)) : g.en,
       back: c ? 'spec/' + g.id : 'spec',
-      sub: c ? (specCatList(c).length + ' 穴') : (g.cats.length + ' 类')
+      sub: (c ? specCatList(c).length : groupHoles(g)) + ' 穴'
     });
     setTab('theory');
     const cats = c ? [c] : g.cats;
@@ -3925,6 +3952,7 @@ window.AC_MERD = {
                 <div class="pname">${p.n}<span class="dot"></span>
                   <span class="tag gold" style="font-size:9px;padding:1px 6px">${label}</span>
                 </div>
+                ${showMer ? `<div style="font-size:11.5px;color:var(--cinnabar);letter-spacing:.04em;margin-top:2px">${merOf(p)}<span style="color:var(--ink3);font-style:italic;font-size:10.5px;letter-spacing:.02em"> · ${merEn(p)}</span></div>` : ''}
                 <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
                 <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''}</div>
               </div>
