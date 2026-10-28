@@ -5611,6 +5611,9 @@ window.AC_MERD = {
     const rxi = e.target.closest('[data-rxitem]');
     if (rxi) { location.hash = '#/rx/' + encodeURIComponent(rxi.dataset.rxitem) + '/' + rxi.dataset.rxidx; return; }
 
+    const spg = e.target.closest('[data-spec]');
+    if (spg) { location.hash = '#/spec/' + encodeURIComponent(spg.dataset.spec); return; }
+
     const sub = e.target.closest('[data-sub]');
     if (sub) { location.hash = '#/quiz/' + sub.dataset.sub; return; }
 
