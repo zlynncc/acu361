@@ -48,6 +48,22 @@
   --shadow: 0 1px 2px rgba(70, 55, 30, .04), 0 8px 24px -12px rgba(70, 55, 30, .18);
 }
 
+/* 深色模式：夜读的墨与灯 */
+html.dark {
+  --paper: #201d18;
+  --paper-deep: #2a261f;
+  --card: #292520;
+  --ink: #e8e2d4;
+  --ink2: #b3ac9c;
+  --ink3: #7e786b;
+  --line: #3c362d;
+  --line-soft: #332e26;
+  --cinnabar: #d4654c;
+  --cinnabar-soft: #3a2721;
+  --gold: #c2a061;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .2), 0 8px 24px -12px rgba(0, 0, 0, .5);
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -67,6 +83,15 @@ body {
   /* 允许双指缩放；禁用双击缩放，避免点到按钮时误放大 */
   touch-action: manipulation;
   -webkit-text-size-adjust: 100%;
+}
+
+/* 深色模式：压暗底纹 */
+html.dark body {
+  background-color: #191612;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(255,248,230,.03), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(197,175,140,.06), transparent 50%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.015) 0 2px, transparent 2px 6px);
 }
 
 .serif { font-family: 'Palatino', 'Palatino Linotype', 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', Georgia, serif; }
@@ -123,6 +148,7 @@ body {
   z-index: 20;
   transition: border-color .2s;
 }
+html.dark .topbar { background: rgba(32, 29, 24, .92); }
 .topbar.scrolled { border-bottom-color: var(--line); }
 
 .topbar h1 {
@@ -687,6 +713,18 @@ body {
 }
 #toast.on { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- 深色模式补充 ---------- */
+html.dark .tabbar { background: rgba(32, 29, 24, .94); }
+html.dark .a2hs-bar { background: rgba(41, 37, 32, .97); }
+html.dark .subj-row:active, html.dark .point-row:active { background: #2e2a23; }
+html.dark .pt-body-f { background: var(--paper); }
+html.dark .btn { background: var(--card); }
+html.dark .btn.primary { background: var(--ink); border-color: var(--ink); color: #201d18; }
+html.dark .btn.primary.done { background: var(--cinnabar); border-color: var(--cinnabar); color: #fff; }
+html.dark .subj-icon { background: var(--cinnabar-soft); }
+html.dark .exam-box { background: var(--card); }
+html.dark .profile-card .n, html.dark .profile-card .d { color: inherit; }
+
 /* ---------- 添加到主屏幕引导 ---------- */
 .a2hs-bar {
   position: fixed;
@@ -1097,6 +1135,7 @@ body {
   height: 62px;
   padding: 0 6px;
   background: rgba(255, 253, 248, .92);
+  /* dark patched below */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--line);
@@ -2940,11 +2979,48 @@ window.AC_MERD = {
   const learned = new Set(saved.learned || []);
   const fav = new Set(saved.fav || []);
   let answered = Number(saved.answered) || 0;
+  /* 错题本：{ 题目标识: {item, wrong, streak, ts} } */
+  let wrongBook = saved.wrongBook || {};
   function persist() {
     try {
-      localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered }));
+      localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered, wrongBook, theme }));
     } catch (e) {}
   }
+
+  /* ---------------- 主题（浅色 / 深色） ---------------- */
+  let theme = saved.theme || '';   /* '' 跟随系统 | 'light' | 'dark' */
+  function applyTheme() {
+    const dark = theme === 'dark' || (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.toggle('dark', dark);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#201d18' : '#f4efe4');
+  }
+  function setTheme(t) {
+    theme = t;
+    try { localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered, wrongBook, theme })); } catch (e) {}
+    applyTheme();
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!theme) applyTheme(); });
+
+  /* 题目标识：用答案文本去重（同一知识点重复出错只记一次） */
+  const qkey = it => (it.type || '') + '|' + (it.answer || '').slice(0, 60);
+  function recordWrong(it, right) {
+    const k = qkey(it);
+    if (right) {
+      /* 答对：若在错题本中，累计连对次数，连对 2 次移出 */
+      const rec = wrongBook[k];
+      if (rec) {
+        rec.streak = (rec.streak || 0) + 1;
+        if (rec.streak >= 2) delete wrongBook[k];
+      }
+    } else {
+      const rec = wrongBook[k];
+      if (rec) { rec.wrong = (rec.wrong || 1) + 1; rec.streak = 0; rec.ts = Date.now(); rec.item = it; }
+      else { wrongBook[k] = { item: it, wrong: 1, streak: 0, ts: Date.now() }; }
+    }
+    persist();
+  }
+  const wrongCount = () => Object.keys(wrongBook).length;
 
   /* ---------------- 工具 ---------------- */
   const $ = sel => document.querySelector(sel);
@@ -3240,6 +3316,123 @@ window.AC_MERD = {
         <span style="font-style:italic">For corrections or suggestions, please contact <a href="mailto:jzheng@fivebranches.edu" style="color:var(--cinnabar);text-decoration:none;font-style:italic">jzheng@fivebranches.edu</a></span></div>
       </div>
     `;
+    view.scrollTop = 0;
+  }
+
+  /* ---------------- 特定穴归类 ---------------- */
+  const SPEC_GROUPS = [
+    { id: 'wushu', name: '五输穴', en: 'Five Shu Points',
+      desc: '十二经肘膝以下五类要穴，经气由浅入深：井主急证发热、荥主身热、输主体重节痛、经主喘咳寒热、合主逆气而泄。',
+      cats: ['井穴', '荥穴', '输穴', '经穴', '合穴'] },
+    { id: 'yuanluo', name: '原穴 · 络穴', en: 'Yuan-Source & Luo Points',
+      desc: '原穴为脏腑原气留止之处，络穴沟通表里两经；原络配穴（主客配穴）以先病经之原穴配表里经之络穴。',
+      cats: ['原穴', '络穴'] },
+    { id: 'beimu', name: '背俞穴 · 募穴', en: 'Back-Shu & Front-Mu Points',
+      desc: '背俞穴位于膀胱经第 1 侧线，主慢性虚损；募穴聚于胸腹，主急性实证。俞募前后相配，疗效更佳。',
+      cats: ['背俞穴', '募穴'] },
+    { id: 'xi', name: '郄穴', en: 'Xi-Cleft Points',
+      desc: '经气深聚之处，共 16 穴（含阴跷、阳跷、阴维、阳维各一），善治本经急性病证与血证。',
+      cats: ['郄穴'] },
+    { id: 'xiahe', name: '下合穴', en: 'Lower He-Sea Points',
+      desc: '六腑之气下合于足三阳经的六个腧穴，「合治内腑」，是治疗六腑病的主要穴位。',
+      cats: ['下合穴'] },
+    { id: 'bahui', name: '八会穴', en: 'Eight Influential Points',
+      desc: '脏、腑、气、血、筋、脉、骨、髓八类精气汇聚之穴，与此八类相关的病变均可取之。',
+      cats: ['八会穴'] },
+    { id: 'baimai', name: '八脉交会穴', en: 'Eight Confluent Points',
+      desc: '十二经与奇经八脉相通的八个腧穴，四对经典配伍：公孙配内关、后溪配申脉、足临泣配外关、列缺配照海。',
+      cats: ['八脉交会穴'] }
+  ];
+
+  /* 从 spec 提取某类别的穴位 */
+  function pointsOfCat(cat) {
+    const out = [];
+    const re = cat === '井穴' ? /(^|[；;、])井穴/ : new RegExp('(^|[；;、])' + cat);
+    POINTS.forEach(p => {
+      if (!p.spec) return;
+      const parts = p.spec.split(/[；;]/);
+      for (const x of parts) {
+        const t = x.trim();
+        let ok = false;
+        if (cat === '井穴') ok = /井穴/.test(t);
+        else if (cat === '荥穴') ok = /荥穴/.test(t) && !/下合/.test(t);
+        else if (cat === '输穴') ok = /输穴/.test(t) && !/背俞/.test(t);
+        else if (cat === '经穴') ok = !/交会|郄|络|募|背俞|原|八会|八脉|下合|井|荥|合|非特定|所起/.test(t) && /^[足手]?[太阴阳明少厥阳]{0,4}经穴\s*（[木火土金水相火]+）$/.test(t);
+        else if (cat === '合穴') ok = /合穴/.test(t) && !/下合/.test(t) && !/井/.test(t);
+        else if (cat === '原穴') ok = /原穴/.test(t) && !/背俞/.test(t);
+        else if (cat === '络穴') ok = /络穴/.test(t) && !/脾之大络/.test(t) === false || /络穴/.test(t);
+        else if (cat === '背俞穴') ok = /背俞穴/.test(t);
+        else if (cat === '募穴') ok = /募穴/.test(t) && !/背俞/.test(t);
+        else if (cat === '郄穴') ok = /郄穴/.test(t);
+        else if (cat === '下合穴') ok = /下合穴/.test(t);
+        else if (cat === '八会穴') ok = /八会穴/.test(t);
+        else if (cat === '八脉交会穴') ok = /八脉交会穴/.test(t);
+        if (ok) { out.push({ p, label: t }); break; }
+      }
+    });
+    return out;
+  }
+
+  function viewSpec() {
+    setTopbar({ title: '特定穴归类', titleEn: 'Special Points', sub: '7 组 · Groups' });
+    setTab('theory');
+    view.innerHTML = `
+      <section class="hero" style="padding-bottom:4px">
+        <div class="kicker">SPECIAL POINT CATEGORIES</div>
+        <h2 class="serif" style="font-size:26px">特定穴归类</h2>
+        <p>五输 · 原络 · 俞募 · 郄 · 下合 · 八会 · 八脉交会<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">Cross-category reference of special point groups</span></p>
+      </section>
+      ${SPEC_GROUPS.map(g => {
+        const total = g.cats.reduce((n, c) => n + pointsOfCat(c).length, 0);
+        return `<div class="subj-row" data-spec="${g.id}" style="background:var(--card);border-radius:16px;margin-top:10px">
+          <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◎</span>
+          <div class="subj-text">
+            <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${g.name}<span class="subj-en">${g.en}</span></div>
+            <div class="subj-desc">${g.desc}</div>
+          </div>
+          <div class="subj-count">${total} 穴</div>
+          <span class="chev">${ICON.chev}</span>
+        </div>`;
+      }).join('')}
+      <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
+        分类由穴位库「穴性」字段自动聚合，点任意穴可跳转详情。<br>
+        <span style="font-style:italic">Auto-aggregated from the point library; tap any point for details.</span>
+      </div>
+      <div style="height:8px"></div>`;
+    view.scrollTop = 0;
+  }
+
+  function viewSpecGroup(id) {
+    const g = SPEC_GROUPS.find(x => x.id === id);
+    if (!g) { viewSpec(); return; }
+    setTopbar({ title: g.name, titleEn: g.en, back: 'spec', sub: g.cats.length + ' 类' });
+    setTab('theory');
+    view.innerHTML = `
+      <section class="hero" style="padding-bottom:4px">
+        <div class="kicker">${g.en}</div>
+        <h2 class="serif" style="font-size:26px">${g.name}</h2>
+        <p style="font-size:12px;white-space:normal;line-height:1.85;letter-spacing:0">${g.desc}</p>
+      </section>
+      ${g.cats.map(c => {
+        const list = pointsOfCat(c);
+        if (!list.length) return '';
+        return `<div class="sec-head"><h3>${c} <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">${list.length} 穴</span></h3></div>
+        <div class="point-list">
+          ${list.map(({ p, label }) => `
+            <div class="point-row ${learned.has(p.c) ? 'learned' : ''}" data-go="point/${p.c}">
+              <div class="code-badge">${p.c}</div>
+              <div class="prow-text">
+                <div class="pname">${p.n}<span class="dot"></span>
+                  <span class="tag gold" style="font-size:9px;padding:1px 6px">${label}</span>
+                </div>
+                <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
+                <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''}</div>
+              </div>
+              <span class="chev">${ICON.chev}</span>
+            </div>`).join('')}
+        </div>`;
+      }).join('')}
+      <div style="height:10px"></div>`;
     view.scrollTop = 0;
   }
 
@@ -3565,7 +3758,7 @@ window.AC_MERD = {
             </div>`).join('')}
         </div>`;
     };
-    render();
+  render();
     input.addEventListener('input', render);
     setTimeout(() => input.focus(), 120);
     view.scrollTop = 0;
@@ -3914,6 +4107,12 @@ window.AC_MERD = {
   }
 
   function newQuiz(sub, n) {
+    /* 错题重练模式：从错题本抽取（按错误次数倒序优先） */
+    if (sub === 'wrong') {
+      const recs = Object.values(wrongBook).sort((a, b) => (b.wrong || 0) - (a.wrong || 0));
+      const items = shuffle(recs.map(r => r.item)).slice(0, n);
+      return { sub, items, i: 0, right: 0, picked: null, finished: false };
+    }
     const items = [];
     const used = new Set();
     let guard = 0;
@@ -4069,6 +4268,17 @@ window.AC_MERD = {
         <span class="chev">${ICON.chev}</span>
       </div>`).join('')}
 
+      ${wrongCount() ? `
+      <div class="subj-row" data-sub="wrong" style="background:var(--cinnabar-soft);border:1px solid #eccabd;border-radius:16px;margin-top:10px">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;background:#fff;color:var(--cinnabar)">✗</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">错题重练</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap">WRONG ANSWER REVIEW</span></div>
+          <div class="subj-desc">专练答错的题 · 连对 2 次自动移出错题本</div>
+        </div>
+        <div class="subj-count" style="color:var(--cinnabar)">${wrongCount()} 题</div>
+        <span class="chev">${ICON.chev}</span>
+      </div>` : ''}
+
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
         全部题目由穴位库、配穴库与技法库实时生成，按 WHO《针灸经穴定位》标准及 CNT 规范整理，中英对照，仅供学习自测。<br><span style="font-style:italic;font-family:Georgia,serif">All questions are generated live from the built-in point, prescription and technique libraries for study self-test only.</span>
       </div>
@@ -4079,7 +4289,8 @@ window.AC_MERD = {
 
   function renderQuestion(s) {
     let subject;
-    if (s.sub === 'PC') subject = { name: '穴位综合题库', sub: 'MIXED DRILL' };
+    if (s.sub === 'wrong') subject = { name: '错题重练', sub: 'WRONG ANSWER REVIEW' };
+    else if (s.sub === 'PC') subject = { name: '穴位综合题库', sub: 'MIXED DRILL' };
     else if (s.sub.startsWith('mer:')) {
       const m = merById[s.sub.slice(4)];
       subject = m ? { name: m.name + ' · 穴位', sub: 'MERIDIAN BANK' } : { name: '经络穴位', sub: 'MERIDIAN BANK' };
@@ -4188,6 +4399,15 @@ window.AC_MERD = {
         <h2 class="serif" style="font-size:26px">针灸基础理论</h2>
         <div style="font-size:11px;color:var(--ink3);letter-spacing:.08em;margin-top:6px">Essential Theories: Meridians, Special Points & Needling · 中英对照</div>
       </section>
+      <div class="subj-row" data-go="spec" style="background:var(--card);border-radius:16px;margin-bottom:14px">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◎</span>
+        <div class="subj-text">
+          <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">特定穴归类<span class="subj-en">SPECIAL POINTS</span></div>
+          <div class="subj-desc">五输 · 原络 · 俞募 · 郄 · 下合 · 八会 · 八脉交会</div>
+        </div>
+        <div class="subj-count">7 组</div>
+        <span class="chev">${ICON.chev}</span>
+      </div>
       ${THEORY.map(x => `
         <div class="card" style="padding:14px 15px">
           <div class="k" style="font-size:.74em;letter-spacing:.2em;color:var(--gold)">${x.en}</div>
@@ -4287,8 +4507,32 @@ window.AC_MERD = {
           <div><span>已掌握 · Learned</span><b>${learned.size}</b></div>
           <div><span>收藏 · Saved</span><b>${fav.size}</b></div>
           <div><span>做题数 · Answered</span><b>${answered}</b></div>
+          <div><span>错题 · Wrong</span><b>${wrongCount()}</b></div>
           <div><span>完成度 · Done</span><b>${pct}%</b></div>
         </div>
+      </div>
+
+      ${wrongCount() ? `
+      <div class="subj-row" data-go="quiz/wrong" style="background:var(--cinnabar-soft);border:1px solid #eccabd;border-radius:15px;margin-bottom:14px">
+        <span class="subj-icon" style="background:var(--card);color:var(--cinnabar)">✗</span>
+        <div class="subj-text">
+          <div class="subj-name" style="font-size:14px">错题重练<span style="font-size:10px;color:var(--ink3);font-weight:400;margin-left:6px">连对 2 次移出</span></div>
+          <div class="subj-desc">专练答错的题 · 按错误次数排序</div>
+        </div>
+        <div class="subj-count" style="color:var(--cinnabar)">${wrongCount()} 题</div>
+        <span class="chev">${ICON.chev}</span>
+      </div>` : ''}
+
+      <div class="sec-head"><h3>外观 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Appearance</span></h3></div>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <span class="tag ${theme === '' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="">跟随系统 · Auto</span>
+        <span class="tag ${theme === 'light' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="light">浅色 · Light</span>
+        <span class="tag ${theme === 'dark' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="dark">深色 · Dark</span>
+      </div>
+
+      <div class="sec-head"><h3>学习记录 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Records</span></h3></div>
+      <div style="display:flex;gap:10px;margin-bottom:14px">
+        <button class="btn ghost" data-act="export">导出记录 · Export</button>
       </div>
 
       <div class="sec-head">
@@ -4814,6 +5058,11 @@ window.AC_MERD = {
           quizState = null;
           viewQuizCat(arg);
         } else if (arg) {
+          if (arg === 'wrong' && wrongCount() === 0) {
+            quizState = null;
+            location.hash = '#/quiz';
+            break;
+          }
           if (!quizState || quizState.sub !== arg || quizState.finished || !quizState.items) quizState = newQuiz(arg, QUIZ_SIZE);
           viewQuiz();
         } else {
@@ -4823,6 +5072,9 @@ window.AC_MERD = {
         break;
       case 'me': viewMe(); break;
       case 'theory': viewTheory(); break;
+      case 'spec':
+        if (arg) viewSpecGroup(arg); else viewSpec();
+        break;
       default: viewHome();
     }
   }
@@ -4850,7 +5102,7 @@ window.AC_MERD = {
       quizState.picked = picked;
       if (picked === it.answer) quizState.right++;
       answered++;
-      persist();
+      recordWrong(it, picked === it.answer);
       viewQuiz();
       return;
     }
@@ -4872,6 +5124,9 @@ window.AC_MERD = {
 
     const me = e.target.closest('[data-me]');
     if (me) { meTab = me.dataset.me; viewMe(); return; }
+
+    const th = e.target.closest('[data-theme]');
+    if (th) { setTheme(th.dataset.theme); viewMe(); return; }
 
     const act = e.target.closest('[data-act]');
     if (act) {
@@ -4899,6 +5154,27 @@ window.AC_MERD = {
         doShare();
       } else if (a === 'wa') {
         window.open('https://wa.me/?text=' + encodeURIComponent(SHARE_TITLE + '\n' + SHARE_TEXT + '\n' + SHARE_URL), '_blank');
+      } else if (a === 'export') {
+        const favList = [...fav].map(c => byCode[c]).filter(Boolean);
+        const learnList = [...learned].map(c => byCode[c]).filter(Boolean);
+        const wrongList = Object.values(wrongBook).sort((x, y) => (y.wrong || 0) - (x.wrong || 0));
+        let txt = '腧穴 361 · 学习记录导出\nExported: ' + new Date().toLocaleString() + '\n\n';
+        txt += '== 概览 ==\n已掌握 ' + learnList.length + ' · 收藏 ' + favList.length + ' · 做题 ' + answered + ' · 错题 ' + wrongList.length + '\n\n';
+        txt += '== 已掌握 Learned (' + learnList.length + ') ==\n' + (learnList.map(p => p.c + ' ' + p.n).join('\n') || '无') + '\n\n';
+        txt += '== 收藏 Favorites (' + favList.length + ') ==\n' + (favList.map(p => p.c + ' ' + p.n).join('\n') || '无') + '\n\n';
+        txt += '== 错题 Wrong (' + wrongList.length + ') ==\n' + (wrongList.map(r => '[' + (r.wrong || 1) + ' 次] ' + (r.item ? (r.item.type + ' — ' + (r.item.answer || '').replace(/^.*（/, '').replace(/）$/, '')) : (r.q || ''))).join('\n') || '无') + '\n';
+        try {
+          const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+          const a2 = document.createElement('a');
+          a2.href = URL.createObjectURL(blob);
+          a2.download = 'acu361-records-' + new Date().toISOString().slice(0, 10) + '.txt';
+          document.body.appendChild(a2);
+          a2.click();
+          a2.remove();
+          toast('记录已导出 · Records exported');
+        } catch (e2) {
+          toast('导出失败，请截图保存');
+        }
       } else if (a === 'copy') {
         copyLink();
       } else if (a === 'learn' || a === 'fav') {
@@ -4953,6 +5229,9 @@ window.AC_MERD = {
     if (a2hsShown) return;
     const h = location.hash.replace(/^#\/?/, '').split('/')[0] || 'home';
     if (h !== 'home') return;
+    /* 答题中不弹（会挡住底部「下一题」按钮） */
+    const onQuiz = document.querySelector('.quiz-top') || document.querySelector('.quiz-foot');
+    if (onQuiz) return;
     if (view.scrollTop > A2HS_SCROLL_TRIGGER) showA2HS();
   }
 
@@ -5025,14 +5304,20 @@ window.AC_MERD = {
   });
 
   /* 首屏若内容不足一屏（大屏），滚动事件不会触发：进来 3 秒后补一次判断 */
-  setTimeout(() => { if (view.scrollHeight <= view.clientHeight + 40) showA2HS(); }, 3000);
+  setTimeout(() => { if (view.scrollHeight <= view.clientHeight + 40) checkA2HS(); }, 3000);
 
   window.addEventListener('hashchange', () => { mapSide = 'f'; render(); });
   /* 外部脚本延迟到页面就绪后再插入时，数据可能晚到：重新渲染一次 */
   window.addEventListener('load', () => setTimeout(render, 0));
 
+  applyTheme();
   render();
   setTab('home');
+
+  /* ---------------- 离线可用（Service Worker） ---------------- */
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 })();
 
 </script>
