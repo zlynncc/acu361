@@ -21,14 +21,14 @@
 <meta property="og:site_name" content="腧穴 361">
 <meta property="og:title" content="腧穴 361 · 多维研习">
 <meta property="og:description" content="361 个腧穴的定位主治，针灸技术，中英双语，随学随测。">
-<meta property="og:image" content="https://acu361.vercel.app/icon-512.png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
+<meta property="og:image" content="https://acu361.vercel.app/share-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="腧穴 361 · 多维研习">
 <meta name="twitter:description" content="361 个腧穴的定位主治，针灸技术，中英双语，随学随测。">
-<meta name="twitter:image" content="https://acu361.vercel.app/icon-512.png">
+<meta name="twitter:image" content="https://acu361.vercel.app/share-cover.png">
 <meta name="theme-color" content="#f4efe4">
 <style>
 *, *::before, *::after { box-sizing: border-box; }
@@ -3818,21 +3818,63 @@ window.AC_MERD = {
     view.scrollTop = 0;
   }
 
-  function viewSpecGroup(id) {
+  /* 分类英文名 */
+  const CAT_EN = { '井穴': 'Jing-Well', '荥穴': 'Ying-Spring', '输穴': 'Shu-Stream', '经穴': 'Jing-River', '合穴': 'He-Sea',
+    '原穴': 'Yuan-Source', '络穴': 'Luo-Connecting', '背俞穴': 'Back-Shu', '募穴': 'Front-Mu' };
+
+  function specCatList(c) { return pointsOfCat(c); }
+
+  function viewSpecGroup(id, catIdx) {
     const g = SPEC_GROUPS.find(x => x.id === id);
     if (!g) { viewSpec(); return; }
-    setTopbar({ title: g.name, titleEn: g.en, back: 'spec', sub: g.cats.length + ' 类' });
+
+    /* 两级模式：多分类的组先列分类名，点击后再看该类穴位 */
+    if (g.cats.length > 1 && catIdx === undefined) {
+      setTopbar({ title: g.name, titleEn: g.en, back: 'spec', sub: g.cats.length + ' 类' });
+      setTab('theory');
+      view.innerHTML = `
+        <section class="hero" style="padding-bottom:4px">
+          <div class="kicker">${g.en}</div>
+          <h2 class="serif" style="font-size:26px">${g.name}</h2>
+          <p style="font-size:12px;white-space:normal;line-height:1.85;letter-spacing:0">${g.desc}</p>
+        </section>
+        ${g.cats.map((c, i) => {
+          const list = specCatList(c);
+          if (!list.length) return '';
+          return `<div class="subj-row" data-speccat="${g.id}:${i}" style="background:var(--card);border-radius:16px;margin-top:10px">
+            <span class="subj-icon" style="width:38px;height:38px;font-size:16px">◎</span>
+            <div class="subj-text">
+              <div class="subj-name" style="font-size:16px;font-family:'Palatino','Palatino Linotype','Songti SC','STSong','Noto Serif SC',Georgia,serif">${c}<span class="subj-en">${CAT_EN[c] || ''}</span></div>
+              <div class="subj-desc">${list.slice(0, 6).map(x => x.p.n).join(' · ')}${list.length > 6 ? ' …' : ''}</div>
+            </div>
+            <div class="subj-count">${list.length} 穴</div>
+            <span class="chev">${ICON.chev}</span>
+          </div>`;
+        }).join('')}
+        <div style="height:10px"></div>`;
+      view.scrollTop = 0;
+      return;
+    }
+
+    const c = (catIdx !== undefined && g.cats[Number(catIdx)]) ? g.cats[Number(catIdx)] : null;
+    setTopbar({
+      title: c ? c : g.name,
+      titleEn: c ? (CAT_EN[c] || g.en) : g.en,
+      back: c ? 'spec/' + g.id : 'spec',
+      sub: c ? (specCatList(c).length + ' 穴') : (g.cats.length + ' 类')
+    });
     setTab('theory');
+    const cats = c ? [c] : g.cats;
     view.innerHTML = `
-      <section class="hero" style="padding-bottom:4px">
+      ${c ? '' : `<section class="hero" style="padding-bottom:4px">
         <div class="kicker">${g.en}</div>
         <h2 class="serif" style="font-size:26px">${g.name}</h2>
         <p style="font-size:12px;white-space:normal;line-height:1.85;letter-spacing:0">${g.desc}</p>
-      </section>
-      ${g.cats.map(c => {
-        const list = pointsOfCat(c);
+      </section>`}
+      ${cats.map(cc => {
+        const list = specCatList(cc);
         if (!list.length) return '';
-        return `<div class="sec-head"><h3>${c} <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">${list.length} 穴</span></h3></div>
+        return `<div class="sec-head"><h3>${cc} <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">${list.length} 穴</span></h3></div>
         <div class="point-list">
           ${list.map(({ p, label }) => `
             <div class="point-row ${learned.has(p.c) ? 'learned' : ''}" data-go="point/${p.c}">
@@ -4916,7 +4958,7 @@ window.AC_MERD = {
   const SHARE_URL = 'https://acu361.vercel.app/';
   const SHARE_TITLE = '腧穴 361 · 多维研习';
   const SHARE_TEXT = '361 个腧穴的定位主治，针灸技术，中英双语，随学随测。';
-  const SHARE_COVER = '/share-cover.png';
+  const SHARE_FILE = '/icon-512.png';  /* 微信等 App 内分享带的图标 */
 
   function toast(msg) {
     let t = document.getElementById('toast');
@@ -4937,10 +4979,10 @@ window.AC_MERD = {
       try {
         /* 尝试连分享封面图一起带上（支持文件分享的平台会显示图片） */
         try {
-          const resp = await fetch(SHARE_COVER);
+          const resp = await fetch(SHARE_FILE);
           if (resp.ok) {
             const blob = await resp.blob();
-            const file = new File([blob], 'acu361-share.png', { type: 'image/png' });
+            const file = new File([blob], 'acu361-icon.png', { type: 'image/png' });
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
               await navigator.share({ files: [file], title: SHARE_TITLE, text: SHARE_TITLE + '\n' + SHARE_TEXT + '\n' + SHARE_URL });
               return;
@@ -5561,7 +5603,9 @@ window.AC_MERD = {
       case 'me': viewMe(); break;
       case 'theory': viewTheory(); break;
       case 'spec':
-        if (arg) viewSpecGroup(arg); else viewSpec();
+        if (arg && arg2) viewSpecGroup(arg, arg2);
+        else if (arg) viewSpecGroup(arg);
+        else viewSpec();
         break;
       default: viewHome();
     }
@@ -5613,6 +5657,9 @@ window.AC_MERD = {
 
     const spg = e.target.closest('[data-spec]');
     if (spg) { location.hash = '#/spec/' + encodeURIComponent(spg.dataset.spec); return; }
+
+    const spc = e.target.closest('[data-speccat]');
+    if (spc) { const [gid, cidx] = spc.dataset.speccat.split(':'); location.hash = '#/spec/' + encodeURIComponent(gid) + '/' + cidx; return; }
 
     const sub = e.target.closest('[data-sub]');
     if (sub) { location.hash = '#/quiz/' + sub.dataset.sub; return; }
