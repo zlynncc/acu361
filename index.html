@@ -3486,7 +3486,7 @@ window.AC_MERD = {
     { id: 'theory', label: '理论', icon: ICON.book },
     { id: 'rx', label: '配穴', icon: ICON.rx },
     { id: 'tech', label: '技法', icon: ICON.needle },
-    { id: 'quiz', label: '题库', icon: ICON.quiz },
+    { id: 'quiz', label: '自测', icon: ICON.quiz },
     { id: 'me', label: '我的', icon: ICON.me }
   ];
   function setTab(active) {
@@ -4717,7 +4717,7 @@ window.AC_MERD = {
     setTab('quiz');
     let rows = '', title = '', titleEn = '', info = '';
     if (sub === 'merbank') {
-      title = '经络穴位题库'; titleEn = 'MERIDIAN POINT BANK';
+      title = '经络穴位自测'; titleEn = 'MERIDIAN SELF-TEST';
       info = MERS.length + ' 经';
       rows = MERS.map(m => {
         const n = POINTS.filter(p => p.m === m.id).length;
@@ -4736,16 +4736,16 @@ window.AC_MERD = {
       </div>`;
       }).join('');
     } else if (sub === 'angles') {
-      title = '穴位多角度学习题库'; titleEn = 'BY ANGLE';
+      title = '穴位多角度自测'; titleEn = 'BY ANGLE';
       info = ANGLES.length + ' 个专项角度 · 每组 ' + QUIZ_SIZE + ' 题';
       rows = ANGLES.map(a => quizRow(a.icon, a.name, a.sub, a.desc, '无限 · ∞', 'data-sub', a.id)).join('');
     } else if (sub === 'rxbank') {
-      title = '配穴处方题库'; titleEn = 'PRESCRIPTION BANK';
+      title = '配穴处方自测'; titleEn = 'PRESCRIPTION SELF-TEST';
       info = RX.length + ' 科 · ' + RX_TOTAL + ' 方 · 每组 ' + QUIZ_SIZE + ' 题';
       rows = RX.map(c => quizRow(c.icon, c.cat, c.en, c.items.map(x => x.t).join(' · '), c.items.length + ' 方', 'data-sub', 'rx:' + c.cat)).join('');
     } else if (sub.startsWith('tchbank:')) {
       const c = techCatBy[sub.slice(8)];
-      title = (c ? c.cat : sub.slice(8)) + '题库'; titleEn = c && c.cat === '洁针技术' ? 'CNT BANK' : 'TECHNIQUE BANK';
+      title = (c ? c.cat : sub.slice(8)) + '自测'; titleEn = c && c.cat === '洁针技术' ? 'CNT SELF-TEST' : 'TECHNIQUE SELF-TEST';
       info = (c ? c.items.length : 0) + ' 章';
       rows = c.items.map((x, i) => {
         const pts = x.ul && x.ul.length ? x.ul.length : 0;
@@ -4769,20 +4769,20 @@ window.AC_MERD = {
   }
 
   function viewQuizHome() {
-    setTopbar({ title: '针灸综合题库', titleEn: 'Question Bank', sub: '6 大题库 · 每组 ' + QUIZ_SIZE + ' 题' });
+    setTopbar({ title: '针灸综合自测', titleEn: 'Self-Test', sub: '6 组 · 每组 ' + QUIZ_SIZE + ' 题' });
     setTab('quiz');
 
     view.innerHTML = `
       <section class="hero" style="padding-bottom:4px">
         <div class="kicker">ACUPUNCTURE QUESTION BANK</div>
-        <h2 class="serif" style="font-size:26px">针灸综合题库</h2>
+        <h2 class="serif" style="font-size:26px">针灸综合自测</h2>
         <p>穴位 · 配穴 · 针灸技术 · 洁针技术 · 全部实时生成 · 无限练习<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif">Points · prescriptions · needling · CNT — all generated live, unlimited practice</span></p>
       </section>
 
       <div class="subj-row" data-go="quiz/merbank" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">∿</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">经络穴位题库</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">MERIDIAN POINT BANK</span></div>
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">经络穴位自测</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">MERIDIAN SELF-TEST</span></div>
           <div class="subj-desc">按经络分级出题 · 学哪条经练哪条经 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${MERS.length} 经</div>
@@ -4794,7 +4794,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/angles" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◎</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位多角度学习题库</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">BY ANGLE</span></div>
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位多角度自测</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">BY ANGLE</span></div>
           <div class="subj-desc">定位 · 认穴 · 主治等专项 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${ANGLES.length} 类</div>
@@ -4804,7 +4804,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/PC" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">⊙</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位综合题库</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">MIXED DRILL</span></div>
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位综合自测</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">MIXED DRILL</span></div>
           <div class="subj-desc">由 ${POINTS.length} 穴实时生成 · 八个角度混合 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">开始 →</div>
@@ -4813,7 +4813,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/rxbank" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◈</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">配穴处方题库</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PRESCRIPTION BANK</span></div>
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">配穴处方自测</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PRESCRIPTION SELF-TEST</span></div>
           <div class="subj-desc">选方 / 辨方 · 按科别分级 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${RX.length} 科</div>
@@ -4824,7 +4824,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/tchbank:${c.cat}" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">${c.icon}</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">${c.cat}题库</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.cat === '洁针技术' ? 'CNT BANK' : 'TECHNIQUE BANK'}</span></div>
+          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">${c.cat}自测</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.cat === '洁针技术' ? 'CNT SELF-TEST' : 'TECHNIQUE SELF-TEST'}</span></div>
           <div class="subj-desc">要点判断 / 章节归类 · 按章节分级 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${c.items.length} 章</div>
@@ -4861,7 +4861,7 @@ window.AC_MERD = {
       })() : ''}
 
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.02em">
-        全部题目由穴位库、配穴库与技法库实时生成，按 WHO《针灸经穴定位》标准及 CNT 规范整理，中英对照，仅供学习自测。<br><span style="font-style:italic;font-family:Georgia,serif">All questions are generated live from the built-in point, prescription and technique libraries for study self-test only.</span>
+        全部题目由穴位库、配穴库与技法库实时生成，按 WHO《针灸经穴定位》标准及 CNT 规范整理，中英对照，仅供学习自测；与 NCCAOM、加州针灸局及 CCAOM 无官方关联，题目亦非官方真题。<br><span style="font-style:italic;font-family:Georgia,serif">All questions are generated live from the built-in libraries for self-study only — not affiliated with or endorsed by NCCAOM, the California Acupuncture Board, or CCAOM, and not sourced from official exam questions.</span>
       </div>
       <div style="height:8px"></div>
     `;
@@ -4873,7 +4873,7 @@ window.AC_MERD = {
     if (s.sub === 'wrong') subject = { name: '错题重练', sub: 'WRONG ANSWER REVIEW' };
     else if (s.sub === 'grad') subject = { name: '毕业抽查', sub: 'GRADUATION CHECK' };
     else if (s.sub === 'wrongretry') subject = { name: '重练本题组错题', sub: 'INSTANT RETRY · 不计进度' };
-    else if (s.sub === 'PC') subject = { name: '穴位综合题库', sub: 'MIXED DRILL' };
+    else if (s.sub === 'PC') subject = { name: '穴位综合自测', sub: 'MIXED DRILL' };
     else if (s.sub.startsWith('mer:')) {
       const m = merById[s.sub.slice(4)];
       subject = m ? { name: m.name + ' · 穴位', sub: 'MERIDIAN BANK' } : { name: '经络穴位', sub: 'MERIDIAN BANK' };
@@ -4908,6 +4908,7 @@ window.AC_MERD = {
           <button class="btn primary" data-act="again">${s.sub === 'wrong' ? '下一批错题 · Next Batch' : '再来一组 · Again'}</button>
           ${wrongCount() ? `<button class="btn" data-act="wrongall" style="margin-top:8px">错题本全部 · ${wrongCount()} 题 · Wrong Book</button>` : ''}`}
 
+          <div style="margin-top:14px;font-size:9.5px;line-height:1.7;color:var(--ink3);letter-spacing:.02em">题目为应用自动生成，仅供学习自测 · Not official exam questions; not affiliated with NCCAOM, the CA Acupuncture Board, or CCAOM.</div>
         </div>
         <div class="card" style="margin-top:12px">
           <div class="k" style="font-size:10.5px;letter-spacing:.22em;color:var(--gold)">本轮回顾 · REVIEW</div>
@@ -4917,7 +4918,7 @@ window.AC_MERD = {
             </div>`).join('')}
         </div>
         <div style="display:flex;gap:10px;margin-top:14px">
-          <button class="btn" data-act="quizhome">返回题库 · Q-Bank</button>
+          <button class="btn" data-act="quizhome">返回自测 · Self-Test</button>
         </div>
         <div style="height:10px"></div>`;
       view.scrollTop = 0;
@@ -5110,7 +5111,7 @@ window.AC_MERD = {
 
       ${wrongCount() ? `
       <div style="margin:0 4px 14px;font-size:10.5px;color:var(--ink3);line-height:1.85">
-        错题 ${wrongCount()} 题 · 在题库做题，交卷后可直接「立即重练本题组错题」<br>
+        错题 ${wrongCount()} 题 · 在自测中答题，交卷后可直接「立即重练本题组错题」<br>
         <span style="font-style:italic;font-family:Georgia,serif">${wrongCount()} wrong answers — retry them right on the result page after each quiz.</span>
       </div>` : ''}
 
