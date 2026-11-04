@@ -5158,7 +5158,34 @@ window.AC_MERD = {
       const cz = e.target.closest('[data-act="copyzelle"]');
       if (cz) {
         const txt = (DONATE.zelle || '').trim();
-        const done = () => toast('已复制 Zelle 邮箱 · Copied: ' + txt);
+        const done = () => {
+          toast('已复制 ✉️ “针”心感谢！愿您气血通畅、百证不愁 🍵');
+          try {
+            localStorage.setItem('acu-study-v1.donateCopied', String(Date.now()));
+            if (!showDonate._retHook) {
+              showDonate._retHook = true;
+              document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState !== 'visible') return;
+                let t0 = 0;
+                try { t0 = Number(localStorage.getItem('acu-study-v1.donateCopied') || 0); } catch (e2) {}
+                if (!t0 || Date.now() - t0 < 60000) return;
+                try { localStorage.removeItem('acu-study-v1.donateCopied'); } catch (e2) {}
+                const LINES = [
+                  '感谢支持！愿您针到功成、逢考必过 🍵',
+                  '您这杯茶，比艾灸还暖 🍵 祝您穴位记得牢、针感找得准',
+                  '收到心意啦～愿您经络通畅、神清气爽，学针一路顺遂 🍵'
+                ];
+                const msg = LINES[Math.floor(Math.random() * LINES.length)];
+                const bar = document.createElement('div');
+                bar.style.cssText = 'position:fixed;left:50%;bottom:76px;transform:translateX(-50%);max-width:92%;background:var(--ink,#3a342b);color:var(--paper,#faf6ec);padding:10px 16px;border-radius:999px;font-size:11.5px;letter-spacing:.04em;z-index:998;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:opacity .4s';
+                bar.textContent = msg;
+                document.body.appendChild(bar);
+                setTimeout(() => { bar.style.opacity = '0'; }, 4200);
+                setTimeout(() => { bar.remove(); }, 4800);
+              });
+            }
+          } catch (e2) {}
+        };
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
         else { try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e2) {} done(); }
       }
@@ -5176,7 +5203,7 @@ window.AC_MERD = {
     view.innerHTML = `
       <div class="profile-card" style="margin-top:8px">
         <div class="n">十四经学习</div>
-        <div class="d">ACUPOINTS 361 · 本地记录 Local Record</div>
+        <div class="d">ACUPOINTS 361 · 设计 郑静 · Jing Zheng</div>
         <div class="m">
           <div><span>已掌握 · Learned</span><b>${learned.size}</b></div>
           <div><span>收藏 · Saved</span><b>${fav.size}</b></div>
