@@ -4908,7 +4908,7 @@ window.AC_MERD = {
           <button class="btn primary" data-act="again">${s.sub === 'wrong' ? '下一批错题 · Next Batch' : '再来一组 · Again'}</button>
           ${wrongCount() ? `<button class="btn" data-act="wrongall" style="margin-top:8px">错题本全部 · ${wrongCount()} 题 · Wrong Book</button>` : ''}`}
 
-          <div style="margin-top:14px;font-size:9.5px;line-height:1.7;color:var(--ink3);letter-spacing:.02em">题目为应用自动生成，仅供学习自测 · Not official exam questions; not affiliated with NCCAOM, the CA Acupuncture Board, or CCAOM.</div>
+          <div style="margin-top:14px;font-size:9.5px;line-height:1.7;color:var(--ink3);letter-spacing:.02em">题目为应用自动生成，仅供学习自测 · Not official exam questions; not affiliated with NCCAOM, the CA Acupuncture Board, or CCAOM.<br><span data-act="donate" style="cursor:pointer;color:var(--gold);text-decoration:underline">${rate >= 90 ? '这套自测帮到了你？欢迎支持本站维护 🍵 · Enjoying it? Support the site' : '支持本站维护 · Support the site'}</span></div>
         </div>
         <div class="card" style="margin-top:12px">
           <div class="k" style="font-size:10.5px;letter-spacing:.22em;color:var(--gold)">本轮回顾 · REVIEW</div>
@@ -4922,6 +4922,11 @@ window.AC_MERD = {
         </div>
         <div style="height:10px"></div>`;
       view.scrollTop = 0;
+      if (rate >= 90 && s.sub !== 'wrong' && s.sub !== 'wrongretry' && s.sub !== 'grad') {
+        let seen = false;
+        try { seen = !!localStorage.getItem('acu-study-v1.donateSeen'); } catch (e) {}
+        if (!seen) setTimeout(showDonate, 900);
+      }
       return;
     }
 
@@ -5088,6 +5093,58 @@ window.AC_MERD = {
   /* ---------------- 我的 ---------------- */
   let meTab = 'fav';
 
+  /* ---------------- 捐赠支持 ---------------- */
+  /* 微信赞赏码图片（base64 dataURL）加到 DONATE.wechatQr 即自动显示，留空则隐藏该卡 */
+  const DONATE = {
+    zelle: 'zlynncc@gmail.com',
+    wechatQr: ''
+  };
+  function showDonate() {
+    try { localStorage.setItem('acu-study-v1.donateSeen', '1'); } catch (e) {}
+    const modal = document.createElement('div');
+    modal.id = 'donateModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding:0';
+    modal.innerHTML = `
+      <div style="background:var(--paper,#faf6ec);width:100%;max-width:440px;border-radius:20px 20px 0 0;padding:20px 18px 26px;max-height:86vh;overflow:auto">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <div class="serif" style="font-size:19px;font-weight:600;letter-spacing:.05em">支持本站维护</div>
+          <div style="font-size:9.5px;letter-spacing:.14em;color:var(--ink3)">SUPPORT THE SITE</div>
+          <span id="dmClose" style="margin-left:auto;font-size:20px;color:var(--ink3);cursor:pointer;line-height:1">×</span>
+        </div>
+        <div style="margin-top:8px;font-size:11.5px;line-height:1.9;color:var(--ink2)">
+          域名、托管与内容更新都靠个人投入；网站承诺永久免费，您的支持是它继续更新的动力。量力而行，请作者喝杯茶 🍵
+          <div style="font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;margin-top:3px">Hosting, updates and endless proofreading, kept free for everyone. Every cup counts.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+          <div style="background:var(--card,#fff);border:1px solid var(--line-soft);border-radius:14px;padding:13px 14px">
+            <div style="font-size:12.5px;font-weight:600;letter-spacing:.05em">Zelle</div>
+            <div style="font-size:10.5px;color:var(--ink3);line-height:1.7;margin-top:2px">打开你的银行 App → Zelle → 转账至下方邮箱<br><span style="font-style:italic">Open your banking app → Zelle → send to this email</span></div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+              <code id="dmZelle" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--paper-deep,#efe6d4);border-radius:9px;padding:8px 11px;font-size:12.5px;color:var(--ink);letter-spacing:.03em">${DONATE.zelle}</code>
+              <button class="btn primary" data-act="copyzelle" style="padding:8px 14px;font-size:11.5px">复制 · Copy</button>
+            </div>
+          </div>
+          ${DONATE.wechatQr ? `
+          <div style="background:var(--card,#fff);border:1px solid var(--line-soft);border-radius:14px;padding:13px 14px;display:flex;gap:12px;align-items:center">
+            <img src="${DONATE.wechatQr}" alt="微信赞赏码" style="width:96px;height:96px;border-radius:10px;object-fit:contain;background:#fff">
+            <div style="font-size:12.5px;font-weight:600;letter-spacing:.05em">微信赞赏<br><span style="font-weight:400;font-size:10.5px;color:var(--ink3);letter-spacing:0">微信扫一扫 · WeChat scan</span></div>
+          </div>` : ''}
+        </div>
+        <div style="margin-top:12px;font-size:9.5px;color:var(--ink3);text-align:center;letter-spacing:.03em">捐赠完全自愿，不影响任何功能 · Donations are voluntary; all features remain free.</div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.id === 'dmClose') { modal.remove(); return; }
+      const cz = e.target.closest('[data-act="copyzelle"]');
+      if (cz) {
+        const txt = (DONATE.zelle || '').trim();
+        const done = () => toast('已复制 Zelle 邮箱 · Copied: ' + txt);
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+        else { try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e2) {} done(); }
+      }
+    });
+  }
+
   function viewMe() {
     setTopbar({ title: '我的学习', titleEn: 'My Study' });
     setTab('me');
@@ -5163,6 +5220,15 @@ window.AC_MERD = {
           <button class="btn" data-act="share">分享 · Share</button>
           <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
         </div>
+      </div>
+
+      <div class="subj-row" data-act="donate" style="background:var(--card);border:1px solid var(--gold);border-radius:16px;margin:12px 4px 0;cursor:pointer">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--gold)">☕</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:15.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">支持本站维护</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Support site maintenance · Zelle / WeChat</span></div>
+          <div class="subj-desc">网站永久免费，您的支持是它继续更新的动力 · Free forever, powered by readers</div>
+        </div>
+        <span class="chev">${ICON.chev}</span>
       </div>
 
       <div style="display:flex;gap:10px;margin-top:14px">
@@ -5743,6 +5809,14 @@ window.AC_MERD = {
     const act = e.target.closest('[data-act]');
     if (act) {
       const a = act.dataset.act;
+      if (a === 'donate') { showDonate(); return; }
+      if (a === 'copyzelle') {
+        const txt = (DONATE.zelle || '').trim();
+        const done = () => toast('已复制 Zelle 邮箱 · Copied: ' + txt);
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+        else { try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e) {} done(); }
+        return;
+      }
       if (a === 'next') {
         if (quizState.i === quizState.items.length - 1) {
           quizState.finished = true;
