@@ -124,13 +124,13 @@ html.dark body {
 .serif { font-family: 'Palatino', 'Palatino Linotype', 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', Georgia, serif; }
 
 /* ---------- 大字模式（我的 → 字号）：整体放大内容区，所有正文文字（含内联字号）同步变大 ---------- */
-html[data-fontsize="lg"] #view { zoom: 1.18; }
+html[data-fontsize="lg"] #view { zoom: 1.28; }
 /* 大字下的换行修正：防止放大后固定单行内容被裁剪 */
 html[data-fontsize="lg"] .mer-card .mmeta { flex-wrap: wrap; row-gap: 2px; }
 html[data-fontsize="lg"] .mer-card .mmeta span { white-space: normal; }
 html[data-fontsize="lg"] .mer-card .mmeta span:first-child { white-space: nowrap; }
 html[data-fontsize="lg"] .profile-card .m { flex-wrap: wrap; row-gap: 10px; }
-html[data-fontsize="lg"] .map-label { font-size: 9px; letter-spacing: .06em; max-width: 55%; }
+html[data-fontsize="lg"] .map-label { font-size: 8.5px; letter-spacing: .03em; max-width: 44%; white-space: normal; line-height: 1.4; }
 
 /* 中英文字体搭配：拉丁字形用西文衬线，中文回落宋体；英文注释统一西文斜体 */
 .view div[style*="font-style:italic"],
@@ -3443,6 +3443,8 @@ window.AC_MERD = {
   const tDone = new WeakSet();
   function convTextNode(n) {
     if (!trad || tDone.has(n) || !n.nodeValue || !/[\u3400-\u9FFF]/.test(n.nodeValue)) return;
+    const p = n.parentElement;
+    if (p && p.closest('[data-notrans]')) return;
     const c = tConv(n.nodeValue);
     if (c !== n.nodeValue) { tDone.add(n); n.nodeValue = c; }
   }
@@ -3545,6 +3547,7 @@ window.AC_MERD = {
       : '';
     topbar.innerHTML = `${back}<h1 class="serif" style="flex:1;min-width:0">${opts.title}${opts.titleEn ? `<span class="ten">${opts.titleEn}</span>` : ''}</h1>` +
       (opts.sub ? `<span class="sub">${opts.sub}</span>` : '') +
+      `<button class="icon-btn lang-btn" data-act="lang" data-notrans="1" title="切換簡繁 · Simplified/Traditional" style="font-size:13px;flex:0 0 auto;font-family:inherit;color:var(--ink2);font-weight:600" aria-label="Toggle Simplified/Traditional">${trad ? '简' : '繁'}</button>` +
       `<button class="icon-btn" data-act="donate" title="支持本站维护 · Support" style="font-size:16px;flex:0 0 auto" aria-label="Support">☕</button>`;
   }
 
@@ -5176,7 +5179,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 27;
+  const APP_VERSION = 28;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5960,6 +5963,7 @@ window.AC_MERD = {
     const act = e.target.closest('[data-act]');
     if (act) {
       const a = act.dataset.act;
+      if (a === 'lang') { trad = !trad; persist(); applyLang(); render(); return; }
       if (a === 'donate') { showDonate(); return; }
       if (a === 'copyzelle') {
         const txt = (DONATE.zelle || '').trim();
