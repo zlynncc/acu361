@@ -647,7 +647,7 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   background: #fdf6ea;
   border: 1px solid #f0e3c9;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.75;
   color: #7c6234;
   letter-spacing: .02em;
@@ -675,7 +675,7 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   align-items: baseline;
   padding: 5px 0;
   border-top: 1px dashed var(--line-soft);
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.65;
 }
 .exam-row:first-of-type { border-top: none; }
@@ -1047,7 +1047,7 @@ html.dark .searchbar input::placeholder { color: var(--ink3); opacity: 1; }
   padding: 12px 14px;
   background: #f7f2e6;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 12.5px;
   line-height: 1.8;
   color: var(--ink2);
   letter-spacing: .02em;
@@ -1108,7 +1108,7 @@ html.dark .searchbar input::placeholder { color: var(--ink3); opacity: 1; }
   width: 100%;
   margin-top: 1px;
   margin-left: 0 !important;
-  font-size: 9px;
+  font-size: 9.5px;
   line-height: 1.6;
   letter-spacing: .1em;
   color: var(--ink3);
@@ -3741,7 +3741,7 @@ window.AC_MERD = {
         <div style="font-size:15px;color:var(--gold);letter-spacing:.1em;margin-top:5px;font-weight:600;white-space:nowrap">一穴多面 · 一处多解</div>
         <div style="font-size:10.5px;color:var(--ink3);letter-spacing:.04em;margin-top:6px;font-style:italic;font-family:Georgia,serif;white-space:nowrap">One Point, Many Facets · One Place, Many Paths</div>
         <p style="margin-top:12px;font-size:12.5px;line-height:1.9;letter-spacing:0;white-space:nowrap">定位主治 · 特定穴属性 · 针灸技术 · 随学随测<br><span style="font-size:10px;font-style:italic;font-family:Georgia,serif;letter-spacing:.02em">Locations · Indications · Special categories · Technique · Quiz anytime</span></p>
-        <p style="margin-top:4px;color:var(--ink3);font-size:10.5px">361 acupoints of the fourteen meridians · Study from many angles, test any time</p>
+        <p style="margin-top:4px;color:var(--ink3);font-size:11px">361 acupoints of the fourteen meridians · Study from many angles, test any time</p>
         <div style="display:inline-flex;align-items:baseline;gap:8px;margin-top:12px;padding:7px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow)">
           <span style="font-size:13px;color:var(--ink);letter-spacing:.12em;font-weight:600">设计者：郑静</span>
           <span style="font-size:10.5px;color:var(--gold);font-style:italic;font-family:Georgia,'Palatino',serif;letter-spacing:.04em">Designer: Jing Zheng</span>
@@ -4020,7 +4020,7 @@ window.AC_MERD = {
                 </div>
                 ${showMer ? `<div style="font-size:11.5px;color:var(--cinnabar);letter-spacing:.04em;margin-top:2px">${merOf(p)}<span style="color:var(--ink3);font-style:italic;font-size:10.5px;letter-spacing:.02em"> · ${merEn(p)}</span></div>` : ''}
                 <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
-                <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''}</div>
+                <div style="font-size:11px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''}</div>
               </div>
               <span class="chev">${ICON.chev}</span>
             </div>`).join('')}
@@ -4061,7 +4061,7 @@ window.AC_MERD = {
       <div class="sec-head"><h3>循行详情 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Pathway in Detail</span></h3></div>
       <div class="card" style="padding:14px 15px">
         <div style="font-size:12.5px;line-height:1.95;color:var(--ink2);letter-spacing:.02em">${window.AC_MERD[m.id].zh}</div>
-        <div style="margin-top:9px;font-size:11px;line-height:1.75;color:var(--ink3);font-style:italic;font-family:Georgia,'Palatino',serif">${window.AC_MERD[m.id].en}</div>
+        <div style="margin-top:9px;font-size:11.5px;line-height:1.75;color:var(--ink3);font-style:italic;font-family:Georgia,'Palatino',serif">${window.AC_MERD[m.id].en}</div>
       </div>` : ''}
 
       <div class="sec-head"><h3>本经腧穴 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Points of This Meridian</span></h3><span class="hint">按循行次序 · in course order</span></div>
@@ -4074,7 +4074,7 @@ window.AC_MERD = {
                 ${p.spec ? `<span class="tag gold" style="font-size:9px;padding:1px 6px">${p.spec.split('；')[0]}</span>` : ''}
               </div>
               <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
-              <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 70)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 70) ? '…' : ''}</div>
+              <div style="font-size:11px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 70)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 70) ? '…' : ''}</div>
             </div>
             <span class="chev">${ICON.chev}</span>
           </div>`).join('')}
@@ -4224,22 +4224,22 @@ window.AC_MERD = {
         <div class="field">
           <div class="k">定 位 <span style="font-weight:400;opacity:.7">Location</span></div>
           <div class="v">${p.loc}</div>
-          ${enp.locEn ? `<div class="v" style="font-size:11px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.locEn}</div>` : ''}
+          ${enp.locEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.locEn}</div>` : ''}
         </div>
         <div class="field">
           <div class="k">主 治 <span style="font-weight:400;opacity:.7">Indications</span></div>
           <div class="v">${p.acts}</div>
-          ${enp.actsEn ? `<div class="v" style="font-size:11px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.actsEn}</div>` : ''}
+          ${enp.actsEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.actsEn}</div>` : ''}
         </div>
         <div class="field">
           <div class="k">操 作 <span style="font-weight:400;opacity:.7">Method</span></div>
           <div class="v dim">${p.op}</div>
-          ${enp.opEn ? `<div class="v" style="font-size:11px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.opEn}</div>` : ''}
+          ${enp.opEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.opEn}</div>` : ''}
         </div>
         ${p.spec ? `<div class="field">
           <div class="k">特定穴 <span style="font-weight:400;opacity:.7">Special</span></div>
           <div class="v">${p.spec}</div>
-          ${enp.specEn ? `<div class="v" style="font-size:11px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.specEn}</div>` : ''}
+          ${enp.specEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.specEn}</div>` : ''}
         </div>` : ''}
         ${p.note ? `<div class="note-box"><b>注意</b> · ${p.note}${enp.noteEn ? `<span style="display:block;font-size:11px;font-style:italic;margin-top:3px;opacity:.8">${enp.noteEn}</span>` : ''}</div>` : ''}
       </div>
@@ -4248,16 +4248,16 @@ window.AC_MERD = {
         <div class="field">
           <div class="k">西医解剖 <span style="font-weight:400;opacity:.7">Western Anatomy</span></div>
           <div class="v" style="line-height:1.9">${enp.anat || '暂无'}</div>
-          ${enp.anatEn ? `<div class="v" style="font-size:11px;color:var(--ink3);line-height:1.7;margin-top:4px;font-style:italic">${enp.anatEn}</div>` : ''}
+          ${enp.anatEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:4px;font-style:italic">${enp.anatEn}</div>` : ''}
         </div>
       </div>
 
       <div class="exam-box">
         <div class="exam-head">学习要点 <span style="font-size:9px;letter-spacing:.16em;opacity:.65;font-family:Georgia,serif">ESSENTIALS</span></div>
-        <div class="exam-row"><span>归经 <i style="font-style:italic;font-size:9px;opacity:.6">Meridian</i></span><b>${p.mer.name}（${p.mer.abbr}）<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${(window.AC_EN.MER && window.AC_EN.MER[p.m]) || ''}</span></b></div>
-        <div class="exam-row"><span>穴性 <i style="font-style:italic;font-size:9px;opacity:.6">Point Category</i></span><b>${p.spec || '经穴'}<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acSpecEn(p.spec || '经穴')}</span></b></div>
+        <div class="exam-row"><span>归经 <i style="font-style:italic;font-size:9px;opacity:.6">Meridian</i></span><b>${p.mer.name}（${p.mer.abbr}）<span style="display:block;font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${(window.AC_EN.MER && window.AC_EN.MER[p.m]) || ''}</span></b></div>
+        <div class="exam-row"><span>穴性 <i style="font-style:italic;font-size:9px;opacity:.6">Point Category</i></span><b>${p.spec || '经穴'}<span style="display:block;font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acSpecEn(p.spec || '经穴')}</span></b></div>
         <div class="exam-row"><span>定位关键字 <i style="font-style:italic;font-size:9px;opacity:.6">Location Keys</i></span><b>${(p.loc.match(/[0-9.]+寸|[第][0-9一二三四五六七八九十]+[、]?[0-9一二三四五六七八九十]*[肋胸腰椎骶颈椎掌跖]*[间隙椎孔骨]?[^\uFF0C\u3002]*/g) || [p.r]).slice(0, 3).join('；')}<span style="display:block;font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;white-space:normal;line-height:1.6">${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 90)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 90) ? '…' : ''}</span></b></div>
-        <div class="exam-row"><span>进针深度 <i style="font-style:italic;font-size:9px;opacity:.6">Insertion Depth</i></span><b>${(p.op.match(/[0-9.~]+寸/) || ['按部位深浅而定'])[0]}<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acDepthEn(p.op || '')}</span></b></div>
+        <div class="exam-row"><span>进针深度 <i style="font-style:italic;font-size:9px;opacity:.6">Insertion Depth</i></span><b>${(p.op.match(/[0-9.~]+寸/) || ['按部位深浅而定'])[0]}<span style="display:block;font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acDepthEn(p.op || '')}</span></b></div>
       </div>
 
       <div class="actions">
@@ -4352,7 +4352,7 @@ window.AC_MERD = {
                   <span style="font-size:10px;color:var(--ink3);letter-spacing:.04em">${p.mer.short}</span>
                 </div>
                 <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
-                <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 60)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 60) ? '…' : ''}</div>
+                <div style="font-size:11px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 60)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 60) ? '…' : ''}</div>
               </div>
               <span class="chev">${ICON.chev}</span>
             </div>`).join('')}
@@ -4592,7 +4592,7 @@ window.AC_MERD = {
       const lblEn = q => `${((E().P[q.c] || {}).en) || q.n} (${q.c})`;
       return {
         type: '禁忌', lv: 3,
-        q: `下列针刺安全提示与禁忌针对的是哪个穴位？<br><span style="font-size:13px;color:var(--ink);line-height:1.9">${t2.note || ''}</span><br><span style="font-size:11.5px;color:var(--ink2);line-height:1.8;font-style:italic;font-family:Georgia,serif">${(E().P[t2.c] || {}).noteEn || ''}</span>`,
+        q: `下列针刺安全提示与禁忌针对的是哪个穴位？<br><span style="font-size:13.5px;color:var(--ink);line-height:1.9">${t2.note || ''}</span><br><span style="font-size:11.5px;color:var(--ink2);line-height:1.8;font-style:italic;font-family:Georgia,serif">${(E().P[t2.c] || {}).noteEn || ''}</span>`,
         options: opts.map(lbl),
         answer: lbl(t2),
         explain: `<b>${t2.c} ${t2.n}</b>：${t2.op}<br><b>注意</b> · ${t2.note || ''}<br><span style="font-style:italic;font-size:11px">${(E().P[t2.c] || {}).noteEn || ''}</span>`,
@@ -4806,7 +4806,7 @@ window.AC_MERD = {
             <span style="margin-left:auto;font-size:10.5px;color:var(--gold);white-space:nowrap">${n} 穴 · ∞</span>
           </div>
           <div style="font-size:9.5px;font-style:italic;font-family:Georgia,'Palatino',serif;color:var(--ink3);letter-spacing:.05em;white-space:normal;line-height:1.65;margin-top:2px">${en}</div>
-          <div style="font-size:10.5px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${m.dir || ''} · ${m.element}经 · ${m.time || ''}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${m.dir || ''} · ${m.element}经 · ${m.time || ''}</div>
         </div>
         <span class="chev">${ICON.chev}</span>
       </div>`;
@@ -4833,7 +4833,7 @@ window.AC_MERD = {
             <span style="margin-left:auto;font-size:10.5px;color:var(--gold);white-space:nowrap">${pts} 要点 · ∞</span>
           </div>
           <div style="font-size:9.5px;font-style:italic;font-family:Georgia,'Palatino',serif;color:var(--ink3);letter-spacing:.05em;white-space:normal;line-height:1.65;margin-top:2px">${x.en || ''}</div>
-          <div style="font-size:10.5px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${(x.ul && x.ul[0]) || ''}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${(x.ul && x.ul[0]) || ''}</div>
         </div>
         <span class="chev">${ICON.chev}</span>
       </div>`;
@@ -4858,7 +4858,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/merbank" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">∿</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">经络穴位自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">MERIDIAN SELF-TEST</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">经络穴位自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">MERIDIAN SELF-TEST</span></div>
           <div class="subj-desc">按经络分级出题 · 学哪条经练哪条经 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${MERS.length} 经</div>
@@ -4870,7 +4870,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/angles" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◎</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位多角度自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">BY ANGLE</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位多角度自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">BY ANGLE</span></div>
           <div class="subj-desc">定位 · 认穴 · 主治等专项 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${ANGLES.length} 类</div>
@@ -4880,7 +4880,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/PC" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">⊙</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位综合自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">MIXED DRILL</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">穴位综合自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">MIXED DRILL</span></div>
           <div class="subj-desc">由 ${POINTS.length} 穴实时生成 · 八个角度混合 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">开始 →</div>
@@ -4889,7 +4889,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/rxbank" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">◈</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">配穴处方自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">PRESCRIPTION SELF-TEST</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">配穴处方自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">PRESCRIPTION SELF-TEST</span></div>
           <div class="subj-desc">选方 / 辨方 · 按科别分级 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${RX.length} 科</div>
@@ -4900,7 +4900,7 @@ window.AC_MERD = {
       <div class="subj-row" data-go="quiz/tchbank:${c.cat}" style="background:var(--card,#fff);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px">${c.icon}</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">${c.cat}自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">${c.cat === '洁针技术' ? 'CNT SELF-TEST' : 'TECHNIQUE SELF-TEST'}</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap;overflow:visible;text-overflow:clip">${c.cat}自测</span><span style="${EN_STY};display:block;width:100%;white-space:normal;line-height:1.65">${c.cat === '洁针技术' ? 'CNT SELF-TEST' : 'TECHNIQUE SELF-TEST'}</span></div>
           <div class="subj-desc">要点判断 / 章节归类 · 按章节分级 · 每组 ${QUIZ_SIZE} 题</div>
         </div>
         <div class="subj-count">${c.items.length} 章</div>
@@ -4911,7 +4911,7 @@ window.AC_MERD = {
       <div class="subj-row" data-sub="wrong" style="background:var(--cinnabar-soft);border:1px solid #eccabd;border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px;background:var(--card);color:var(--cinnabar)">✗</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">错题重练</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap">WRONG ANSWER REVIEW</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">错题重练</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap">WRONG ANSWER REVIEW</span></div>
           <div class="subj-desc">专练答错的题 · 连对 2 次自动移出错题本</div>
         </div>
         <div class="subj-count" style="color:var(--cinnabar)">${wrongCount()} 题</div>
@@ -4922,7 +4922,7 @@ window.AC_MERD = {
       <div class="subj-row" data-sub="grad" style="background:var(--card);border:1px dashed var(--gold);border-radius:16px;margin-top:10px">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px;background:var(--card);color:var(--gold)">✓</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:15px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">毕业抽查</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap">GRADUATION CHECK</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">毕业抽查</span><span style="${EN_STY};display:block;width:100%;white-space:nowrap">GRADUATION CHECK</span></div>
           <div class="subj-desc">已连对 2 次移出的题 · 答对永久通过，答错回炉</div>
         </div>
         <div class="subj-count" style="color:var(--gold)">${gradCount()} 题</div>
@@ -5175,11 +5175,12 @@ window.AC_MERD = {
     zelle: 'zlynncc@gmail.com',
     wechatQr: ''
   };
+  const FEEDBACK_EMAIL = 'jzheng@fivebranches.edu';
 
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 28;
+  const APP_VERSION = 30;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5222,7 +5223,7 @@ window.AC_MERD = {
           如果它有帮到你，一杯茶就是最好的鼓励 🍵
           它会一直免费——每一杯茶，都会变成域名的续费、下一次更新，和一直亮着的页面。
           谢谢每一份温暖的心意。
-          <div style="font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;margin-top:3px">I built this little app for one simple thing: making point memorization easier. If it has helped you, a cup of tea is the best encouragement 🍵 It stays free, always — every cup goes into the domain, hosting, and the next update. Thank you for every warm gesture.</div>
+          <div style="font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;margin-top:3px">I built this little app for one simple thing: making point memorization easier. If it has helped you, a cup of tea is the best encouragement 🍵 It stays free, always — every cup goes into the domain, hosting, and the next update. Thank you for every warm gesture.</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
           <div style="background:var(--card,#fff);border:1px solid var(--line-soft);border-radius:14px;padding:13px 14px">
@@ -5281,6 +5282,45 @@ window.AC_MERD = {
     });
   }
 
+  /* ---------------- 反馈入口 ---------------- */
+  function showFeedback() {
+    const modal = document.createElement('div');
+    modal.id = 'fbModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding:0';
+    modal.innerHTML = `
+      <div style="background:var(--paper,#faf6ec);width:100%;max-width:440px;border-radius:20px 20px 0 0;padding:20px 18px 26px;max-height:86vh;overflow:auto">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <div class="serif" style="font-size:19px;font-weight:600;letter-spacing:.05em">反馈与纠错</div>
+          <div style="font-size:9.5px;letter-spacing:.14em;color:var(--ink3)">FEEDBACK</div>
+          <span id="fmClose" style="margin-left:auto;font-size:20px;color:var(--ink3);cursor:pointer;line-height:1">×</span>
+        </div>
+        <div style="margin-top:8px;font-size:11.5px;line-height:1.9;color:var(--ink2)">
+          发现内容错误、排版问题，或有什么功能想用而找不到——都欢迎告诉我。每一条反馈都会被认真对待。
+          <div style="font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;margin-top:3px">Found an error, a typo, or missing a feature? Every message is read and appreciated.</div>
+        </div>
+        <div style="background:var(--card,#fff);border:1px solid var(--line-soft);border-radius:14px;padding:13px 14px;margin-top:14px">
+          <div style="font-size:12.5px;font-weight:600;letter-spacing:.05em">Email</div>
+          <div style="font-size:10.5px;color:var(--ink3);line-height:1.7;margin-top:2px">点击「写邮件」直接发送，或复制邮箱在任意邮件 App 中联系<br><span style="font-style:italic">Tap “Compose” to send, or copy the address for any mail app</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+            <code id="fmEmail" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--paper-deep,#efe6d4);border-radius:9px;padding:8px 11px;font-size:12.5px;color:var(--ink);letter-spacing:.03em">${FEEDBACK_EMAIL}</code>
+            <button class="btn primary" id="fmCopy" style="padding:8px 14px;font-size:11.5px">复制 · Copy</button>
+          </div>
+          <a href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('穴位 App 反馈 · Feedback')}" style="display:block;text-align:center;margin-top:9px;padding:8px 14px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);font-size:11.5px;letter-spacing:.04em;text-decoration:none">写邮件 · Compose</a>
+        </div>
+        <div style="margin-top:12px;font-size:9.5px;color:var(--ink3);text-align:center;letter-spacing:.03em">内容纠错 · 功能建议 · 排版问题 · Errors, ideas, or layout issues</div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.id === 'fmClose') { modal.remove(); return; }
+      if (e.target.id === 'fmCopy') {
+        const txt = (FEEDBACK_EMAIL || '').trim();
+        const done = () => toast('已复制邮箱 · Copied: ' + txt);
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+        else { try { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } catch (e2) {} done(); }
+      }
+    });
+  }
+
   function viewMe() {
     setTopbar({ title: '我的学习', titleEn: 'My Study' });
     setTab('me');
@@ -5305,8 +5345,17 @@ window.AC_MERD = {
       <div class="subj-row" data-act="donate" style="background:var(--card);border:1px solid var(--gold);border-radius:16px;margin:12px 4px 0;cursor:pointer">
         <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--gold)">☕</span>
         <div class="subj-text">
-          <div class="subj-name serif" style="font-size:15.5px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">支持本站维护</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Support site maintenance · Zelle / WeChat</span></div>
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">支持本站维护</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Support site maintenance · Zelle / WeChat</span></div>
           <div class="subj-desc">网站永久免费，您的支持是它继续更新的动力 · Free forever, powered by readers</div>
+        </div>
+        <span class="chev">${ICON.chev}</span>
+      </div>
+
+      <div class="subj-row" data-act="feedback" style="background:var(--card);border-radius:16px;margin:10px 4px 0;cursor:pointer">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--ink2)">✉️</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">反馈与纠错</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Feedback &amp; Corrections</span></div>
+          <div class="subj-desc">发现错误或有建议？欢迎告诉我 · Every message is read</div>
         </div>
         <span class="chev">${ICON.chev}</span>
       </div>
@@ -5362,7 +5411,7 @@ window.AC_MERD = {
               <div class="prow-text">
                 <div class="pname">${p.n}<span style="font-size:10px;color:var(--ink3);margin-left:2px">${p.mer.short}</span></div>
                 <div class="ploc">${p.loc.replace(/^在[^，]*，/, '')}</div>
-                <div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 60)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 60) ? '…' : ''}</div>
+                <div style="font-size:11px;color:var(--ink3);font-style:italic;margin-top:1px">${((window.AC_EN.P[p.c] || {}).en) || ''} — ${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 60)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 60) ? '…' : ''}</div>
               </div>
               <span class="chev">${ICON.chev}</span>
             </div>`).join('')}
@@ -5573,7 +5622,7 @@ window.AC_MERD = {
               <span style="margin-left:auto;font-size:10.5px;color:var(--gold);white-space:nowrap">${c.items.length} 章</span>
             </div>
             <div style="font-size:9.5px;font-style:italic;font-family:Georgia,'Palatino',serif;color:var(--ink3);letter-spacing:.05em;white-space:normal;line-height:1.65;margin-top:2px">${c.en}</div>
-            <div style="font-size:10.5px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${c.items[0].t} 等 ${c.items.length} 章 · 点击进入</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${c.items[0].t} 等 ${c.items.length} 章 · 点击进入</div>
           </div>
           <span class="chev">${ICON.chev}</span>
         </div>`).join('')}
@@ -5604,7 +5653,7 @@ window.AC_MERD = {
                 <span style="margin-left:auto;font-size:10.5px;color:var(--gold);white-space:nowrap">${x.ul.length} 要点</span>
               </div>
               <div style="font-size:9.5px;font-style:italic;font-family:Georgia,'Palatino',serif;color:var(--ink3);letter-spacing:.05em;white-space:normal;line-height:1.65;margin-top:2px">${x.en || ''}</div>
-              <div style="font-size:10.5px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${x.ul[0]}</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:3px;white-space:normal;line-height:1.65">${x.ul[0]}</div>
             </div>
             <span class="chev">${ICON.chev}</span>
           </div>`).join('')}
@@ -5964,6 +6013,7 @@ window.AC_MERD = {
     if (act) {
       const a = act.dataset.act;
       if (a === 'lang') { trad = !trad; persist(); applyLang(); render(); return; }
+      if (a === 'feedback') { showFeedback(); return; }
       if (a === 'donate') { showDonate(); return; }
       if (a === 'copyzelle') {
         const txt = (DONATE.zelle || '').trim();
