@@ -4208,6 +4208,7 @@ window.AC_MERD = {
   function viewPoint(code) {
     const p = byCode[code];
     if (!p) { location.hash = '#/home'; return; }
+    reportCtx = '穴位详情 · Point: ' + p.c + ' ' + p.n;
     mapSide = p.side || mapSide || 'f';
     setTopbar({ title: p.n, titleEn: p.py, back: 'mer/' + p.m, sub: p.c });
     setTab('home');
@@ -4292,6 +4293,10 @@ window.AC_MERD = {
         <button class="btn fav ${isFav ? 'on' : ''}" data-act="fav">
           ${isFav ? ICON.starFill : ICON.star}${isFav ? '已收藏' : '收藏'}
         </button>
+      </div>
+
+      <div style="text-align:center;margin-top:12px">
+        <a data-act="feedback" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3);letter-spacing:.04em;cursor:pointer;text-decoration:none">✎ 发现内容有误？<span style="font-style:italic;font-family:Georgia,serif">Report an error</span></a>
       </div>
 
       <div class="pager">
@@ -5033,6 +5038,7 @@ window.AC_MERD = {
 
     const it = s.items[s.i];
     const answered = s.picked !== null;
+    reportCtx = '题目纠错 · Quiz: ' + it.type + '题，答案「' + it.answer + '」：' + String(it.q || it.explain || '').slice(0, 42);
 
     view.innerHTML = `
       <div class="quiz-top">
@@ -5068,6 +5074,7 @@ window.AC_MERD = {
         <div class="quiz-explain">${s.picked === it.answer ? '答对了。' : '正确答案：<b>' + it.answer + '</b>'}${it.en ? `<div style="font-size:11.5px;color:var(--ink3);font-style:italic;margin-top:3px">${s.picked === it.answer ? 'Correct.' : 'Correct answer: ' + ((it.en.o && it.en.o[it.options.indexOf(it.answer)]) || '')}</div>` : ''}<br>${it.explain}${it.en ? `<div style="font-size:11.5px;color:var(--ink3);font-style:italic;margin-top:4px;line-height:1.7">${it.en.ex}</div>` : ''}</div>
         <div class="quiz-foot">
           <button class="btn primary" data-act="next">${s.i === s.items.length - 1 ? '查看成绩 · Result' : '下一题 · Next'}</button>
+          <a data-act="feedback" style="display:block;text-align:center;margin-top:9px;font-size:11px;color:var(--ink3);letter-spacing:.04em;cursor:pointer;text-decoration:none">✎ 本题有误？<span style="font-style:italic;font-family:Georgia,serif">Report an error</span></a>
         </div>` : ''}
       <div style="height:10px"></div>
     `;
@@ -5205,7 +5212,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 33;
+  const APP_VERSION = 34;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5308,7 +5315,12 @@ window.AC_MERD = {
   }
 
   /* ---------------- 反馈入口 ---------------- */
+  /* 页面级报错上下文：穴位页/答题页渲染时设置，「我的」页总入口清空 */
+  let reportCtx = '';
   function showFeedback() {
+    const ctx = (reportCtx || '').trim();
+    const subj = ctx ? '穴位 App 纠错 · Correction' : '穴位 App 反馈 · Feedback';
+    const body = ctx ? '问题位置：' + ctx + '\n\n问题描述：\n' : '';
     const modal = document.createElement('div');
     modal.id = 'fbModal';
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding:0';
@@ -5320,6 +5332,7 @@ window.AC_MERD = {
           <span id="fmClose" style="margin-left:auto;font-size:20px;color:var(--ink3);cursor:pointer;line-height:1">×</span>
         </div>
         <div style="margin-top:8px;font-size:11.5px;line-height:1.9;color:var(--ink2)">
+          ${ctx ? `<div style="background:var(--paper-deep,#efe6d4);border-radius:10px;padding:8px 12px;font-size:11.5px;color:var(--ink);letter-spacing:.02em;margin-bottom:8px">📍 问题位置：<b>${ctx}</b></div>` : ''}
           发现内容错误、排版问题，或有什么功能想用而找不到——都欢迎告诉我。每一条反馈都会被认真对待。
           <div style="font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;margin-top:3px">Found an error, a typo, or missing a feature? Every message is read and appreciated.</div>
         </div>
@@ -5330,7 +5343,7 @@ window.AC_MERD = {
             <code id="fmEmail" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--paper-deep,#efe6d4);border-radius:9px;padding:8px 11px;font-size:12.5px;color:var(--ink);letter-spacing:.03em">${FEEDBACK_EMAIL}</code>
             <button class="btn primary" id="fmCopy" style="padding:8px 14px;font-size:11.5px">复制 · Copy</button>
           </div>
-          <a href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('穴位 App 反馈 · Feedback')}" style="display:block;text-align:center;margin-top:9px;padding:8px 14px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);font-size:11.5px;letter-spacing:.04em;text-decoration:none">写邮件 · Compose</a>
+          <a href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}" style="display:block;text-align:center;margin-top:9px;padding:8px 14px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);font-size:11.5px;letter-spacing:.04em;text-decoration:none">写邮件 · Compose</a>
         </div>
         <div style="margin-top:12px;font-size:9.5px;color:var(--ink3);text-align:center;letter-spacing:.03em">内容纠错 · 功能建议 · 排版问题 · Errors, ideas, or layout issues</div>
       </div>`;
@@ -5395,6 +5408,7 @@ window.AC_MERD = {
   }
 
   function viewMe() {
+    reportCtx = '';
     setTopbar({ title: '我的学习', titleEn: 'My Study' });
     setTab('me');
 
@@ -5484,7 +5498,9 @@ window.AC_MERD = {
       </div>
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3)">
         所有记录保存在本机浏览器中，不会上传；更换设备或清除浏览器数据后将重置，请留意。<br>
-        <span style="font-style:italic">All records are stored locally in your browser and never uploaded. They reset if you switch devices or clear browser data.</span>
+        <span style="font-style:italic">All records are stored locally in your browser and never uploaded. They reset if you switch devices or clear browser data.</span><br><br>
+        本 App 仅用于考试学习，不构成任何医疗建议；内容如有出入，请以你所用教材为准。<br>
+        <span style="font-style:italic">For exam study only — not medical advice. If content differs from your textbook, the textbook prevails.</span>
       </div>
     `;
     view.scrollTop = 0;
