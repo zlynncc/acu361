@@ -125,6 +125,12 @@ html.dark body {
 
 /* ---------- 大字模式（我的 → 字号）：整体放大内容区，所有正文文字（含内联字号）同步变大 ---------- */
 html[data-fontsize="lg"] #view { zoom: 1.18; }
+/* 大字下的换行修正：防止放大后固定单行内容被裁剪 */
+html[data-fontsize="lg"] .mer-card .mmeta { flex-wrap: wrap; row-gap: 2px; }
+html[data-fontsize="lg"] .mer-card .mmeta span { white-space: normal; }
+html[data-fontsize="lg"] .mer-card .mmeta span:first-child { white-space: nowrap; }
+html[data-fontsize="lg"] .profile-card .m { flex-wrap: wrap; row-gap: 10px; }
+html[data-fontsize="lg"] .map-label { font-size: 9px; letter-spacing: .06em; max-width: 55%; }
 
 /* 中英文字体搭配：拉丁字形用西文衬线，中文回落宋体；英文注释统一西文斜体 */
 .view div[style*="font-style:italic"],
@@ -5133,7 +5139,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 25;
+  const APP_VERSION = 26;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
