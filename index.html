@@ -5180,7 +5180,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 30;
+  const APP_VERSION = 31;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5321,6 +5321,54 @@ window.AC_MERD = {
     });
   }
 
+  /* ---------------- 设置弹层（主题 / 字号 / 简繁） ---------------- */
+  function showSettings() {
+    const modal = document.createElement('div');
+    modal.id = 'stModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding:0';
+    const tag = (on, attrs, label) => `<span class="tag ${on ? 'red' : ''}" style="padding:6px 14px;cursor:pointer" ${attrs}>${label}</span>`;
+    modal.innerHTML = `
+      <div style="background:var(--paper,#faf6ec);width:100%;max-width:440px;border-radius:20px 20px 0 0;padding:20px 18px 26px;max-height:86vh;overflow:auto">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <div class="serif" style="font-size:19px;font-weight:600;letter-spacing:.05em">设置</div>
+          <div style="font-size:9.5px;letter-spacing:.14em;color:var(--ink3)">SETTINGS</div>
+          <span id="stmClose" style="margin-left:auto;font-size:20px;color:var(--ink3);cursor:pointer;line-height:1">×</span>
+        </div>
+        <div style="margin-top:16px;font-size:12.5px;font-weight:600;letter-spacing:.05em">外观 · <span style="font-weight:400;font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);letter-spacing:.1em">APPEARANCE</span></div>
+        <div class="st-group" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          ${tag(theme === '', 'data-theme=""', '跟随系统 · Auto')}
+          ${tag(theme === 'light', 'data-theme="light"', '浅色 · Light')}
+          ${tag(theme === 'dark', 'data-theme="dark"', '深色 · Dark')}
+        </div>
+        <div style="margin-top:16px;font-size:12.5px;font-weight:600;letter-spacing:.05em">字号 · <span style="font-weight:400;font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);letter-spacing:.1em">TEXT SIZE</span></div>
+        <div class="st-group" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          ${tag(!fontLg, 'data-font=""', '标准 · Standard')}
+          ${tag(fontLg, 'data-font="lg"', '大字 · Large')}
+        </div>
+        <div style="margin-top:16px;font-size:12.5px;font-weight:600;letter-spacing:.05em">中文 · <span style="font-weight:400;font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);letter-spacing:.1em">SCRIPT</span></div>
+        <div class="st-group" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          ${tag(!trad, 'data-lang="s"', '简体 · Simplified')}
+          ${tag(trad, 'data-lang="t"', '繁體 · Traditional')}
+        </div>
+        <div style="margin-top:16px;font-size:9.5px;color:var(--ink3);text-align:center;letter-spacing:.03em">所有设置即时生效并自动记忆 · Applied instantly, remembered automatically</div>
+      </div>`;
+    document.body.appendChild(modal);
+    const syncTags = () => {
+      modal.querySelectorAll('[data-theme]').forEach(t => t.classList.toggle('red', t.dataset.theme === theme));
+      modal.querySelectorAll('[data-font]').forEach(t => t.classList.toggle('red', (t.dataset.font === 'lg') === fontLg));
+      modal.querySelectorAll('[data-lang]').forEach(t => t.classList.toggle('red', (t.dataset.lang === 't') === trad));
+    };
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.id === 'stmClose') { modal.remove(); return; }
+      const th = e.target.closest('[data-theme]');
+      if (th) { setTheme(th.dataset.theme); syncTags(); return; }
+      const fsz = e.target.closest('[data-font]');
+      if (fsz) { fontLg = fsz.dataset.font === 'lg'; persist(); applyFont(); syncTags(); return; }
+      const lg = e.target.closest('[data-lang]');
+      if (lg) { trad = lg.dataset.lang === 't'; persist(); applyLang(); render(); convTree(modal); syncTags(); return; }
+    });
+  }
+
   function viewMe() {
     setTopbar({ title: '我的学习', titleEn: 'My Study' });
     setTab('me');
@@ -5340,54 +5388,6 @@ window.AC_MERD = {
           <div><span>错题 · Wrong</span><b>${wrongCount()}</b></div>
           <div><span>完成度 · Done</span><b>${pct}%</b></div>
         </div>
-      </div>
-
-      <div class="subj-row" data-act="donate" style="background:var(--card);border:1px solid var(--gold);border-radius:16px;margin:12px 4px 0;cursor:pointer">
-        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--gold)">☕</span>
-        <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">支持本站维护</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Support site maintenance · Zelle / WeChat</span></div>
-          <div class="subj-desc">网站永久免费，您的支持是它继续更新的动力 · Free forever, powered by readers</div>
-        </div>
-        <span class="chev">${ICON.chev}</span>
-      </div>
-
-      <div class="subj-row" data-act="feedback" style="background:var(--card);border-radius:16px;margin:10px 4px 0;cursor:pointer">
-        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--ink2)">✉️</span>
-        <div class="subj-text">
-          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">反馈与纠错</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Feedback &amp; Corrections</span></div>
-          <div class="subj-desc">发现错误或有建议？欢迎告诉我 · Every message is read</div>
-        </div>
-        <span class="chev">${ICON.chev}</span>
-      </div>
-
-      ${wrongCount() ? `
-      <div style="margin:0 4px 14px;font-size:10.5px;color:var(--ink3);line-height:1.85">
-        错题 ${wrongCount()} 题 · 在自测中答题，交卷后可直接「立即重练本题组错题」<br>
-        <span style="font-style:italic;font-family:Georgia,serif">${wrongCount()} wrong answers — retry them right on the result page after each quiz.</span>
-      </div>` : ''}
-
-      <div class="sec-head"><h3>外观 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Appearance</span></h3></div>
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <span class="tag ${theme === '' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="">跟随系统 · Auto</span>
-        <span class="tag ${theme === 'light' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="light">浅色 · Light</span>
-        <span class="tag ${theme === 'dark' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="dark">深色 · Dark</span>
-      </div>
-
-      <div class="sec-head"><h3>字号 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Text Size</span></h3><span class="hint">放大正文阅读 · Reading text</span></div>
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <span class="tag ${!fontLg ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-font="">标准 · Standard</span>
-        <span class="tag ${fontLg ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-font="lg">大字 · Large</span>
-      </div>
-
-      <div class="sec-head"><h3>中文 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Chinese</span></h3><span class="hint">加州考试繁体适配 · CALE Traditional</span></div>
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <span class="tag ${!trad ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-lang="s">简体 · Simplified</span>
-        <span class="tag ${trad ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-lang="t">繁體 · Traditional</span>
-      </div>
-
-      <div class="sec-head"><h3>学习记录 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Records</span></h3></div>
-      <div style="display:flex;gap:10px;margin-bottom:14px">
-        <button class="btn ghost" data-act="export">导出记录 · Export</button>
       </div>
 
       <div class="sec-head">
@@ -5418,18 +5418,44 @@ window.AC_MERD = {
         </div>`;
       })()}
 
-      <div class="share-box">
-        <div class="share-t">分享 <span>Share</span></div>
-        <div class="share-d">打开即可用，无需注册。<br>
-          <span style="font-style:italic">Opens instantly, no sign-up.</span></div>
-        <div class="share-btns">
-          <button class="btn" data-act="share">分享 · Share</button>
-          <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
+      ${wrongCount() ? `
+      <div style="margin:12px 4px 0;font-size:10.5px;color:var(--ink3);line-height:1.85">
+        错题 ${wrongCount()} 题 · 在自测中答题，交卷后可直接「立即重练本题组错题」<br>
+        <span style="font-style:italic;font-family:Georgia,serif">${wrongCount()} wrong answers — retry them right on the result page after each quiz.</span>
+      </div>` : ''}
+
+      <div class="subj-row" data-act="donate" style="background:var(--card);border:1px solid var(--gold);border-radius:16px;margin:16px 4px 0;cursor:pointer">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--gold)">☕</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">支持本站维护</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Support site maintenance · Zelle / WeChat</span></div>
+          <div class="subj-desc">网站永久免费，您的支持是它继续更新的动力 · Free forever, powered by readers</div>
         </div>
+        <span class="chev">${ICON.chev}</span>
       </div>
 
-      <div style="display:flex;gap:10px;margin-top:14px">
-        <button class="btn ghost" data-act="reset">清空学习记录 · Reset</button>
+      <div class="subj-row" data-act="feedback" style="background:var(--card);border-radius:16px;margin:10px 4px 0;cursor:pointer">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--ink2)">✉️</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">反馈与纠错</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Feedback &amp; Corrections</span></div>
+          <div class="subj-desc">发现错误或有建议？欢迎告诉我 · Every message is read</div>
+        </div>
+        <span class="chev">${ICON.chev}</span>
+      </div>
+
+      <div class="subj-row" data-act="settings" style="background:var(--card);border-radius:16px;margin:10px 4px 0;cursor:pointer">
+        <span class="subj-icon" style="width:38px;height:38px;font-size:17px;color:var(--ink2)">⚙️</span>
+        <div class="subj-text">
+          <div class="subj-name serif" style="font-size:16px;flex-wrap:wrap;line-height:1.45"><span style="white-space:nowrap">设置</span><span style="font-size:9.5px;font-style:italic;font-family:Georgia,serif;color:var(--ink3);display:block;width:100%;white-space:nowrap">Settings</span></div>
+          <div class="subj-desc">外观 · 字号 · 中文简繁 / Theme · Text · Script</div>
+        </div>
+        <span class="chev">${ICON.chev}</span>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:18px 4px 0">
+        <button class="btn ghost" data-act="export">导出记录 · Export</button>
+        <button class="btn ghost" data-act="share">分享 · Share</button>
+        <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
+        <button class="btn ghost" data-act="reset">清空记录 · Reset</button>
       </div>
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3)">
         所有记录保存在本机浏览器中，不会上传；更换设备或清除浏览器数据后将重置，请留意。<br>
@@ -6014,6 +6040,7 @@ window.AC_MERD = {
       const a = act.dataset.act;
       if (a === 'lang') { trad = !trad; persist(); applyLang(); render(); return; }
       if (a === 'feedback') { showFeedback(); return; }
+      if (a === 'settings') { showSettings(); return; }
       if (a === 'donate') { showDonate(); return; }
       if (a === 'copyzelle') {
         const txt = (DONATE.zelle || '').trim();
