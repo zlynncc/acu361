@@ -123,6 +123,20 @@ html.dark body {
 
 .serif { font-family: 'Palatino', 'Palatino Linotype', 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', Georgia, serif; }
 
+/* ---------- 大字模式（我的 → 字号）：只放大正文阅读文字，不动装饰性小字 ---------- */
+html[data-fontsize="lg"] .field .v { font-size: 15.5px; }
+html[data-fontsize="lg"] .field .v.dim { font-size: 14.5px; }
+html[data-fontsize="lg"] .ploc { font-size: 12.5px; }
+html[data-fontsize="lg"] .opt { font-size: 16px; }
+html[data-fontsize="lg"] .qcard .qtext { font-size: 18px; }
+html[data-fontsize="lg"] .quiz-explain { font-size: 13.5px; }
+html[data-fontsize="lg"] .note-box { font-size: 13.5px; }
+html[data-fontsize="lg"] .exam-row { font-size: 13px; }
+html[data-fontsize="lg"] .exam-row span { font-size: 11.5px; }
+html[data-fontsize="lg"] .share-d { font-size: 12.5px; }
+html[data-fontsize="lg"] .subj-desc { font-size: 12.5px; }
+html[data-fontsize="lg"] .a2hs-step .tx { font-size: 14px; }
+
 /* 中英文字体搭配：拉丁字形用西文衬线，中文回落宋体；英文注释统一西文斜体 */
 .view div[style*="font-style:italic"],
 .view span[style*="font-style:italic"],
@@ -392,6 +406,7 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   align-items: center;
   gap: 7px;
 }
+.mer-card .mmeta span { white-space: nowrap; }
 .mer-card .prog {
   margin-top: 9px;
   height: 2px;
@@ -531,7 +546,7 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
 .prow-text { min-width: 0; flex: 1; }
 .ploc {
   margin-top: 3px;
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--ink3);
   white-space: nowrap;
   overflow: hidden;
@@ -625,12 +640,12 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   margin-bottom: 7px;
 }
 .field .v {
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.9;
   color: var(--ink);
   letter-spacing: .02em;
 }
-.field .v.dim { color: var(--ink2); font-size: 13px; }
+.field .v.dim { color: var(--ink2); font-size: 13.5px; }
 .note-box {
   margin-top: 12px;
   padding: 11px 13px;
@@ -1007,7 +1022,7 @@ html.dark .searchbar input::placeholder { color: var(--ink3); opacity: 1; }
   border-radius: 13px;
   background: var(--card);
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: 15px;
   color: var(--ink);
   text-align: left;
   cursor: pointer;
@@ -3394,7 +3409,7 @@ window.AC_MERD = {
   let grad = saved.grad || {};
   function persist() {
     try {
-      localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered, wrongBook, killed, grad, theme }));
+      localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered, wrongBook, killed, grad, theme, fontLg }));
     } catch (e) {}
   }
 
@@ -3408,10 +3423,16 @@ window.AC_MERD = {
   }
   function setTheme(t) {
     theme = t;
-    try { localStorage.setItem(KEY, JSON.stringify({ learned: [...learned], fav: [...fav], answered, wrongBook, killed, grad, theme })); } catch (e) {}
+    persist();
     applyTheme();
   }
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!theme) applyTheme(); });
+
+  /* ---------------- 字号（标准 / 大） ---------------- */
+  let fontLg = !!saved.fontLg;   /* false 标准 | true 大字（只放大正文阅读文字） */
+  function applyFont() {
+    document.documentElement.setAttribute('data-fontsize', fontLg ? 'lg' : 'std');
+  }
 
   /* 题目标识：用答案文本去重（同一知识点重复出错只记一次） */
   const qkey = it => (it.type || '') + '|' + (it.answer || '').slice(0, 60);
@@ -3735,10 +3756,10 @@ window.AC_MERD = {
           <div style="font-size:11px;color:var(--ink3);letter-spacing:.06em">${daily.c} · ${daily.py}</div>
         </div>
         <div style="font-size:11.5px;color:var(--ink3);font-style:italic;letter-spacing:.03em">${(window.AC_EN.P[daily.c] && window.AC_EN.P[daily.c].en) || ''}</div>
-        <div style="margin-top:10px;font-size:12.5px;line-height:1.85;color:var(--ink2)">${daily.loc}</div>
-        <div style="margin-top:4px;font-size:11px;color:var(--ink3);line-height:1.7;font-style:italic">${(window.AC_EN.P[daily.c] && window.AC_EN.P[daily.c].locEn) || ''}</div>
-        <div style="margin-top:9px;font-size:12px;color:var(--ink3);line-height:1.8">主治：${daily.acts}</div>
-        <div style="margin-top:4px;font-size:11px;color:var(--ink3);line-height:1.7;font-style:italic">Indications: ${(window.AC_EN.P[daily.c] && window.AC_EN.P[daily.c].actsEn) || ''}</div>
+        <div style="margin-top:10px;font-size:13.5px;line-height:1.85;color:var(--ink2)">${daily.loc}</div>
+        <div style="margin-top:4px;font-size:11.5px;color:var(--ink3);line-height:1.7;font-style:italic">${(window.AC_EN.P[daily.c] && window.AC_EN.P[daily.c].locEn) || ''}</div>
+        <div style="margin-top:9px;font-size:12.5px;color:var(--ink3);line-height:1.8">主治：${daily.acts}</div>
+        <div style="margin-top:4px;font-size:11.5px;color:var(--ink3);line-height:1.7;font-style:italic">Indications: ${(window.AC_EN.P[daily.c] && window.AC_EN.P[daily.c].actsEn) || ''}</div>
       </div>
 
       <div style="margin:20px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3);letter-spacing:.04em">
@@ -4200,7 +4221,7 @@ window.AC_MERD = {
         <div class="exam-head">学习要点 <span style="font-size:9px;letter-spacing:.16em;opacity:.65;font-family:Georgia,serif">ESSENTIALS</span></div>
         <div class="exam-row"><span>归经 <i style="font-style:italic;font-size:9px;opacity:.6">Meridian</i></span><b>${p.mer.name}（${p.mer.abbr}）<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${(window.AC_EN.MER && window.AC_EN.MER[p.m]) || ''}</span></b></div>
         <div class="exam-row"><span>穴性 <i style="font-style:italic;font-size:9px;opacity:.6">Point Category</i></span><b>${p.spec || '经穴'}<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acSpecEn(p.spec || '经穴')}</span></b></div>
-        <div class="exam-row"><span>定位关键字 <i style="font-style:italic;font-size:9px;opacity:.6">Location Keys</i></span><b>${(p.loc.match(/[0-9.]+寸|[第][0-9一二三四五六七八九十]+[、]?[0-9一二三四五六七八九十]*[肋胸腰椎骶颈椎掌跖]*[间隙椎孔骨]?[^\uFF0C\u3002]*/g) || [p.r]).slice(0, 3).join('；')}<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;white-space:normal;line-height:1.6">${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 90)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 90) ? '…' : ''}</span></b></div>
+        <div class="exam-row"><span>定位关键字 <i style="font-style:italic;font-size:9px;opacity:.6">Location Keys</i></span><b>${(p.loc.match(/[0-9.]+寸|[第][0-9一二三四五六七八九十]+[、]?[0-9一二三四五六七八九十]*[肋胸腰椎骶颈椎掌跖]*[间隙椎孔骨]?[^\uFF0C\u3002]*/g) || [p.r]).slice(0, 3).join('；')}<span style="display:block;font-size:11px;color:var(--ink3);font-style:italic;font-family:Georgia,serif;white-space:normal;line-height:1.6">${((window.AC_EN.P[p.c] || {}).locEn || '').slice(0, 90)}${(((window.AC_EN.P[p.c] || {}).locEn || '').length > 90) ? '…' : ''}</span></b></div>
         <div class="exam-row"><span>进针深度 <i style="font-style:italic;font-size:9px;opacity:.6">Insertion Depth</i></span><b>${(p.op.match(/[0-9.~]+寸/) || ['按部位深浅而定'])[0]}<span style="display:block;font-size:10px;color:var(--ink3);font-style:italic;font-family:Georgia,serif">${acDepthEn(p.op || '')}</span></b></div>
       </div>
 
@@ -4984,7 +5005,7 @@ window.AC_MERD = {
         </div>
       </div>
       ${answered ? `
-        <div class="quiz-explain">${s.picked === it.answer ? '答对了。' : '正确答案：<b>' + it.answer + '</b>'}${it.en ? `<div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:3px">${s.picked === it.answer ? 'Correct.' : 'Correct answer: ' + ((it.en.o && it.en.o[it.options.indexOf(it.answer)]) || '')}</div>` : ''}<br>${it.explain}${it.en ? `<div style="font-size:10.5px;color:var(--ink3);font-style:italic;margin-top:4px;line-height:1.7">${it.en.ex}</div>` : ''}</div>
+        <div class="quiz-explain">${s.picked === it.answer ? '答对了。' : '正确答案：<b>' + it.answer + '</b>'}${it.en ? `<div style="font-size:11.5px;color:var(--ink3);font-style:italic;margin-top:3px">${s.picked === it.answer ? 'Correct.' : 'Correct answer: ' + ((it.en.o && it.en.o[it.options.indexOf(it.answer)]) || '')}</div>` : ''}<br>${it.explain}${it.en ? `<div style="font-size:11.5px;color:var(--ink3);font-style:italic;margin-top:4px;line-height:1.7">${it.en.ex}</div>` : ''}</div>
         <div class="quiz-foot">
           <button class="btn primary" data-act="next">${s.i === s.items.length - 1 ? '查看成绩 · Result' : '下一题 · Next'}</button>
         </div>` : ''}
@@ -5123,7 +5144,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 23;
+  const APP_VERSION = 24;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5266,6 +5287,12 @@ window.AC_MERD = {
         <span class="tag ${theme === '' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="">跟随系统 · Auto</span>
         <span class="tag ${theme === 'light' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="light">浅色 · Light</span>
         <span class="tag ${theme === 'dark' ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-theme="dark">深色 · Dark</span>
+      </div>
+
+      <div class="sec-head"><h3>字号 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Text Size</span></h3><span class="hint">放大正文阅读 · Reading text</span></div>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <span class="tag ${!fontLg ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-font="">标准 · Standard</span>
+        <span class="tag ${fontLg ? 'red' : ''}" style="padding:5px 12px;cursor:pointer" data-font="lg">大字 · Large</span>
       </div>
 
       <div class="sec-head"><h3>学习记录 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Records</span></h3></div>
@@ -5886,6 +5913,9 @@ window.AC_MERD = {
     const th = e.target.closest('[data-theme]');
     if (th) { setTheme(th.dataset.theme); viewMe(); return; }
 
+    const fsz = e.target.closest('[data-font]');
+    if (fsz) { fontLg = fsz.dataset.font === 'lg'; persist(); applyFont(); viewMe(); return; }
+
     const act = e.target.closest('[data-act]');
     if (act) {
       const a = act.dataset.act;
@@ -6087,6 +6117,8 @@ window.AC_MERD = {
   window.addEventListener('load', () => setTimeout(render, 0));
 
   applyTheme();
+  applyFont();
+
   render();
   setTab('home');
 
