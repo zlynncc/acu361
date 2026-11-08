@@ -129,7 +129,6 @@ html[data-fontsize="lg"] #view { zoom: 1.28; }
 html[data-fontsize="lg"] .mer-card .mmeta { flex-wrap: wrap; row-gap: 2px; }
 html[data-fontsize="lg"] .mer-card .mmeta span { white-space: normal; }
 html[data-fontsize="lg"] .mer-card .mmeta span:first-child { white-space: nowrap; }
-html[data-fontsize="lg"] .profile-card .m { flex-wrap: wrap; row-gap: 10px; }
 html[data-fontsize="lg"] .map-label { font-size: 8.5px; letter-spacing: .03em; max-width: 44%; white-space: normal; line-height: 1.4; }
 
 /* 中英文字体搭配：拉丁字形用西文衬线，中文回落宋体；英文注释统一西文斜体 */
@@ -712,6 +711,28 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
 .btn.primary.done { background: var(--cinnabar); border-color: var(--cinnabar); }
 .btn.fav.on { background: var(--cinnabar-soft); border-color: #eccabd; color: var(--cinnabar); }
 .btn.ghost { background: transparent; box-shadow: none; color: var(--ink2); }
+/* 双语双行按钮（我的页底部操作组）：中文主行 + 英文斜体小注行 */
+.btn.duet {
+  flex-direction: column;
+  gap: 4px;
+  height: auto;
+  min-height: 56px;
+  padding: 10px 4px;
+}
+.btn.duet span { font-size: 13px; letter-spacing: .08em; line-height: 1; display: block; white-space: nowrap; }
+.btn.duet i {
+  font-family: Georgia, 'Palatino', serif;
+  font-style: italic;
+  font-size: 9.5px;
+  letter-spacing: .05em;
+  color: var(--ink3);
+  line-height: 1;
+  display: block;
+}
+.btn.duet.danger span { color: var(--cinnabar); }
+.btn.duet.danger i { color: var(--cinnabar); opacity: .62; }
+/* 大字模式下改 2×2：一排四个放不下四字词，且大字需要更大触控目标 */
+html[data-fontsize="lg"] .btn.duet { flex: 1 1 42%; }
 
 /* 分享卡片 */
 .share-box {
@@ -1130,9 +1151,12 @@ html.dark .searchbar input::placeholder { color: var(--ink3); opacity: 1; }
   font-size: 11px;
   color: var(--ink3);
   letter-spacing: .02em;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }
 .subj-count {
   flex: 0 0 auto;
@@ -1169,8 +1193,9 @@ html.dark .searchbar input::placeholder { color: var(--ink3); opacity: 1; }
 }
 .profile-card .d { font-size: 10.5px; letter-spacing: .18em; opacity: .55; margin-top: 8px; font-family: Georgia, 'Palatino', serif; }
 .profile-card .m {
-  display: flex;
-  gap: 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
   margin-top: 18px;
 }
 .profile-card .m div span { display: block; font-size: 10px; letter-spacing: .16em; opacity: .55; }
@@ -5180,7 +5205,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 31;
+  const APP_VERSION = 33;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5452,10 +5477,10 @@ window.AC_MERD = {
       </div>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin:18px 4px 0">
-        <button class="btn ghost" data-act="export">导出记录 · Export</button>
-        <button class="btn ghost" data-act="share">分享 · Share</button>
-        <button class="btn ghost" data-act="copy">复制链接 · Copy</button>
-        <button class="btn ghost" data-act="reset">清空记录 · Reset</button>
+        <button class="btn ghost duet" data-act="export"><span>导出记录</span><i>Export</i></button>
+        <button class="btn ghost duet" data-act="share"><span>分享</span><i>Share</i></button>
+        <button class="btn ghost duet" data-act="copy"><span>复制链接</span><i>Copy</i></button>
+        <button class="btn ghost duet danger" data-act="reset"><span>清空记录</span><i>Reset</i></button>
       </div>
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3)">
         所有记录保存在本机浏览器中，不会上传；更换设备或清除浏览器数据后将重置，请留意。<br>
