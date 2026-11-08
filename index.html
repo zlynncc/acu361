@@ -123,19 +123,8 @@ html.dark body {
 
 .serif { font-family: 'Palatino', 'Palatino Linotype', 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', Georgia, serif; }
 
-/* ---------- 大字模式（我的 → 字号）：只放大正文阅读文字，不动装饰性小字 ---------- */
-html[data-fontsize="lg"] .field .v { font-size: 15.5px; }
-html[data-fontsize="lg"] .field .v.dim { font-size: 14.5px; }
-html[data-fontsize="lg"] .ploc { font-size: 12.5px; }
-html[data-fontsize="lg"] .opt { font-size: 16px; }
-html[data-fontsize="lg"] .qcard .qtext { font-size: 18px; }
-html[data-fontsize="lg"] .quiz-explain { font-size: 13.5px; }
-html[data-fontsize="lg"] .note-box { font-size: 13.5px; }
-html[data-fontsize="lg"] .exam-row { font-size: 13px; }
-html[data-fontsize="lg"] .exam-row span { font-size: 11.5px; }
-html[data-fontsize="lg"] .share-d { font-size: 12.5px; }
-html[data-fontsize="lg"] .subj-desc { font-size: 12.5px; }
-html[data-fontsize="lg"] .a2hs-step .tx { font-size: 14px; }
+/* ---------- 大字模式（我的 → 字号）：整体放大内容区，所有正文文字（含内联字号）同步变大 ---------- */
+html[data-fontsize="lg"] #view { zoom: 1.18; }
 
 /* 中英文字体搭配：拉丁字形用西文衬线，中文回落宋体；英文注释统一西文斜体 */
 .view div[style*="font-style:italic"],
@@ -5144,7 +5133,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 24;
+  const APP_VERSION = 25;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
