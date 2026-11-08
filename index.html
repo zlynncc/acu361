@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  腧穴 361 · Acupoints 361 — 十四经腧穴中英双语学习工具
+  © 2025 郑静 Jing Zheng. 保留所有权利。
+  本软件及其内含数据仅供个人学习使用，禁止复制、修改或二次分发。
+  For personal study only. All rights reserved. Do not copy, modify, or redistribute.
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -11,6 +17,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="腧穴361">
 <meta name="format-detection" content="telephone=no">
+<!-- 匿名访问统计：无 cookie、不追踪个人；仅在线打开时加载，本地文件打开不发送任何请求 -->
+<script>
+if (/^https?:$/.test(location.protocol)) {
+  var _cfa = document.createElement('script');
+  _cfa.type = 'module';
+  _cfa.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  _cfa.setAttribute('data-cf-beacon', '{"token": "0a6ae30d09ea424086f8bbe1e029cdc4"}');
+  document.head.appendChild(_cfa);
+}
+</script>
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -4991,7 +5007,13 @@ window.AC_MERD = {
       subject = it ? { name: it.t, sub: p[1] === '洁针技术' ? 'CNT BANK' : 'TECHNIQUE BANK' } : { name: p[1], sub: 'TECH BANK' };
     }
     else subject = angleById[s.sub] || ANGLES[0];
-    setTopbar({ title: subject.name, titleEn: subject.sub, sub: (s.sub && String(s.sub).startsWith('tch:') ? '每组 ' + QUIZ_SIZE + ' 题' : POINTS.length + ' 穴 · ' + QUIZ_SIZE + ' 题'), back: 'quiz' });
+    /* 返回键回到题组来源：按经出题回本经主页，其余回各自列表页 */
+    let backTo = 'quiz';
+    if (s.sub && s.sub.startsWith('mer:')) backTo = 'mer/' + s.sub.slice(4);
+    else if (angleById[s.sub]) backTo = 'quiz/angles';
+    else if (s.sub && s.sub.startsWith('rx:')) backTo = 'quiz/rxbank';
+    else if (s.sub && s.sub.startsWith('tch:')) backTo = 'quiz/tchbank:' + s.sub.split(':')[1];
+    setTopbar({ title: subject.name, titleEn: subject.sub, sub: (s.sub && String(s.sub).startsWith('tch:') ? '每组 ' + QUIZ_SIZE + ' 题' : POINTS.length + ' 穴 · ' + QUIZ_SIZE + ' 题'), back: backTo });
     setTab('quiz');
 
     if (s.finished) {
@@ -5212,7 +5234,7 @@ window.AC_MERD = {
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 34;
+  const APP_VERSION = 37;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
@@ -5497,10 +5519,13 @@ window.AC_MERD = {
         <button class="btn ghost duet danger" data-act="reset"><span>清空记录</span><i>Reset</i></button>
       </div>
       <div style="margin:18px 2px 8px;font-size:10.5px;line-height:1.9;color:var(--ink3)">
-        所有记录保存在本机浏览器中，不会上传；更换设备或清除浏览器数据后将重置，请留意。<br>
-        <span style="font-style:italic">All records are stored locally in your browser and never uploaded. They reset if you switch devices or clear browser data.</span><br><br>
+        学习记录仅保存在本机浏览器，不会上传；本站只统计匿名访问次数，不收集任何答题内容和个人信息。<br>
+        <span style="font-style:italic">Your study records stay in your browser and are never uploaded. We only count anonymous visits — no answers, no personal data.</span><br>
+        更换设备或清除浏览器数据后记录将重置，请留意 · Records reset if you switch devices or clear browser data.<br><br>
         本 App 仅用于考试学习，不构成任何医疗建议；内容如有出入，请以你所用教材为准。<br>
-        <span style="font-style:italic">For exam study only — not medical advice. If content differs from your textbook, the textbook prevails.</span>
+        <span style="font-style:italic">For exam study only — not medical advice. If content differs from your textbook, the textbook prevails.</span><br><br>
+        © 2025 郑静 Jing Zheng · 本工具仅供个人学习，禁止复制或二次分发<br>
+        <span style="font-style:italic">For personal study only — do not copy or redistribute.</span>
       </div>
     `;
     view.scrollTop = 0;
