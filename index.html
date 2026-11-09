@@ -3744,6 +3744,11 @@ window.AC_MERD = {
     LU: {
       vb: '0 0 700.7 1470.1',
       pts: { LU1:[258,317], LU2:[251,294], LU3:[170,409], LU4:[166,442], LU5:[150,514], LU6:[124,589], LU7:[99,674], LU8:[96,682], LU9:[92,694], LU10:[48,742], LU11:[10,760] },
+      /* 骨度分寸标尺（方案B：本经骨度段）：marks=横纹锚点，segs=段寸数标注 */
+      cun: {
+        marks: [ {x:207, y:356.5, t:'腋纹'}, {x:150, y:514, t:'肘横纹'}, {x:92, y:694, t:'腕横纹'} ],
+        segs: [ {x:232, y:438, t:'9寸'}, {x:165, y:606, t:'12寸'} ]
+      },
       line: 'M258,317 L251,294 L170,409 L166,442 L150,514 L124,589 L99,674 L96,682 L92,694 L48,742 L10,760',
       body: `<g transform="translate(-162.122307,1507.280692) scale(0.100000,-0.100000)"
 fill="var(--fig-body)" stroke="none">
@@ -4368,6 +4373,17 @@ l-11 65 5 -66z"/>
     /* 焦点模式（与原图一致）：同经穴位为无名小点（悬停显示提示），仅当前穴标注名称 */
     const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
     const marks = sibs.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="6.5" fill="var(--fig-dot)" opacity=".4"><title>${q.c} ${q.n}</title></circle>`).join('');
+    /* 骨度分寸标尺：横纹锚点刻度 + 段寸数（独立图层，不压经线穴位）；
+       当前穴恰在锚点上时（如尺泽=肘横纹）隐藏该锚点文字，避免与穴名标签打架 */
+    const cunSVG = (C, py) => {
+      if (!C) return '';
+      const mk = C.marks.filter(m => Math.abs(m.y - py) > 70).map(m =>
+        `<path d="M${m.x} ${m.y} h40" stroke="var(--fig-ruler)" stroke-width="3" stroke-linecap="round"/>
+         <text x="${m.x + 46}" y="${m.y + 7}" font-size="20" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${m.t}</text>`).join('');
+      const sg = C.segs.map(s =>
+        `<text x="${s.x}" y="${s.y}" text-anchor="middle" font-size="24" font-weight="600" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="5" paint-order="stroke">${s.t}</text>`).join('');
+      return mk + sg;
+    };
     const nameFS = 32, codeFS = 27;
     const nameW = textW(point.n, nameFS), codeW = textW(point.c, codeFS);
     const nameX = Math.max(nameW / 2 + 6, Math.min(xy[0], VBW - nameW / 2 - 6));
@@ -4378,6 +4394,7 @@ l-11 65 5 -66z"/>
     return `<svg viewBox="${PV[0]} ${PV[1] - topPad} ${PV[2]} ${PV[3] + topPad}" class="fig-ai" role="img" aria-label="穴位部位示意">
       ${M.body}
       <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
+      ${cunSVG(M.cun, xy[1])}
       ${marks}
       <circle cx="${xy[0]}" cy="${xy[1]}" r="24" fill="var(--fig-dot)" opacity=".16"/>
       <circle cx="${xy[0]}" cy="${xy[1]}" r="11" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="3"/>
@@ -5892,7 +5909,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 43;
+  const APP_VERSION = 44;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
