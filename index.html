@@ -3749,6 +3749,8 @@ window.AC_MERD = {
         marks: [ {x:207, y:356.5, t:'腋纹', tEn:'Axillary fold'}, {x:150, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:92, y:694, t:'腕横纹', tEn:'Wrist crease'} ],
         segs: [ {x:232, y:438, t:'9寸', tEn:'9 cun'}, {x:165, y:606, t:'12寸', tEn:'12 cun'} ]
       },
+      /* 全景图标签手动定位（自动避让不理想时）：[中心x, 标签块底y, 是否引线] */
+      labelFix: { LU7: [99, 705, 0], LU9: [92, 760, 1], LU10: [100, 810, 1], LU11: [33, 818, 1] },
       line: 'M258,317 L251,294 L170,409 L166,442 L150,514 L124,589 L99,674 L96,682 L92,694 L48,742 L10,760',
       body: `<g transform="translate(-162.122307,1507.280692) scale(0.100000,-0.100000)"
 fill="var(--fig-body)" stroke="none">
@@ -4429,23 +4431,40 @@ l-11 65 5 -66z"/>
         { dx: -(w / 2 + 84), dy: -(14 + h), ln: 1 }, { dx: (w / 2 + 84), dy: -(14 + h), ln: 1 }
       ];
       let pick = null, ln = 0;
-      for (const c of cands) {
-        const x1 = x + c.dx - w / 2, y1 = y + c.dy;
-        if (x1 < 4 || y1 < 4 || x1 + w > VBW - 4 || y1 + h > vbH - 4) continue;
-        const box = { x1, y1, x2: x1 + w, y2: y1 + h };
-        if (boxes.some(r => hit(box, r))) continue;
-        pick = box; ln = c.ln; break;
+      const FIX = (M.labelFix || {})[q.c];
+      if (FIX) {
+        pick = { x1: FIX[0] - w / 2, y1: FIX[1] - h, x2: FIX[0] + w / 2, y2: FIX[1] };
+        ln = FIX[2] || 0;
+      } else {
+        for (const c of cands) {
+          const x1 = x + c.dx - w / 2, y1 = y + c.dy;
+          if (x1 < 4 || y1 < 4 || x1 + w > VBW - 4 || y1 + h > vbH - 4) continue;
+          const box = { x1, y1, x2: x1 + w, y2: y1 + h };
+          if (boxes.some(r => hit(box, r))) continue;
+          pick = box; ln = c.ln; break;
+        }
+        if (!pick) pick = { x1: x - w / 2, y1: y - 14 - h, x2: x + w / 2, y2: y - 14 };
       }
-      if (!pick) pick = { x1: x - w / 2, y1: y - 14 - h, x2: x + w / 2, y2: y - 14 };
       boxes.push(pick);
       const cx = Math.max(w / 2 + 4, Math.min(pick.x1 + w / 2, VBW - w / 2 - 4));
-      const leader = ln ? `<path d="M${x} ${y} L${cx} ${pick.y2 + 2}" stroke="var(--fig-label)" stroke-width="1.6" opacity=".65" fill="none"/>` : '';
+      /* 引线：从穴点圆边缘出发，精确指向标签块最近边缘中点，端点带箭头 */
+      let leader = '';
+      if (ln) {
+        let ex, ey;
+        if (pick.y2 <= y) { ex = cx; ey = pick.y2; }
+        else if (pick.y1 >= y) { ex = cx; ey = pick.y1; }
+        else { ex = x < pick.x1 ? pick.x1 : pick.x2; ey = pick.y1 + h / 2; }
+        const L = Math.hypot(ex - x, ey - y) || 1;
+        const sx = x + (ex - x) / L * 11, sy = y + (ey - y) / L * 11;
+        leader = `<path d="M${sx} ${sy} L${ex} ${ey}" stroke="var(--fig-label)" stroke-width="1.8" opacity=".8" fill="none" marker-end="url(#acuArr)"/>`;
+      }
       return leader +
         `<text x="${cx}" y="${pick.y2 - 25}" text-anchor="middle" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${q.n}</text>
          <text x="${cx}" y="${pick.y2 - 5}" text-anchor="middle" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${q.c}</text>`;
     }).join('');
     const dots = pts.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2.4"><title>${q.c} ${q.n}</title></circle>`).join('');
     return `<svg viewBox="${VB[0]} ${VB[1]} ${VBW} ${vbH}" role="img" aria-label="经脉循行示意图">
+      <defs><marker id="acuArr" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L12,5 L0,10 z" fill="var(--fig-label)"/></marker></defs>
       ${M.body}
       <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
       ${dots}
@@ -5966,7 +5985,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 45;
+  const APP_VERSION = 46;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
