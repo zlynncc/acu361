@@ -3750,7 +3750,7 @@ window.AC_MERD = {
         segs: [ {x:232, y:438, t:'9寸', tEn:'9 cun'}, {x:165, y:606, t:'12寸', tEn:'12 cun'} ]
       },
       /* 全景图标签手动定位（自动避让不理想时）：[中心x, 标签块底y, 是否引线] */
-      labelFix: { LU7: [99, 705, 0], LU9: [92, 760, 1], LU10: [100, 810, 1], LU11: [33, 818, 1] },
+      labelFix: { LU7: [45, 706, 1], LU8: [30, 655, 1], LU9: [92, 760, 1], LU10: [100, 810, 1], LU11: [33, 818, 1] },
       line: 'M258,317 L251,294 L170,409 L166,442 L150,514 L124,589 L99,674 L96,682 L92,694 L48,742 L10,760',
       body: `<g transform="translate(-162.122307,1507.280692) scale(0.100000,-0.100000)"
 fill="var(--fig-body)" stroke="none">
@@ -4376,13 +4376,16 @@ l-11 65 5 -66z"/>
     const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
     const marks = sibs.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="6.5" fill="var(--fig-dot)" opacity=".4"><title>${q.c} ${q.n}</title></circle>`).join('');
     /* 骨度分寸标尺：横纹锚点刻度 + 段寸数（双语双行），独立图层不压经线穴位；
-       当前穴恰在锚点上时（如尺泽=肘横纹）隐藏该锚点文字，避免与穴名标签打架 */
+       当前穴恰在锚点上时（如尺泽=肘横纹），文字挪到横线下方，错开穴名标签但仍显示 */
     const cunSVG = (C, py) => {
       if (!C) return '';
-      const mk = C.marks.filter(m => Math.abs(m.y - py) > 70).map(m =>
-        `<path d="M${m.x} ${m.y} h40" stroke="var(--fig-ruler)" stroke-width="3" stroke-linecap="round"/>
-         <text x="${m.x + 46}" y="${m.y + 4}" font-size="20" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${m.t}</text>
-         <text x="${m.x + 46}" y="${m.y + 21}" font-size="12.5" fill="var(--fig-label)" opacity=".85" font-style="italic" font-family="Georgia,serif" stroke="var(--card)" stroke-width="4" paint-order="stroke">${m.tEn}</text>`).join('');
+      const mk = C.marks.map(m => {
+        const near = Math.abs(m.y - py) <= 70;
+        const y1 = m.y + (near ? 26 : 4), y2 = m.y + (near ? 43 : 21);
+        return `<path d="M${m.x} ${m.y} h40" stroke="var(--fig-ruler)" stroke-width="3" stroke-linecap="round"/>
+         <text x="${m.x + 46}" y="${y1}" font-size="20" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${m.t}</text>
+         <text x="${m.x + 46}" y="${y2}" font-size="12.5" fill="var(--fig-label)" opacity=".85" font-style="italic" font-family="Georgia,serif" stroke="var(--card)" stroke-width="4" paint-order="stroke">${m.tEn}</text>`;
+      }).join('');
       const sg = C.segs.map(s =>
         `<text x="${s.x}" y="${s.y - 4}" text-anchor="middle" font-size="24" font-weight="600" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="5" paint-order="stroke">${s.t}</text>
          <text x="${s.x}" y="${s.y + 14}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--fig-label)" opacity=".85" font-style="italic" font-family="Georgia,serif" stroke="var(--card)" stroke-width="4" paint-order="stroke">${s.tEn}</text>`).join('');
@@ -5985,7 +5988,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 46;
+  const APP_VERSION = 48;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
