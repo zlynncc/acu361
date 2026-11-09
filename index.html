@@ -3746,8 +3746,8 @@ window.AC_MERD = {
       pts: { LU1:[258,317], LU2:[251,294], LU3:[170,409], LU4:[166,442], LU5:[150,514], LU6:[124,589], LU7:[99,674], LU8:[96,682], LU9:[92,694], LU10:[48,742], LU11:[10,760] },
       /* 骨度分寸标尺（方案B：本经骨度段）：marks=横纹锚点，segs=段寸数标注 */
       cun: {
-        marks: [ {x:207, y:356.5, t:'腋纹'}, {x:150, y:514, t:'肘横纹'}, {x:92, y:694, t:'腕横纹'} ],
-        segs: [ {x:232, y:438, t:'9寸'}, {x:165, y:606, t:'12寸'} ]
+        marks: [ {x:207, y:356.5, t:'腋纹', tEn:'Axillary fold'}, {x:150, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:92, y:694, t:'腕横纹', tEn:'Wrist crease'} ],
+        segs: [ {x:232, y:438, t:'9寸', tEn:'9 cun'}, {x:165, y:606, t:'12寸', tEn:'12 cun'} ]
       },
       line: 'M258,317 L251,294 L170,409 L166,442 L150,514 L124,589 L99,674 L96,682 L92,694 L48,742 L10,760',
       body: `<g transform="translate(-162.122307,1507.280692) scale(0.100000,-0.100000)"
@@ -4373,15 +4373,17 @@ l-11 65 5 -66z"/>
     /* 焦点模式（与原图一致）：同经穴位为无名小点（悬停显示提示），仅当前穴标注名称 */
     const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
     const marks = sibs.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="6.5" fill="var(--fig-dot)" opacity=".4"><title>${q.c} ${q.n}</title></circle>`).join('');
-    /* 骨度分寸标尺：横纹锚点刻度 + 段寸数（独立图层，不压经线穴位）；
+    /* 骨度分寸标尺：横纹锚点刻度 + 段寸数（双语双行），独立图层不压经线穴位；
        当前穴恰在锚点上时（如尺泽=肘横纹）隐藏该锚点文字，避免与穴名标签打架 */
     const cunSVG = (C, py) => {
       if (!C) return '';
       const mk = C.marks.filter(m => Math.abs(m.y - py) > 70).map(m =>
         `<path d="M${m.x} ${m.y} h40" stroke="var(--fig-ruler)" stroke-width="3" stroke-linecap="round"/>
-         <text x="${m.x + 46}" y="${m.y + 7}" font-size="20" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${m.t}</text>`).join('');
+         <text x="${m.x + 46}" y="${m.y + 4}" font-size="20" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${m.t}</text>
+         <text x="${m.x + 46}" y="${m.y + 21}" font-size="12.5" fill="var(--fig-label)" opacity=".85" font-style="italic" font-family="Georgia,serif" stroke="var(--card)" stroke-width="4" paint-order="stroke">${m.tEn}</text>`).join('');
       const sg = C.segs.map(s =>
-        `<text x="${s.x}" y="${s.y}" text-anchor="middle" font-size="24" font-weight="600" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="5" paint-order="stroke">${s.t}</text>`).join('');
+        `<text x="${s.x}" y="${s.y - 4}" text-anchor="middle" font-size="24" font-weight="600" fill="var(--fig-label)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="5" paint-order="stroke">${s.t}</text>
+         <text x="${s.x}" y="${s.y + 14}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--fig-label)" opacity=".85" font-style="italic" font-family="Georgia,serif" stroke="var(--card)" stroke-width="4" paint-order="stroke">${s.tEn}</text>`).join('');
       return mk + sg;
     };
     const nameFS = 32, codeFS = 27;
@@ -4400,6 +4402,54 @@ l-11 65 5 -66z"/>
       <circle cx="${xy[0]}" cy="${xy[1]}" r="11" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="3"/>
       <text x="${nameX}" y="${xy[1] - 48}" text-anchor="middle" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="6" paint-order="stroke">${point.n}</text>
       <text x="${codeX}" y="${xy[1] - 17}" text-anchor="middle" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".8" stroke="var(--card)" stroke-width="6" paint-order="stroke">${point.c}</text>
+    </svg>`;
+  }
+
+  /* 经络首页全景图：整条经 + 全部穴位标签（候选位由近到远自动避让，必要时引线） */
+  function bodySVGFull(M) {
+    const VB = M.vb.split(' ').map(Number);
+    const VBW = VB[2];
+    const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
+    const pts = POINTS.filter(q => M.pts[q.c]).sort((a, b) => order(a.c) - order(b.c));
+    const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
+    /* viewBox 裁到循行范围（最下穴下方留边），去掉无关下半身 */
+    const maxY = Math.max(...pts.map(q => M.pts[q.c][1]));
+    const vbH = Math.min(VB[3], maxY + 95) - VB[1];
+    const nameFS = 24, codeFS = 13;
+    const boxes = [];
+    const hit = (a, b) => !(a.x2 < b.x1 || b.x2 < a.x1 || a.y2 < b.y1 || b.y2 < a.y1);
+    const labels = pts.map(q => {
+      const [x, y] = M.pts[q.c];
+      const w = Math.max(textW(q.n, nameFS), textW(q.c, codeFS)) + 10, h = 46;
+      /* 候选位：近→远。正上/正下不引线，侧面与更远位加引线 */
+      const cands = [
+        { dx: 0, dy: -(14 + h), ln: 0 }, { dx: 0, dy: 22, ln: 0 },
+        { dx: -(w / 2 + 30), dy: -(14 + h), ln: 1 }, { dx: (w / 2 + 30), dy: -(14 + h), ln: 1 },
+        { dx: 0, dy: -(62 + h), ln: 1 }, { dx: 0, dy: 70, ln: 1 },
+        { dx: -(w / 2 + 84), dy: -(14 + h), ln: 1 }, { dx: (w / 2 + 84), dy: -(14 + h), ln: 1 }
+      ];
+      let pick = null, ln = 0;
+      for (const c of cands) {
+        const x1 = x + c.dx - w / 2, y1 = y + c.dy;
+        if (x1 < 4 || y1 < 4 || x1 + w > VBW - 4 || y1 + h > vbH - 4) continue;
+        const box = { x1, y1, x2: x1 + w, y2: y1 + h };
+        if (boxes.some(r => hit(box, r))) continue;
+        pick = box; ln = c.ln; break;
+      }
+      if (!pick) pick = { x1: x - w / 2, y1: y - 14 - h, x2: x + w / 2, y2: y - 14 };
+      boxes.push(pick);
+      const cx = Math.max(w / 2 + 4, Math.min(pick.x1 + w / 2, VBW - w / 2 - 4));
+      const leader = ln ? `<path d="M${x} ${y} L${cx} ${pick.y2 + 2}" stroke="var(--fig-label)" stroke-width="1.6" opacity=".65" fill="none"/>` : '';
+      return leader +
+        `<text x="${cx}" y="${pick.y2 - 25}" text-anchor="middle" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${q.n}</text>
+         <text x="${cx}" y="${pick.y2 - 5}" text-anchor="middle" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${q.c}</text>`;
+    }).join('');
+    const dots = pts.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2.4"><title>${q.c} ${q.n}</title></circle>`).join('');
+    return `<svg viewBox="${VB[0]} ${VB[1]} ${VBW} ${vbH}" role="img" aria-label="经脉循行示意图">
+      ${M.body}
+      <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
+      ${dots}
+      ${labels}
     </svg>`;
   }
 
@@ -4775,6 +4825,13 @@ l-11 65 5 -66z"/>
       <div class="card" style="padding:14px 15px">
         <div style="font-size:12.5px;line-height:1.95;color:var(--ink2);letter-spacing:.02em">${window.AC_MERD[m.id].zh}</div>
         <div style="margin-top:9px;font-size:11.5px;line-height:1.75;color:var(--ink3);font-style:italic;font-family:Georgia,'Palatino',serif">${window.AC_MERD[m.id].en}</div>
+      </div>` : ''}
+
+      ${AI_MAPS[m.id] ? `
+      <div class="sec-head"><h3>经脉循行图 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Meridian Course</span></h3><span class="hint">示意 · diagram</span></div>
+      <div class="map-wrap">
+        ${bodySVGFull(AI_MAPS[m.id])}
+        <div class="map-note">示意本经循行路线与穴位分布 · Course and points of this meridian</div>
       </div>` : ''}
 
       <div class="sec-head"><h3>本经腧穴 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Points of This Meridian</span></h3><span class="hint">按循行次序 · in course order</span></div>
@@ -5909,7 +5966,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 44;
+  const APP_VERSION = 45;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
