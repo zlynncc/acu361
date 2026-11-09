@@ -4790,6 +4790,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   const AI_MAPS = {
     LU: {
       vb: '0 0 700.7 1470.1',
+      lf: [660, 882],
       pts: { LU1:[258,317], LU2:[251,294], LU3:[170,409], LU4:[166,442], LU5:[150,514], LU6:[124,589], LU7:[99,674], LU8:[96,682], LU9:[92,694], LU10:[48,742], LU11:[10,760] },
       /* 骨度分寸标尺（方案B：本经骨度段）：marks=横纹锚点，segs=段寸数标注 */
       cun: {
@@ -4817,6 +4818,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     HT: {
       vb: '0 0 700.7 1470.1',
+      lf: [660, 882],
       pts: { HT1:[152,290], HT2:[218,388], HT3:[236,500], HT4:[144,687], HT5:[144,683], HT6:[144,690], HT7:[126,700], HT8:[112,722], HT9:[99,769] },
       line: 'M152,290 L218,388 L236,500 L144,687 L144,683 L144,690 L126,700 L112,722 L99,769',
       body: AI_BODY_F,
@@ -4825,6 +4827,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     SI: {
       vb: '0 0 700.7 1470.1',
+      lf: [660, 882],
       pts: { SI1:[596,768], SI2:[588,758], SI3:[580,742], SI4:[572,716], SI5:[565,700], SI6:[568,707], SI7:[548,651], SI8:[529,521], SI16:[416,221], SI17:[405,208], SI18:[416,174], SI19:[421,160] },
       line: 'M596,768 L588,758 L580,742 L572,716 L565,700 L568,707 L548,651 L529,521 L416,221 L405,208 L416,174 L421,160',
       body: AI_BODY_F,
@@ -4832,6 +4835,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     PC: {
       vb: '0 0 700.7 1470.1',
+      lf: [660, 882],
       pts: { PC1:[250,329], PC2:[192,347], PC3:[225,510], PC4:[153,593], PC5:[143,629], PC6:[134,651], PC7:[106,700], PC8:[84,725], PC9:[78,780] },
       line: 'M250,329 L192,347 L225,510 L153,593 L143,629 L134,651 L106,700 L84,725 L78,780',
       body: AI_BODY_F,
@@ -4839,6 +4843,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     TE: {
       vb: '0 0 700.7 1470.1',
+      lf: [660, 882],
       pts: { TE1:[609,778], TE2:[601,762], TE3:[593,744], TE4:[586,700], TE5:[600,658], TE6:[600,644], TE7:[610,665], TE8:[600,672], TE9:[590,680], TE10:[561,514], TE17:[405,201], TE18:[421,146], TE19:[416,153], TE20:[427,153], TE21:[421,167], TE22:[405,146], TE23:[410,139] },
       line: 'M609,778 L601,762 L593,744 L586,700 L600,658 L600,644 L610,665 L600,672 L590,680 L561,514 L405,201 L421,146 L416,153 L427,153 L421,167 L405,146 L410,139',
       body: AI_BODY_F,
@@ -4920,71 +4925,72 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     </svg>` + (M.hand && M.hand.pts[point.c] ? bodySVGHand(M.hand, point.c) : '');
   }
 
-  /* 经络首页全景图：整条经 + 全部穴位标签（候选位由近到远自动避让，必要时引线） */
+  /* 经络首页全景图：书式侧列标注（《中国针灸学》版式）——
+     标签按 x 分左右两列、沿 y 均匀排开，虚线引至穴点，名字互不堆叠 */
   function bodySVGFull(M) {
     const VB = M.vb.split(' ').map(Number);
     const VBW = VB[2];
     const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
     const pts = POINTS.filter(q => M.pts[q.c]).sort((a, b) => order(a.c) - order(b.c));
     const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
-    /* viewBox 裁到循行范围（最下穴下方留边），去掉无关下半身 */
     const maxY = Math.max(...pts.map(q => M.pts[q.c][1]));
-    const vbH = Math.min(VB[3], maxY + 95) - VB[1];
-    const nameFS = 24, codeFS = 13;
-    const boxes = [];
-    /* 穴位红点也参与碰撞：给每个点预置一个小保护盒，标签不得压住任何穴点 */
-    pts.forEach(q => { const [px, py] = M.pts[q.c]; boxes.push({ x1: px - 13, y1: py - 13, x2: px + 13, y2: py + 13 }); });
+    const nameFS = 21, codeFS = 13;
     const hit = (a, b) => !(a.x2 < b.x1 || b.x2 < a.x1 || a.y2 < b.y1 || b.y2 < a.y1);
     /* 手背侧穴位：主图只留浅色小点，标签与精确位置在下方手背放大图中显示 */
-    const labels = pts.filter(q => !(M.hand && M.hand.pts[q.c])).map(q => {
-      const [x, y] = M.pts[q.c];
-      const w = Math.max(textW(q.n, nameFS), textW(q.c, codeFS)) + 10, h = 46;
-      /* 候选位：近→远。贴穴（正上/正下/左右侧位）不引线，远位才加引线箭头 */
-      const cands = [
-        { dx: 0, dy: -(14 + h), ln: 0 }, { dx: 0, dy: 22, ln: 0 },
-        { dx: -(w / 2 + 24), dy: -12, ln: 0 }, { dx: (w / 2 + 24), dy: -12, ln: 0 },
-        { dx: -(w / 2 + 30), dy: -(14 + h), ln: 1 }, { dx: (w / 2 + 30), dy: -(14 + h), ln: 1 },
-        { dx: 0, dy: -(62 + h), ln: 1 }, { dx: 0, dy: 70, ln: 1 },
-        { dx: -(w / 2 + 84), dy: -(14 + h), ln: 1 }, { dx: (w / 2 + 84), dy: -(14 + h), ln: 1 }
-      ];
-      let pick = null, ln = 0;
-      const FIX = (M.labelFix || {})[q.c];
-      if (FIX) {
-        pick = { x1: FIX[0] - w / 2, y1: FIX[1] - h, x2: FIX[0] + w / 2, y2: FIX[1] };
-        ln = FIX[2] || 0;
-      } else {
-        for (const c of cands) {
-          const x1 = x + c.dx - w / 2, y1 = y + c.dy;
-          if (x1 < 4 || y1 < 4 || x1 + w > VBW - 4 || y1 + h > vbH - 4) continue;
-          const box = { x1, y1, x2: x1 + w, y2: y1 + h };
-          if (boxes.some(r => hit(box, r))) continue;
-          pick = box; ln = c.ln; break;
-        }
-        if (!pick) pick = { x1: x - w / 2, y1: y - 14 - h, x2: x + w / 2, y2: y - 14 };
-      }
-      boxes.push(pick);
-      const cx = Math.max(w / 2 + 4, Math.min(pick.x1 + w / 2, VBW - w / 2 - 4));
-      /* 引线：从穴点圆边缘出发，精确指向标签块最近边缘中点，端点带箭头 */
-      let leader = '';
-      if (ln) {
-        let ex, ey;
-        if (pick.y2 <= y) { ex = cx; ey = pick.y2; }
-        else if (pick.y1 >= y) { ex = cx; ey = pick.y1; }
-        else { ex = x < pick.x1 ? pick.x1 : pick.x2; ey = pick.y1 + h / 2; }
-        const L = Math.hypot(ex - x, ey - y) || 1;
-        const sx = x + (ex - x) / L * 11, sy = y + (ey - y) / L * 11;
-        leader = `<path d="M${sx} ${sy} L${ex} ${ey}" stroke="var(--fig-label)" stroke-width="1.8" opacity=".8" fill="none" marker-end="url(#acuArr)"/>`;
-      }
-      return leader +
-        `<text x="${cx}" y="${pick.y2 - 25}" text-anchor="middle" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${q.n}</text>
-         <text x="${cx}" y="${pick.y2 - 5}" text-anchor="middle" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${q.c}</text>`;
+    const lbl = pts.filter(q => !(M.hand && M.hand.pts[q.c]));
+    /* 书式单行标签：中文名 + 代号同行（如「承泣 ST1」） */
+    const LW = q => textW(q.n, nameFS) + 6 + textW(q.c, codeFS) + 2;
+    const cx = VB[0] + VBW / 2;
+    /* 分列：居中经脉（任脉类，≥60% 穴位贴近中线）按序号奇偶交替分列，其余按中线分左右 */
+    const near = lbl.filter(q => Math.abs(M.pts[q.c][0] - cx) < 28).length;
+    const centerMode = near >= lbl.length * .6;
+    const colL = [], colR = [];
+    let alt = 0;
+    lbl.forEach(q => {
+      const x = M.pts[q.c][0];
+      if (centerMode && Math.abs(x - cx) < 28) (alt++ % 2 ? colR : colL).push(q);
+      else (x < cx ? colL : colR).push(q);
+    });
+    /* 穴点保护盒：标签避让，不压任何红点 */
+    const dotBoxes = lbl.map(q => { const [x, y] = M.pts[q.c]; return { x1: x - 12, y1: y - 12, x2: x + 12, y2: y + 12 }; });
+    /* 一列内沿 y 排序、行距不小于 32 均匀排开；与穴点相碰时整行下移避让 */
+    const layoutCol = (col, side) => {
+      col.sort((a, b) => M.pts[a.c][1] - M.pts[b.c][1]);
+      const ext = side === 'L' ? Math.min(...col.map(q => M.pts[q.c][0])) - 26
+                               : Math.max(...col.map(q => M.pts[q.c][0])) + 26;
+      let prev = -1e9;
+      /* lf：手/足部穴区标签地板——穴点落在 [lf0,∞) 时标签行不低于 lf1（避开肢体轮廓） */
+      const LF = M.lf;
+      return col.map(q => {
+        const [x, y] = M.pts[q.c];
+        const w = LW(q);
+        const bx = side === 'L' ? Math.max(ext, VB[0] + w + 8) : Math.min(ext, VBW - w - 8);
+        let ly = Math.max(y + 6, prev + 32, VB[1] + 24, LF && y >= LF[0] ? LF[1] : -1e9);
+        const box = () => ({ x1: side === 'L' ? bx - w : bx, y1: ly - 16, x2: side === 'L' ? bx : bx + w, y2: ly + 4 });
+        let n = 0;
+        while (n++ < 80 && dotBoxes.some(d => hit(box(), d))) ly += 9;
+        prev = ly;
+        return { q, bx, ly, w, side };
+      });
+    };
+    const items = layoutCol(colL, 'L').concat(layoutCol(colR, 'R'));
+    /* 虚线引线：从标签边中点直指穴点边缘（书式点线，不带箭头） */
+    const labels = items.map(it => {
+      const [x, y] = M.pts[it.q.c];
+      const sx = it.side === 'L' ? it.bx + 3 : it.bx - 3;
+      const sy = it.ly - 5;
+      const dx = x - sx, dy = y - sy, L = Math.hypot(dx, dy) || 1;
+      return `<path d="M${sx} ${sy} L${x - dx / L * 12} ${y - dy / L * 12}" stroke="var(--fig-label)" stroke-width="1.6" stroke-dasharray="3 4" opacity=".75" fill="none"/>
+         <text x="${it.bx}" y="${it.ly}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${it.q.n}<tspan dx="6" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".4">${it.q.c}</tspan></text>`;
     }).join('');
     const dots = pts.map(q => {
       const hand = M.hand && M.hand.pts[q.c];
       return `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="${hand ? 5.5 : 7}" fill="var(--fig-dot)"${hand ? ' opacity=".38"' : ''} stroke="var(--fig-dot-ring)" stroke-width="2"><title>${q.c} ${q.n}${hand ? '（手背侧 · 见下方放大图）' : ''}</title></circle>`;
     }).join('');
+    /* 列底若超出人体下缘，向下扩一点画布，保证最后一个标签完整 */
+    const bottom = items.length ? Math.max(...items.map(it => it.ly)) + 26 : 0;
+    const vbH = Math.max(Math.min(VB[3], maxY + 95), bottom) - VB[1];
     return `<svg viewBox="${VB[0]} ${VB[1]} ${VBW} ${vbH}" role="img" aria-label="经脉循行示意图">
-      <defs><marker id="acuArr" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L12,5 L0,10 z" fill="var(--fig-label)"/></marker></defs>
       ${M.body}
       <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
       ${dots}
@@ -6542,7 +6548,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 52;
+  const APP_VERSION = 53;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
