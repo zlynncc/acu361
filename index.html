@@ -608,17 +608,20 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   box-shadow: var(--shadow);
 }
 .map-wrap svg { display: block; width: min(70%, 244px); height: auto; margin: 0 auto; }
-.map-wrap svg.fig-ai { width: min(52%, 178px); }
+.map-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 0;
+}
 .map-label {
-  position: absolute;
-  left: 12px; top: 11px;
   font-size: 10px;
   letter-spacing: .16em;
   color: var(--ink3);
 }
 .map-toggle {
-  position: absolute;
-  right: 10px; top: 8px;
+  flex-shrink: 0;
   display: flex;
   background: var(--card);
   border: 1px solid var(--line);
@@ -4369,7 +4372,10 @@ l-11 65 5 -66z"/>
     const nameW = textW(point.n, nameFS), codeW = textW(point.c, codeFS);
     const nameX = Math.max(nameW / 2 + 6, Math.min(xy[0], VBW - nameW / 2 - 6));
     const codeX = Math.max(codeW / 2 + 6, Math.min(xy[0], VBW - codeW / 2 - 6));
-    return `<svg viewBox="${M.vb}" class="fig-ai" role="img" aria-label="穴位部位示意">
+    /* 顶部预留留白带，让标签/切换按钮不压人体 */
+    const PV = M.vb.split(' ').map(Number);
+    const topPad = 90;
+    return `<svg viewBox="${PV[0]} ${PV[1] - topPad} ${PV[2]} ${PV[3] + topPad}" class="fig-ai" role="img" aria-label="穴位部位示意">
       ${M.body}
       <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
       ${marks}
@@ -4903,10 +4909,12 @@ l-11 65 5 -66z"/>
       </div>
 
       <div class="map-wrap">
-        <span class="map-label">部位示意 · Location Diagram</span>
-        <div class="map-toggle">
-          <button class="${mapSide === 'f' ? 'on' : ''}" data-side="f">正面 <span style="font-family:Georgia,serif;font-style:italic;font-size:9px;letter-spacing:.04em">Front</span></button>
-          <button class="${mapSide === 'b' ? 'on' : ''}" data-side="b">背面 <span style="font-family:Georgia,serif;font-style:italic;font-size:9px;letter-spacing:.04em">Back</span></button>
+        <div class="map-head">
+          <span class="map-label">部位示意 · Location Diagram</span>
+          <div class="map-toggle">
+            <button class="${mapSide === 'f' ? 'on' : ''}" data-side="f">正面 <span style="font-family:Georgia,serif;font-style:italic;font-size:9px;letter-spacing:.04em">Front</span></button>
+            <button class="${mapSide === 'b' ? 'on' : ''}" data-side="b">背面 <span style="font-family:Georgia,serif;font-style:italic;font-size:9px;letter-spacing:.04em">Back</span></button>
+          </div>
         </div>
         ${bodySVG(p, mapSide)}
         <div class="map-note">示意图，仅示大致部位与同经穴位分布</div>
@@ -5884,7 +5892,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 41;
+  const APP_VERSION = 43;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
