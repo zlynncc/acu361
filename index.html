@@ -3750,7 +3750,7 @@ window.AC_MERD = {
         segs: [ {x:232, y:438, t:'9寸', tEn:'9 cun'}, {x:165, y:606, t:'12寸', tEn:'12 cun'} ]
       },
       /* 全景图标签手动定位（自动避让不理想时）：[中心x, 标签块底y, 是否引线] */
-      labelFix: { LU7: [45, 706, 1], LU8: [30, 655, 1], LU9: [92, 760, 1], LU10: [100, 810, 1], LU11: [33, 818, 1] },
+      labelFix: { LU7: [45, 655, 1], LU8: [45, 706, 1], LU9: [92, 760, 1], LU10: [100, 810, 1], LU11: [33, 818, 1] },
       line: 'M258,317 L251,294 L170,409 L166,442 L150,514 L124,589 L99,674 L96,682 L92,694 L48,742 L10,760',
       body: `<g transform="translate(-162.122307,1507.280692) scale(0.100000,-0.100000)"
 fill="var(--fig-body)" stroke="none">
@@ -5988,7 +5988,7 @@ l-11 65 5 -66z"/>
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 48;
+  const APP_VERSION = 49;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
