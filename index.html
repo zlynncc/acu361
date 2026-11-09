@@ -4858,6 +4858,41 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     foot: { vb: '0 0 300 300', lx: 176, t: '足背特写', tEn: 'Dorsum of foot', body: AI_FOOT }
   };
 
+  /* 底模解剖锚点表 + 分段骨度比例尺（准确性保障链条第①环）
+     来源标注：[M]=底模像素实测 / [I]=由验证穴点反推（底模不画横纹）
+     所有穴位坐标的最终归属：anchor + B寸×scale（表达式化改造的基准） */
+  const AI_ANCHORS = {
+    mid: 347,                 /* 前正中线 x [M] */
+    navel: [347, 580],        /* 脐中心 [M] */
+    nippleL: [258, 406],      /* 左乳晕中心 [M]（乳线 x=256 对齐此点） */
+    nippleR: [436, 404],      /* 右乳晕中心 [M] */
+    clavicleY: 280,           /* 锁骨下缘 [M]（胸骨端 285） */
+    sternalTop: 255,          /* 胸骨上窝 [I] */
+    xiphoid: 455,             /* 剑突下端（歧骨）[I] */
+    axilla: 366,              /* 腋前纹头 [I]（LU2 y） */
+    elbow: 514,               /* 肘横纹 [I]（LU5 尺泽 y） */
+    wrist: 694,               /* 腕横纹 [I]（LU9 太渊 y） */
+    hip: 728,                 /* 会阴/裆底 [M] */
+    symphysis: 705,           /* 耻骨联合上缘（曲骨）[I] */
+    patellaTop: 1035,         /* 髌底 [M] */
+    patellaBottom: 1075,      /* 髌骨下缘 [I]（犊鼻 y） */
+    malleolus: 1375,          /* 踝（解溪水平）[I] */
+    web: 1435,                /* 趾蹼 [M] */
+    toe2: 1457,               /* 第 2 趾端 [M] */
+    face: { eye: 105, noseWing: 142, mouth: 161, earFront: 398, hairline: 87 },
+    /* 分段比例尺 px/B寸（底模各段天然不统一，段内必须一致；[I]=由验证穴距反推） */
+    scale: {
+      upperArm: 16.4,         /* 腋→肘 9寸=148px [M] */
+      forearm: 15.0,          /* 肘→腕 12寸=180px [M] */
+      chest: 16.3,            /* 歧骨→脐 8寸≈130px [I] */
+      abdUpper: 16.3,         /* 脐上段（与 chest 共用）[I] */
+      abdLower: 25.0,         /* 脐→耻骨联合 5寸=125px [I] */
+      thigh: 20.0,            /* 髌底上段（伏兔=髌底上6寸=120px）[I] */
+      shank: 18.75,           /* 犊鼻→解溪 16寸=300px [I] */
+      foot: 20.0              /* 足部 [I] */
+    }
+  };
+
   const AI_MAPS = {
     LU: {
       vb: '0 0 700.7 1470.1',
@@ -6702,7 +6737,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 59;
+  const APP_VERSION = 60;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
