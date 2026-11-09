@@ -648,6 +648,23 @@ html.dark .topbar { background: rgba(32, 29, 24, .92); }
   padding: 4px 0 8px;
 }
 
+.seg-cap {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  letter-spacing: .06em;
+  padding: 6px 0 2px;
+}
+.seg-cap .seg-en {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ink3);
+  font-style: italic;
+  font-family: Georgia, 'Palatino', serif;
+  letter-spacing: .02em;
+}
+
 .field { padding: 15px 0; border-top: 1px solid var(--line-soft); }
 .field:first-child { border-top: none; padding-top: 6px; }
 .field .k {
@@ -4851,6 +4868,10 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     ST: {
       vb: '0 0 700.7 1470.1',
+      segs: [
+        { t: '头面躯干', tEn: 'Head, face & trunk', a: 'ST1', b: 'ST30' },
+        { t: '下肢', tEn: 'Lower limb', a: 'ST31', b: 'ST45' }
+      ],
       pts: { ST1:[372,146], ST2:[372,160], ST3:[372,174], ST4:[361,187], ST5:[383,194], ST6:[405,187], ST7:[394,163], ST8:[427,119], ST9:[383,228], ST10:[383,242], ST11:[383,262], ST12:[306,290], ST13:[300,303], ST14:[300,317], ST15:[300,329], ST16:[300,341], ST17:[300,353], ST18:[300,370], ST19:[309,469], ST20:[309,460], ST21:[309,433], ST22:[309,451], ST23:[309,442], ST24:[309,433], ST25:[309,514], ST26:[309,536], ST27:[309,557], ST28:[309,579], ST29:[309,600], ST30:[309,622], ST31:[310,753], ST32:[303,870], ST33:[303,971], ST34:[303,1071], ST35:[313,1091], ST36:[317,1149], ST37:[317,1185], ST38:[317,1206], ST39:[317,1192], ST40:[322,1221], ST41:[313,1386], ST42:[313,1395], ST43:[311,1402], ST44:[311,1409], ST45:[309,1423] },
       line: 'M372,146 L372,160 L372,174 L361,187 L383,194 L405,187 L394,163 L427,119 L383,228 L383,242 L383,262 L306,290 L300,303 L300,317 L300,329 L300,341 L300,353 L300,370 L309,469 L309,460 L309,433 L309,451 L309,442 L309,433 L309,514 L309,536 L309,557 L309,579 L309,600 L309,622 L310,753 L303,870 L303,971 L303,1071 L313,1091 L317,1149 L317,1185 L317,1206 L317,1192 L322,1221 L313,1386 L313,1395 L311,1402 L311,1409 L309,1423',
       body: AI_BODY_F,
@@ -4925,77 +4946,115 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     </svg>` + (M.hand && M.hand.pts[point.c] ? bodySVGHand(M.hand, point.c) : '');
   }
 
-  /* 经络首页全景图：书式侧列标注（《中国针灸学》版式）——
-     标签按 x 分左右两列、沿 y 均匀排开，虚线引至穴点，名字互不堆叠 */
-  function bodySVGFull(M) {
-    const VB = M.vb.split(' ').map(Number);
+  /* 书式侧列布局（公共，《中国针灸学》版式）：标签按 x 分左右两列、沿 y 均匀排开，
+     穴点避让、手足区地板。codeOnly=true 时只标代号（全景图用），否则标「中文名 代号」 */
+  function bookLayout(codes, M, VB, opt) {
     const VBW = VB[2];
-    const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
-    const pts = POINTS.filter(q => M.pts[q.c]).sort((a, b) => order(a.c) - order(b.c));
+    const pts = codes.map(c => POINTS.find(q => q.c === c)).filter(Boolean);
     const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
-    const maxY = Math.max(...pts.map(q => M.pts[q.c][1]));
-    const nameFS = 21, codeFS = 13;
-    const hit = (a, b) => !(a.x2 < b.x1 || b.x2 < a.x1 || a.y2 < b.y1 || b.y2 < a.y1);
-    /* 手背侧穴位：主图只留浅色小点，标签与精确位置在下方手背放大图中显示 */
-    const lbl = pts.filter(q => !(M.hand && M.hand.pts[q.c]));
-    /* 书式单行标签：中文名 + 代号同行（如「承泣 ST1」） */
-    const LW = q => textW(q.n, nameFS) + 6 + textW(q.c, codeFS) + 2;
+    const codeOnly = !!opt.codeOnly;
+    const LW = codeOnly ? q => textW(q.c, 14) + 2
+                        : q => textW(q.n, 21) + 6 + textW(q.c, 13) + 2;
+    const ROWH = codeOnly ? 24 : 32;
     const cx = VB[0] + VBW / 2;
     /* 分列：居中经脉（任脉类，≥60% 穴位贴近中线）按序号奇偶交替分列，其余按中线分左右 */
-    const near = lbl.filter(q => Math.abs(M.pts[q.c][0] - cx) < 28).length;
-    const centerMode = near >= lbl.length * .6;
+    const near = pts.filter(q => Math.abs(M.pts[q.c][0] - cx) < 28).length;
+    const centerMode = pts.length && near >= pts.length * .6;
     const colL = [], colR = [];
     let alt = 0;
-    lbl.forEach(q => {
+    pts.forEach(q => {
       const x = M.pts[q.c][0];
       if (centerMode && Math.abs(x - cx) < 28) (alt++ % 2 ? colR : colL).push(q);
       else (x < cx ? colL : colR).push(q);
     });
     /* 穴点保护盒：标签避让，不压任何红点 */
-    const dotBoxes = lbl.map(q => { const [x, y] = M.pts[q.c]; return { x1: x - 12, y1: y - 12, x2: x + 12, y2: y + 12 }; });
-    /* 一列内沿 y 排序、行距不小于 32 均匀排开；与穴点相碰时整行下移避让 */
+    const dotBoxes = pts.map(q => { const [x, y] = M.pts[q.c]; return { x1: x - 12, y1: y - 12, x2: x + 12, y2: y + 12 }; });
+    const hit = (a, b) => !(a.x2 < b.x1 || b.x2 < a.x1 || a.y2 < b.y1 || b.y2 < a.y1);
+    const LF = opt.lf;
     const layoutCol = (col, side) => {
       col.sort((a, b) => M.pts[a.c][1] - M.pts[b.c][1]);
       const ext = side === 'L' ? Math.min(...col.map(q => M.pts[q.c][0])) - 26
                                : Math.max(...col.map(q => M.pts[q.c][0])) + 26;
       let prev = -1e9;
       /* lf：手/足部穴区标签地板——穴点落在 [lf0,∞) 时标签行不低于 lf1（避开肢体轮廓） */
-      const LF = M.lf;
       return col.map(q => {
         const [x, y] = M.pts[q.c];
         const w = LW(q);
-        const bx = side === 'L' ? Math.max(ext, VB[0] + w + 8) : Math.min(ext, VBW - w - 8);
-        let ly = Math.max(y + 6, prev + 32, VB[1] + 24, LF && y >= LF[0] ? LF[1] : -1e9);
-        const box = () => ({ x1: side === 'L' ? bx - w : bx, y1: ly - 16, x2: side === 'L' ? bx : bx + w, y2: ly + 4 });
+        const bx = side === 'L' ? Math.max(ext, VB[0] + w + 8) : Math.min(ext, VB[0] + VBW - w - 8);
+        let ly = Math.max(y + 6, prev + ROWH, VB[1] + 24, LF && y >= LF[0] ? LF[1] : -1e9);
+        const box = () => ({ x1: side === 'L' ? bx - w : bx, y1: ly - (codeOnly ? 10 : 16), x2: side === 'L' ? bx : bx + w, y2: ly + 4 });
         let n = 0;
         while (n++ < 80 && dotBoxes.some(d => hit(box(), d))) ly += 9;
         prev = ly;
         return { q, bx, ly, w, side };
       });
     };
-    const items = layoutCol(colL, 'L').concat(layoutCol(colR, 'R'));
-    /* 虚线引线：从标签边中点直指穴点边缘（书式点线，不带箭头） */
-    const labels = items.map(it => {
-      const [x, y] = M.pts[it.q.c];
-      const sx = it.side === 'L' ? it.bx + 3 : it.bx - 3;
-      const sy = it.ly - 5;
-      const dx = x - sx, dy = y - sy, L = Math.hypot(dx, dy) || 1;
-      return `<path d="M${sx} ${sy} L${x - dx / L * 12} ${y - dy / L * 12}" stroke="var(--fig-label)" stroke-width="1.6" stroke-dasharray="3 4" opacity=".75" fill="none"/>
-         <text x="${it.bx}" y="${it.ly}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${it.q.n}<tspan dx="6" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".4">${it.q.c}</tspan></text>`;
-    }).join('');
+    return layoutCol(colL, 'L').concat(layoutCol(colR, 'R'));
+  }
+
+  /* 虚线引线（书式点线，不带箭头）：从标签边直指穴点边缘 */
+  function leaderLine(M, it, half) {
+    const [x, y] = M.pts[it.q.c];
+    const sx = it.side === 'L' ? it.bx + 3 : it.bx - 3;
+    const sy = it.ly - 5;
+    const dx = x - sx, dy = y - sy, L = Math.hypot(dx, dy) || 1;
+    return `<path d="M${sx} ${sy} L${x - dx / L * 12} ${y - dy / L * 12}" stroke="var(--fig-label)" stroke-width="1.6" stroke-dasharray="3 4" opacity=".75" fill="none"/>`;
+  }
+
+  /* 经络首页全景图：只标代号看循行全貌，详细名字在下方腧穴分图（书式） */
+  function bodySVGFull(M) {
+    const VB = M.vb.split(' ').map(Number);
+    const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
+    const pts = POINTS.filter(q => M.pts[q.c]).sort((a, b) => order(a.c) - order(b.c));
+    const maxY = Math.max(...pts.map(q => M.pts[q.c][1]));
+    /* 手背侧穴位：主图只留浅色小点，标签与精确位置在下方手背放大图中显示 */
+    const lbl = pts.filter(q => !(M.hand && M.hand.pts[q.c]));
+    const items = bookLayout(lbl.map(q => q.c), M, VB, { codeOnly: true, lf: M.lf });
+    const labels = items.map(it => leaderLine(M, it) +
+      `<text x="${it.bx}" y="${it.ly}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="14" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="3" paint-order="stroke">${it.q.c}</text>`).join('');
     const dots = pts.map(q => {
       const hand = M.hand && M.hand.pts[q.c];
       return `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="${hand ? 5.5 : 7}" fill="var(--fig-dot)"${hand ? ' opacity=".38"' : ''} stroke="var(--fig-dot-ring)" stroke-width="2"><title>${q.c} ${q.n}${hand ? '（手背侧 · 见下方放大图）' : ''}</title></circle>`;
     }).join('');
     /* 列底若超出人体下缘，向下扩一点画布，保证最后一个标签完整 */
-    const bottom = items.length ? Math.max(...items.map(it => it.ly)) + 26 : 0;
+    const bottom = items.length ? Math.max(...items.map(it => it.ly)) + 16 : 0;
     const vbH = Math.max(Math.min(VB[3], maxY + 95), bottom) - VB[1];
-    return `<svg viewBox="${VB[0]} ${VB[1]} ${VBW} ${vbH}" role="img" aria-label="经脉循行示意图">
+    return `<svg viewBox="${VB[0]} ${VB[1]} ${VB[2]} ${vbH}" role="img" aria-label="经脉循行示意图">
       ${M.body}
       <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
       ${dots}
       ${labels}
     </svg>` + (M.hand ? bodySVGHand(M.hand, null) : '');
+  }
+
+  /* 腧穴分图（《中国针灸学》腧穴各论模式）：按 segs 配置裁剪底模出「躯干段/下肢段」等，
+     同一底模与穴点数据，书式完整标注（中文名+代号），标签密度与书相当 */
+  function bodySVGSeg(M, S) {
+    const VB = M.vb.split(' ').map(Number);
+    const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
+    const na = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
+    const a = na(S.a), b = na(S.b);
+    const pts = POINTS.filter(q => { const n = na(q.c); return M.pts[q.c] && n >= a && n <= b && !(M.hand && M.hand.pts[q.c]); });
+    if (!pts.length) return '';
+    const xs = pts.map(q => M.pts[q.c][0]), ys = pts.map(q => M.pts[q.c][1]);
+    /* 自动裁剪窗口：穴位包围盒外扩，左右留足标签列空间 */
+    const x0 = Math.max(VB[0], Math.min(...xs) - 140);
+    const x1 = Math.min(VB[0] + VB[2], Math.max(...xs) + 140);
+    const y0 = Math.max(VB[1], Math.min(...ys) - 110);
+    const y1 = Math.min(VB[1] + VB[3], Math.max(...ys) + 65);
+    const svb = [x0, y0, x1 - x0, y1 - y0];
+    const items = bookLayout(pts.map(q => q.c), M, svb, { lf: M.lf });
+    const labels = items.map(it => leaderLine(M, it) +
+      `<text x="${it.bx}" y="${it.ly}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="21" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${it.q.n}<tspan dx="6" font-size="13" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".4">${it.q.c}</tspan></text>`).join('');
+    const dots = pts.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2"><title>${q.c} ${q.n}</title></circle>`).join('');
+    const bottom = items.length ? Math.max(...items.map(it => it.ly)) + 20 : 0;
+    const vbH = Math.max(y1 - y0, bottom - y0);
+    return `<svg viewBox="${x0} ${y0} ${x1 - x0} ${vbH}" role="img" aria-label="腧穴分图">
+      ${M.body}
+      <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
+      ${dots}
+      ${labels}
+    </svg>`;
   }
 
   /* 手背局部放大图：手背侧穴位（大肠/三焦/小肠经手部穴）在正面图上无法精确落位，
@@ -5413,8 +5472,15 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       <div class="sec-head"><h3>经脉循行图 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Meridian Course</span></h3><span class="hint">示意 · diagram</span></div>
       <div class="map-wrap">
         ${bodySVGFull(AI_MAPS[m.id])}
-        <div class="map-note">示意本经循行路线与穴位分布 · Course and points of this meridian</div>
+        <div class="map-note">示意本经循行路线与穴位分布（代号标注） · Course and points of this meridian</div>
       </div>` : ''}
+      ${(AI_MAPS[m.id] && AI_MAPS[m.id].segs) ? `
+      <div class="sec-head"><h3>腧穴分图 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Segmented Point Charts</span></h3><span class="hint">据《中国针灸学》版式</span></div>
+      ${AI_MAPS[m.id].segs.map((S, i) => `
+      <div class="map-wrap" style="margin-top:6px">
+        ${bodySVGSeg(AI_MAPS[m.id], S)}
+        <div class="seg-cap">${m.name}腧穴（${'一二三四五六七八'[i]}）<span class="seg-en"> ${S.t} · ${S.tEn} · ${S.a}–${S.b}</span></div>
+      </div>`).join('')}` : ''}
 
       <div class="sec-head"><h3>本经腧穴 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Points of This Meridian</span></h3><span class="hint">按循行次序 · in course order</span></div>
       <div class="point-list">
@@ -6548,7 +6614,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 53;
+  const APP_VERSION = 54;
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
     fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
