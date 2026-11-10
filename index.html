@@ -4912,16 +4912,16 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     LI: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '肩颈面', tEn: 'Shoulder, neck & face', a: 'LI12', b: 'LI20' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI1', b: 'LI11' } ],
-      pts: { LI1:[637,772], LI2:[630,756], LI3:[620,742], LI4:[612,730], LI5:[612,697], LI6:[588,649], LI7:[580,619], LI8:[571,559], LI9:[574,574], LI10:[568,544], LI11:[574,514], LI12:[557,499], LI13:[552,469], LI14:[540,409], LI15:[544,310], LI17:[416,242], LI18:[416,228], LI19:[372,180], LI20:[370,166] },
-      line: 'M637,772 L630,756 L620,742 L612,730 L612,697 L588,649 L580,619 L574,574 L571,559 L568,544 L574,514 L557,499 L552,469 L540,409 L544,310 L416,242 L416,228 L372,180 L370,166',
+      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'LI17', b: 'LI20' }, { t: '肩臂', tEn: 'Shoulder & arm', a: 'LI12', b: 'LI16' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI5', b: 'LI11' } ],
+      pts: {LI1:[637,772], LI2:[630,756], LI3:[620,742], LI4:[612,730], LI5:[614,695], LI6:[599,648], LI7:[589,616.7], LI8:[574,569.7], LI9:[569,554], LI10:[564,538.3], LI11:[554,507], LI12:[556,488], LI13:[536,467.3], LI14:[512,414.4], LI15:[500,388], LI16:[494,362], LI17:[378,252], LI18:[381,230], LI19:[357,154], LI20:[360,141]},
+      line: 'M637,772 L630,756 L620,742 L612,730 L614,695 L599,648 L589,617 L574,570 L569,554 L564,538 L554,507 L556,488 L536,467 L512,414 L500,388 L494,362 L378,252 L381,230 L357,154 L360,141',
       body: AI_BODY_F,
       cun: { mirror: true, marks: [ {x:493, y:356.5, t:'腋纹', tEn:'Axillary fold'}, {x:550, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:608, y:694, t:'腕横纹', tEn:'Wrist crease'} ], segs: [ {x:508, y:438, t:'9寸', tEn:'9 cun'}, {x:523, y:606, t:'12寸', tEn:'12 cun'} ] },
       /* 手部穴（手背桡侧）在背面底模手背放大图中精确落位（坐标=背面图坐标系） */
       hand: {
         vb: '700 585 207 270',
-        pts: { LI1:[869,748], LI2:[862,720], LI3:[852,705], LI4:[838,701], LI5:[818,692] },
-        line: 'M818,692 L838,701 L852,705 L862,720 L869,748',
+        pts: {LI1:[903,760], LI2:[884,747], LI3:[882,731], LI4:[870,718], LI5:[856,691]},
+        line: 'M856,691 L871,718 L882,731 L883,748 L902,762',
       },
       labelFix: { LI6: [535, 700, 1] },
     },
@@ -4937,11 +4937,23 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     SI: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '肩颈面', tEn: 'Shoulder & face', a: 'SI9', b: 'SI19' }, { t: '手腕', tEn: 'Hand & wrist', a: 'SI1', b: 'SI8' } ],
+      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'SI16', b: 'SI19' }, { t: '肩胛', tEn: 'Scapular region', a: 'SI9', b: 'SI15', bB: true }, { t: '肘前臂', tEn: 'Elbow & forearm', a: 'SI6', b: 'SI8' } ],
       lf: [660, 882],
-      pts: { SI1:[596,768], SI2:[588,758], SI3:[580,742], SI4:[572,716], SI5:[565,700], SI6:[568,707], SI7:[548,651], SI8:[529,521], SI16:[416,221], SI17:[405,208], SI18:[416,174], SI19:[421,160] },
-      line: 'M596,768 L588,758 L580,742 L572,716 L565,700 L568,707 L548,651 L529,521 L416,221 L405,208 L416,174 L421,160',
+      pts: {SI1:[596,768], SI2:[588,758], SI3:[580,742], SI4:[572,716], SI6:[576.2,682.7], SI7:[557.2,621.3], SI8:[531,504], SI16:[404,230], SI17:[392,211], SI18:[390,120], SI19:[407,122], SI5:[581,698]},
+      line: 'M596,768 L588,758 L580,742 L572,716 L581,698 L576,683 L557,621 L531,504 L404,230 L392,211 L390,120 L407,122',
       body: AI_BODY_F,
+      /* 手背尺侧穴：背面底模手部放大图中落位（坐标=背面图坐标系） */
+      hand: {
+        vb: '735 615 190 270',
+        pts: {SI1:[802,779], SI2:[802,755], SI3:[797,741], SI4:[792,723], SI5:[790,703]},
+        line: 'M790,703 L792,723 L797,741 L802,755 L803,783',
+      },
+      /* 肩胛段（SI9-15）：背面底模坐标 */
+      back: {
+        vb: '0 0 920 1400',
+        pts: {SI9:[348,322], SI10:[365,300], SI11:[388,336], SI12:[383,266], SI13:[426,278], SI14:[425,256], SI15:[436,225]},
+        line: 'M348,322 L365,300 L388,336 L383,266 L426,278 L425,256 L436,225',
+      },
       cun: { mirror: true, marks: [ {x:493, y:356.5, t:'腋纹', tEn:'Axillary fold'}, {x:550, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:608, y:694, t:'腕横纹', tEn:'Wrist crease'} ], segs: [ {x:508, y:438, t:'9寸', tEn:'9 cun'}, {x:523, y:606, t:'12寸', tEn:'12 cun'} ] },
     },
     PC: {
@@ -4955,11 +4967,17 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     TE: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '肩颈头', tEn: 'Shoulder, neck & head', a: 'TE11', b: 'TE23' }, { t: '手肘', tEn: 'Hand & elbow', a: 'TE1', b: 'TE10' } ],
+      segs: [ { t: '头面', tEn: 'Head & face', a: 'TE17', b: 'TE23' }, { t: '颈肩臂', tEn: 'Neck, shoulder & arm', a: 'TE10', b: 'TE16' }, { t: '前臂', tEn: 'Forearm', a: 'TE5', b: 'TE9' } ],
       lf: [660, 882],
-      pts: { TE1:[609,778], TE2:[601,762], TE3:[593,744], TE4:[586,700], TE5:[600,658], TE6:[600,644], TE7:[610,665], TE8:[600,672], TE9:[590,680], TE10:[561,514], TE17:[405,201], TE18:[421,146], TE19:[416,153], TE20:[427,153], TE21:[421,167], TE22:[405,146], TE23:[410,139] },
-      line: 'M609,778 L601,762 L593,744 L586,700 L600,658 L600,644 L610,665 L600,672 L590,680 L561,514 L405,201 L421,146 L416,153 L427,153 L421,167 L405,146 L410,139',
+      pts: {TE1:[609,778], TE2:[601,762], TE3:[593,744], TE4:[601,693], TE5:[587.8,666.5], TE6:[582.4,651.2], TE7:[578.4,651.2], TE8:[577,636], TE9:[565,583.2], TE10:[540,486], TE11:[526.8,477.6], TE12:[505.4,440.9], TE13:[498.3,428.7], TE14:[477,392], TE15:[468,368], TE16:[395,209], TE17:[424,143], TE18:[428,120], TE19:[427,105], TE20:[421,84], TE21:[406,112], TE22:[394,104], TE23:[401,95]},
+      line: 'M609,778 L601,762 L593,744 L601,693 L588,667 L583,652 L579,652 L578,637 L567,584 L540,486 L527,478 L505,441 L498,429 L477,392 L468,368 L395,209 L424,143 L428,120 L427,105 L421,84 L406,112 L394,104 L401,95',
       body: AI_BODY_F,
+      /* 手背穴（TE1-4）：背面底模手部放大图中落位 */
+      hand: {
+        vb: '735 615 190 270',
+        pts: {TE1:[830,787], TE2:[834,752], TE3:[832,732], TE4:[828,697]},
+        line: 'M828,697 L832,732 L834,752 L830,790',
+      },
       cun: { mirror: true, marks: [ {x:493, y:356.5, t:'腋纹', tEn:'Axillary fold'}, {x:550, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:608, y:694, t:'腕横纹', tEn:'Wrist crease'} ], segs: [ {x:508, y:438, t:'9寸', tEn:'9 cun'}, {x:523, y:606, t:'12寸', tEn:'12 cun'} ] },
     },
     ST: {
@@ -5130,28 +5148,29 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* 腧穴分图（《中国针灸学》腧穴各论模式）：按 segs 配置裁剪底模出「躯干段/下肢段」等，
      同一底模与穴点数据，书式完整标注（中文名+代号），标签密度与书相当 */
   function bodySVGSeg(M, S) {
-    const VB = M.vb.split(' ').map(Number);
+    const src = S.bB && M.back ? M.back : M;
+    const VB = (S.bB && M.back ? src.vb : M.vb).split(' ').map(Number);
     const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
     const na = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
     const a = na(S.a), b = na(S.b);
-    const pts = POINTS.filter(q => { const n = na(q.c); return M.pts[q.c] && n >= a && n <= b && !(M.hand && M.hand.pts[q.c]); });
+    const pts = POINTS.filter(q => { const n = na(q.c); return src.pts[q.c] && n >= a && n <= b && !(M.hand && M.hand.pts[q.c]); });
     if (!pts.length) return '';
-    const xs = pts.map(q => M.pts[q.c][0]), ys = pts.map(q => M.pts[q.c][1]);
+    const xs = pts.map(q => src.pts[q.c][0]), ys = pts.map(q => src.pts[q.c][1]);
     /* 自动裁剪窗口：穴位包围盒外扩，左右留足标签列空间 */
     const x0 = Math.max(VB[0], Math.min(...xs) - 140);
     const x1 = Math.min(VB[0] + VB[2], Math.max(...xs) + 140);
     const y0 = Math.max(VB[1], Math.min(...ys) - 110);
     const y1 = Math.min(VB[1] + VB[3], Math.max(...ys) + 65);
     const svb = [x0, y0, x1 - x0, y1 - y0];
-    const items = bookLayout(pts.map(q => q.c), M, svb, { lf: M.lf, rowh: 22 });
-    const labels = items.map(it => leaderLine(M, it) +
+    const items = bookLayout(pts.map(q => q.c), src, svb, { lf: M.lf, rowh: 22 });
+    const labels = items.map(it => leaderLine(src, it) +
       `<text x="${it.bx}" y="${it.ly}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="21" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${it.q.n}<tspan dx="6" font-size="13" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".4">${it.q.c}</tspan></text>`).join('');
-    const dots = pts.map(q => `<circle cx="${M.pts[q.c][0]}" cy="${M.pts[q.c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2"><title>${q.c} ${q.n}</title></circle>`).join('');
+    const dots = pts.map(q => `<circle cx="${src.pts[q.c][0]}" cy="${src.pts[q.c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2"><title>${q.c} ${q.n}</title></circle>`).join('');
     const bottom = items.length ? Math.max(...items.map(it => it.ly)) + 20 : 0;
     const vbH = Math.max(y1 - y0, bottom - y0);
     return `<svg viewBox="${x0} ${y0} ${x1 - x0} ${vbH}" role="img" aria-label="腧穴分图">
-      ${M.body}
-      <path d="${M.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
+      ${S.bB && M.back ? AI_BODY_B : M.body}
+      <path d="${src.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
       ${dots}
       ${labels}
     </svg>`;
@@ -6748,14 +6767,10 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 64;
-  /* 更新日志：每次发版在数组最前面加一条（v、date、items），「我的」页显示 */
+  const APP_VERSION = 66;
+  /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
-    { v: 64, date: '2026-11-10', items: ['任脉 23 穴规则坐标合入（天突上移58px/廉泉70px等）', '肝经 14 穴合入（足部四穴重钉拇趾链）', '心经 9 穴 + 包经 9 穴合入（极泉/天池/手部实测锚点）', '分图顺序统一为头→身→腿'] },
-    { v: 63, date: '2026-11-10', items: ['全部 12 经补配「腧穴分图」（此前仅胃经有分图）', '「我的」页显示版本号与更新内容'] },
-    { v: 62, date: '2026-11-10', items: ['修复胃经循行线面部后直连腹部（补回颈胸段 ST9-18）', '肾经腹线 11 穴 / 脾经腹线 5 穴规则坐标合入并重算循行线'] },
-    { v: 61, date: '2026-11-09', items: ['肺经 11 穴 + 胃经 45 穴 WHO 规则坐标全量替换', '犊鼻上移至外膝眼实测凹陷、丰隆列入干线折线', '三条腹线统一乳线横尺，面部 10 锚点实测'] },
-    { v: 60, date: '2026-11-08', items: ['手绘底模 + 程序骨架合成方案上线（AI_ANCHORS 锚点表）'] },
+    { v: 66, date: '2026-11-10', items: ['大肠/小肠/三焦经 56 穴 WHO 规则坐标合入（手部三井穴贴指甲角、合谷回掌骨中点、曲池/肩髃等重算）', '小肠经新增背面肩胛分图（SI9-15 落肩胛骨标准位置）', '小肠/三焦经新增手背放大图（此前仅大肠经有）', '更新日志精简为只显示最新一条'] },
   ];
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
@@ -6967,7 +6982,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         <div class="d" style="margin-top:2px">版本 · v${APP_VERSION}（${CHANGELOG[0].date}）</div>
         <div style="margin-top:10px;border-top:1px solid var(--line,#eee);padding-top:8px;text-align:left">
           <div style="font-size:13px;font-weight:600;color:var(--ink2,#666)">更新内容 · What's New</div>
-          ${CHANGELOG.slice(0, 3).map(c => `
+          ${CHANGELOG.slice(0, 1).map(c => `
             <div style="margin-top:6px;font-size:12.5px">
               <b style="color:var(--fig-code,#8a1f1f)">v${c.v}</b> <span style="color:var(--ink3,#999)">${c.date}</span>
               <ul style="margin:3px 0 0 18px;padding:0;color:var(--ink2,#555);line-height:1.55">
