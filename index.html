@@ -7072,14 +7072,14 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 73;
+  const APP_VERSION = 74;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
-    { v: 71, date: '2026-11-12', items: ['胆经足部五穴重测：丘墟贴踝缘、足临泣/地五会归足背、侠溪落趾蹼、足窍阴归第4趾甲角（此前误画小趾）', '胆经分图拆分「腿 GB31-39」「足 GB40-44」，足部放大展示', '修复视角元数据回归（GB/BL/GV 共27穴，讲解页恢复 AI 示意图）'] },
+    { v: 74, date: '2026-11-12', items: ['修复更新提示：线上子资源带 sharecode 鉴权，旧版版本检查 403 导致看不到新版本提醒', '六条上肢经手部穴位统一独立成图（肺/大肠/心/小肠/心包/三焦），手部标签横平虚线、左右分列', '脾经足部五穴（隐白/大都/太白/公孙/商丘）按底模实测重定位，落在大脚趾与脚内侧缘', '三焦/小肠经手部穴坐标修正（关冲/液门/中渚、少泽/前谷/后溪）'] },
   ];
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
-    fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
+    fetch('version.json?_=' + Date.now() + (location.search ? '&' + location.search.slice(1) : ''), { cache: 'no-store' })
       .then(r => r.ok ? r.json() : null)
       .then(j => {
         if (!j || !j.ver || j.ver <= APP_VERSION) return;
@@ -7090,7 +7090,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         bar.id = 'updBar';
         bar.style.cssText = 'position:fixed;left:50%;bottom:70px;transform:translateX(-50%);width:max-content;max-width:92%;display:flex;align-items:center;gap:10px;background:var(--card,#fff);border:1px solid var(--gold);border-radius:999px;padding:9px 9px 9px 15px;font-size:11.5px;letter-spacing:.04em;color:var(--ink);z-index:997;box-shadow:0 6px 20px rgba(0,0,0,.18)';
         bar.innerHTML = `<span>🆕 有新版本 v${j.ver}${j.notice ? ' · ' + j.notice : ''}</span>` +
-          `<a href="${location.pathname}" style="text-decoration:none;background:var(--gold);color:#fff;border-radius:999px;padding:6px 13px;font-size:11px;letter-spacing:.06em">更新 · Update</a>` +
+          `<a href="${location.href + (location.search ? '&_r=' : '?_r=') + Date.now()}" style="text-decoration:none;background:var(--gold);color:#fff;border-radius:999px;padding:6px 13px;font-size:11px;letter-spacing:.06em">更新 · Update</a>` +
           `<span id="updClose" style="cursor:pointer;color:var(--ink3);font-size:15px;line-height:1;padding:0 3px">×</span>`;
         document.body.appendChild(bar);
         bar.querySelector('#updClose').addEventListener('click', () => {
