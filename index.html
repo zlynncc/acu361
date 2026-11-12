@@ -4897,7 +4897,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   const AI_MAPS = {
     LU: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '胸臂手', tEn: 'Chest, arm & hand', a: 'LU1', b: 'LU11' } ],
+      segs: [ { t: '胸臂', tEn: 'Chest & arm', a: 'LU1', b: 'LU8' }, { t: '手', tEn: 'Hand', a: 'LU9', b: 'LU11', hb: 1 } ],
+      hand: { pts: { LU9:[848,676], LU10:[858,687], LU11:[876,697] }, line: 'M848,676 C853,681 856,684 858,687 C864,691 870,694 876,697' },
       lf: [660, 882],
       pts: { LU1:[214,306], LU2:[214,290], LU3:[163,429], LU4:[161,443], LU5:[150,514], LU6:[122,591], LU7:[92,676], LU8:[90,683], LU9:[84,698], LU10:[60,730], LU11:[8,768] },
       /* 骨度分寸标尺（方案B：本经骨度段）：marks=横纹锚点，segs=段寸数标注 */
@@ -4917,16 +4918,18 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         pts: { LI1:[903,760], LI2:[884,747], LI3:[882,731], LI4:[870,718], LI5:[856,691] },
         line: 'M856,691 L870,718 L882,731 L884,747 L903,760',
       },
-      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'LI17', b: 'LI20' }, { t: '肩臂', tEn: 'Shoulder & arm', a: 'LI12', b: 'LI16' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI5', b: 'LI11' }, { t: '手', tEn: 'Hand', a: 'LI1', b: 'LI4', bB: 1 } ],
+      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'LI17', b: 'LI20' }, { t: '肩臂', tEn: 'Shoulder & arm', a: 'LI12', b: 'LI16' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI5', b: 'LI11' }, { t: '手', tEn: 'Hand', a: 'LI1', b: 'LI4', hb: 1 } ],
       pts: {LI1:[676,837], LI2:[662,803], LI3:[656,785], LI4:[649,756], LI5:[620,703], LI6:[599,648], LI7:[589,616.7], LI8:[574,569.7], LI9:[569,554], LI10:[564,538.3], LI11:[554,507], LI12:[556,488], LI13:[549,446.3], LI14:[542.3,365.4], LI15:[539,325], LI16:[497,276], LI17:[378,252], LI18:[381,230], LI19:[357,154], LI20:[360,141]},
       line: 'M676,837 L662,803 L656,785 L649,756 L620,703 L599,648 L589,617 L574,570 L569,554 L564,538 L554,507 L556,488 L549,446.3 L542.3,365.4 L539,325 L497,276 L378,252 L381,230 L357,154 L360,141',
       body: AI_BODY_F,
       cun: { mirror: true, marks: [ {x:478, y:393, t:'腋纹', tEn:'Axillary fold'}, {x:550, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:608, y:704, t:'腕横纹', tEn:'Wrist crease'} ], segs: [ {x:513, y:438, t:'9寸', tEn:'9 cun'}, {x:523, y:606, t:'12寸', tEn:'12 cun'} ] },
+      hand: { pts: { LI1:[903,760], LI2:[884,747], LI3:[882,731], LI4:[870,718] }, line: 'M856,691 L870,718 L882,731 L884,747 L903,760' },
       labelFix: { LI6: [535, 700, 1] },
     },
     HT: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '臂手', tEn: 'Arm & hand', a: 'HT1', b: 'HT9' } ],
+      segs: [ { t: '臂', tEn: 'Arm', a: 'HT1', b: 'HT6' }, { t: '手', tEn: 'Hand', a: 'HT7', b: 'HT9', hb: 1 } ],
+      hand: { pts: { HT7:[781,695], HT8:[836,756], HT9:[844,792] }, line: 'M781,695 C798,714 818,736 836,756 C839,768 842,780 844,792' },
       lf: [660, 882],
       pts: { HT1:[162.0,395.0], HT2:[157.0,474.3], HT3:[158.0,514.0], HT4:[121.0,679.0], HT5:[120.0,686.7], HT6:[119.0,694.3], HT7:[119.0,702.0], HT8:[97.0,748.0], HT9:[107.0,810.0] },
       line: 'M107.0,810.0 C105.3,799.7 95.0,766.0 97.0,748.0 C99.0,730.0 115.3,710.9 119.0,702.0 C122.7,693.1 118.8,696.9 119.0,694.3 C119.2,691.8 119.7,689.2 120.0,686.7 C120.3,684.1 114.7,707.8 121.0,679.0 C127.3,650.2 152.0,548.1 158.0,514.0 C164.0,479.9 156.3,494.2 157.0,474.3 C157.7,454.5 161.2,408.2 162.0,395.0 ',
@@ -4936,7 +4939,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     SI: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'SI16', b: 'SI19' }, { t: '肩胛', tEn: 'Scapular region', a: 'SI9', b: 'SI15', bB: true }, { t: '肘前臂', tEn: 'Elbow & forearm', a: 'SI6', b: 'SI8' } ],
+      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'SI16', b: 'SI19' }, { t: '肩胛', tEn: 'Scapular region', a: 'SI9', b: 'SI15', bB: true }, { t: '肘前臂', tEn: 'Elbow & forearm', a: 'SI6', b: 'SI8' }, { t: '手', tEn: 'Hand', a: 'SI1', b: 'SI5', hb: 1 } ],
       lf: [660, 882],
       pts: {SI1:[596,768], SI2:[588,758], SI3:[580,742], SI4:[572,716], SI6:[576.2,682.7], SI7:[557.2,621.3], SI8:[531,504], SI16:[404,230], SI17:[392,211], SI18:[390,120], SI19:[407,122], SI5:[581,698]},
       line: 'M596,768 L588,758 L580,742 L572,716 L581,698 L576,683 L557,621 L531,504 L404,230 L392,211 L390,120 L407,122',
@@ -4944,8 +4947,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       /* 手背尺侧穴：背面底模手部放大图中落位（坐标=背面图坐标系） */
       hand: {
         vb: '735 615 190 270',
-        pts: {SI1:[802,779], SI2:[802,755], SI3:[797,741], SI4:[792,723], SI5:[790,703]},
-        line: 'M790,703 L792,723 L797,741 L802,755 L803,783',
+        pts: {SI1:[824,792], SI2:[818,774], SI3:[813,753], SI4:[792,723], SI5:[790,703]},
+        line: 'M790,703 L792,724 C797,737 805,745 813,753 C815,760 817,767 818,774 C820,780 822,786 824,792',
       },
       /* 肩胛段（SI9-15）：背面底模坐标 */
       back: {
@@ -4957,7 +4960,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     PC: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '臂手', tEn: 'Arm & hand', a: 'PC1', b: 'PC9' } ],
+      segs: [ { t: '臂', tEn: 'Arm', a: 'PC1', b: 'PC6' }, { t: '手', tEn: 'Hand', a: 'PC7', b: 'PC9', hb: 1 } ],
+      hand: { pts: { PC7:[818,684], PC8:[852,732], PC9:[883,789] }, line: 'M818,684 C830,700 842,716 852,732 C862,750 873,770 883,789' },
       lf: [660, 882],
       pts: { PC1:[283.2,410.0], PC2:[210.0,412.4], PC3:[163.0,514.0], PC4:[106.0,625.3], PC5:[104.0,656.0], PC6:[102.0,671.3], PC7:[101.0,702.0], PC8:[94.0,748.0], PC9:[90.0,828.0] },
       line: 'M90.0,828.0 C90.7,814.7 92.2,769.0 94.0,748.0 C95.8,727.0 99.7,714.8 101.0,702.0 C102.3,689.2 101.5,679.0 102.0,671.3 C102.5,663.7 103.3,663.7 104.0,656.0 C104.7,648.3 96.2,649.0 106.0,625.3 C115.8,601.7 145.7,549.5 163.0,514.0 C180.3,478.5 190.0,429.8 210.0,412.4 C230.0,395.1 271.0,410.4 283.2,410.0 ',
@@ -4966,7 +4970,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     TE: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '头面', tEn: 'Head & face', a: 'TE17', b: 'TE23' }, { t: '颈肩臂', tEn: 'Neck, shoulder & arm', a: 'TE10', b: 'TE16' }, { t: '前臂', tEn: 'Forearm', a: 'TE5', b: 'TE9' } ],
+      segs: [ { t: '头面', tEn: 'Head & face', a: 'TE17', b: 'TE23' }, { t: '颈肩臂', tEn: 'Neck, shoulder & arm', a: 'TE10', b: 'TE16' }, { t: '前臂', tEn: 'Forearm', a: 'TE5', b: 'TE9' }, { t: '手', tEn: 'Hand', a: 'TE1', b: 'TE4', hb: 1 } ],
       lf: [660, 882],
       pts: {TE1:[609,778], TE2:[601,762], TE3:[593,744], TE4:[601,693], TE5:[587.8,666.5], TE6:[582.4,651.2], TE7:[578.4,651.2], TE8:[577,636], TE9:[565,583.2], TE10:[541,483.4], TE11:[537.4,464.8], TE12:[532.1,409.1], TE13:[530.3,390.7], TE14:[525,335], TE15:[508,292], TE16:[395,209], TE17:[424,143], TE18:[428,120], TE19:[427,105], TE20:[421,84], TE21:[406,112], TE22:[394,104], TE23:[401,95]},
       line: 'M609,778 L601,762 L593,744 L601,693 L588,667 L583,652 L579,652 L578,637 L567,584 L541,483.4 L537.4,464.8 L532.1,409.1 L530.3,390.7 L525,335 L508,292 L395,209 L424,143 L428,120 L427,105 L421,84 L406,112 L394,104 L401,95',
@@ -4974,8 +4978,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       /* 手背穴（TE1-4）：背面底模手部放大图中落位 */
       hand: {
         vb: '735 615 190 270',
-        pts: {TE1:[830,787], TE2:[834,752], TE3:[832,732], TE4:[828,697]},
-        line: 'M828,697 L832,732 L834,752 L830,790',
+        pts: {TE1:[851,802], TE2:[840,760], TE3:[865,745], TE4:[828,697]},
+        line: 'M828,697 C838,710 854,728 865,745 C858,750 848,755 840,760 C842,774 846,788 851,802',
       },
       cun: { mirror: true, marks: [ {x:478, y:393, t:'腋纹', tEn:'Axillary fold'}, {x:550, y:514, t:'肘横纹', tEn:'Cubital crease'}, {x:608, y:704, t:'腕横纹', tEn:'Wrist crease'} ], segs: [ {x:513, y:438, t:'9寸', tEn:'9 cun'}, {x:523, y:606, t:'12寸', tEn:'12 cun'} ] },
     },
@@ -4992,8 +4996,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     SP: {
       vb: '0 0 700.7 1470.1',
       segs: [ { t: '腹胸', tEn: 'Abdomen & chest', a: 'SP12', b: 'SP21' }, { t: '足腿', tEn: 'Foot & leg', a: 'SP1', b: 'SP11' } ],
-      pts: { SP1:[324.0,1423.0], SP2:[324.0,1416.0], SP3:[324.0,1409.0], SP4:[324.0,1400.0], SP5:[322.0,1391.0], SP6:[320.0,1350.0], SP7:[317.0,1285.0], SP8:[317.0,1256.0], SP9:[315.0,1134.0], SP10:[322.0,1091.0], SP11:[313.0,1021.0], SP12:[262.0,705.0], SP13:[262.0,687.5], SP14:[262.0,612.5], SP15:[262.0,580.0], SP16:[262.0,533.1], SP17:[283.0,370.0], SP18:[283.0,353.0], SP19:[275.0,341.0], SP20:[258.0,329.0], SP21:[225.0,370.0] },
-      line: 'M324.0,1423.0 C324.0,1421.8 324.0,1418.3 324.0,1416.0 C324.0,1413.7 324.0,1411.7 324.0,1409.0 C324.0,1406.3 324.3,1403.0 324.0,1400.0 C323.7,1397.0 322.7,1399.3 322.0,1391.0 C321.3,1382.7 320.8,1367.7 320.0,1350.0 C319.2,1332.3 317.5,1300.7 317.0,1285.0 C316.5,1269.3 317.3,1281.2 317.0,1256.0 C316.7,1230.8 314.2,1161.5 315.0,1134.0 C315.8,1106.5 322.3,1109.8 322.0,1091.0 C321.7,1072.2 323.0,1085.3 313.0,1021.0 C303.0,956.7 270.5,760.6 262.0,705.0 C253.5,649.4 262.0,702.9 262.0,687.5 C262.0,672.1 262.0,630.4 262.0,612.5 C262.0,594.6 262.0,593.2 262.0,580.0 C262.0,566.8 258.5,568.1 262.0,533.1 C265.5,498.1 279.5,400.0 283.0,370.0 C286.5,340.0 284.3,357.8 283.0,353.0 C281.7,348.2 279.2,345.0 275.0,341.0 C270.8,337.0 266.3,324.2 258.0,329.0 C249.7,333.8 230.5,363.2 225.0,370.0 ',
+      pts: { SP1:[290.0,1460.0], SP2:[290.5,1449.0], SP3:[294.0,1442.0], SP4:[300.5,1430.0], SP5:[309.5,1404.0], SP6:[320.0,1350.0], SP7:[317.0,1285.0], SP8:[317.0,1256.0], SP9:[315.0,1134.0], SP10:[322.0,1091.0], SP11:[313.0,1021.0], SP12:[262.0,705.0], SP13:[262.0,687.5], SP14:[262.0,612.5], SP15:[262.0,580.0], SP16:[262.0,533.1], SP17:[283.0,370.0], SP18:[283.0,353.0], SP19:[275.0,341.0], SP20:[258.0,329.0], SP21:[225.0,370.0] },
+      line: 'M290.0,1460.0 C290.1,1458.2 289.8,1452.0 290.5,1449.0 C291.2,1446.0 292.3,1445.2 294.0,1442.0 C295.7,1438.8 297.9,1436.3 300.5,1430.0 C303.1,1423.7 306.2,1417.3 309.5,1404.0 C312.8,1390.7 318.8,1369.8 320.0,1350.0 C321.2,1330.2 317.5,1300.7 317.0,1285.0 C316.5,1269.3 317.3,1281.2 317.0,1256.0 C316.7,1230.8 314.2,1161.5 315.0,1134.0 C315.8,1106.5 322.3,1109.8 322.0,1091.0 C321.7,1072.2 323.0,1085.3 313.0,1021.0 C303.0,956.7 270.5,760.6 262.0,705.0 C253.5,649.4 262.0,702.9 262.0,687.5 C262.0,672.1 262.0,630.4 262.0,612.5 C262.0,594.6 262.0,593.2 262.0,580.0 C262.0,566.8 258.5,568.1 262.0,533.1 C265.5,498.1 279.5,400.0 283.0,370.0 C286.5,340.0 284.3,357.8 283.0,353.0 C281.7,348.2 279.2,345.0 275.0,341.0 C270.8,337.0 266.3,324.2 258.0,329.0 C249.7,333.8 230.5,363.2 225.0,370.0',
       body: AI_BODY_F,
     },
     KI: {
@@ -5397,6 +5401,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* 腧穴分图（《中国针灸学》腧穴各论模式）：按 segs 配置裁剪底模出「躯干段/下肢段」等，
      同一底模与穴点数据，书式完整标注（中文名+代号），标签密度与书相当 */
   function bodySVGSeg(M, S) {
+    if (S.hb && M.hand) return bodySVGHand(M.hand, null);
     const src = S.bB && M.back ? M.back : M;
     const VB = (S.bB && M.back ? src.vb : M.vb).split(' ').map(Number);
     const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
@@ -5425,16 +5430,48 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     </svg>`;
   }
 
-  /* 手背局部放大图：手背侧穴位（大肠/三焦/小肠经手部穴）在正面图上无法精确落位，
-     用背面底模裁剪的手背放大图显示。focus=当前穴代号（穴位页焦点），null=全景全标注 */
+  /* 手部标签（全景/分图）：标签与穴点等高、横平虚线相连；同行拥挤时左右交替分列 */
+  function handLabelsLayer(H, codes, info, x0, x1) {
+    const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
+    const list = codes.slice().sort((a, b) => H.pts[a][1] - H.pts[b][1]);
+    const xs = list.map(c => H.pts[c][0]);
+    const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const rows = { L: [], R: [] };
+    list.forEach(c => {
+      const [x, y] = H.pts[c];
+      let side = x < cx ? 'L' : 'R';
+      const oth = rows[side === 'L' ? 'R' : 'L'];
+      if (rows[side].length && y - rows[side][rows[side].length - 1].ly < 26 &&
+          (!oth.length || y - oth[oth.length - 1].ly >= 26)) side = side === 'L' ? 'R' : 'L';
+      let ly = y;
+      if (rows[side].length && ly - rows[side][rows[side].length - 1].ly < 26) ly = rows[side][rows[side].length - 1].ly + 26;
+      rows[side].push({ c, x, y, ly, side });
+    });
+    return rows.L.concat(rows.R).map(it => {
+      const [x, y] = H.pts[it.c];
+      const s = it.side === 'L' ? 1 : -1;
+      const lx = it.side === 'L' ? Math.min(x0 + 118, x - 24) : Math.max(x1 - 118, x + 24);
+      const sx = it.side === 'L' ? lx + 4 : lx - 4;
+      const ex = x - s * 12;
+      const bent = Math.abs(it.ly - y) > 4;
+      const path = bent ? `M${sx} ${it.ly} L${x + s * 16} ${it.ly} L${ex} ${y}` : `M${sx} ${it.ly} L${ex} ${y}`;
+      return `<path d="${path}" stroke="var(--fig-label)" stroke-width="1.6" stroke-dasharray="3 4" opacity=".75" fill="none"/>
+       <text x="${lx}" y="${it.ly + 5}" text-anchor="${it.side === 'L' ? 'end' : 'start'}" font-size="20" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${info[it.c]}<tspan dx="6" font-size="13" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5">${it.c}</tspan></text>`;
+    }).join('');
+  }
+
+  /* 手部局部图（背面底模裁剪放大）：手部穴位统一在此落位。
+     focus=当前穴代号（穴位页焦点），null=全景/手部分图全标注（横平虚线、左右分列） */
   function bodySVGHand(H, focus) {
     const order = c => parseInt(c.replace(/^[A-Z]+/, ''), 10);
     const info = {}; POINTS.forEach(q => { info[q.c] = q.n; });
     const codes = Object.keys(H.pts).sort((a, b) => order(a) - order(b));
+    const xs = codes.map(c => H.pts[c][0]), ys = codes.map(c => H.pts[c][1]);
+    const x0 = Math.max(600, Math.min(...xs) - 122), x1 = Math.min(1080, Math.max(...xs) + 122);
+    const y0 = Math.max(0, Math.min(...ys) - 80), y1 = Math.min(1400, Math.max(...ys) + 58);
     let layer = '';
     if (focus) {
       const [x, y] = H.pts[focus];
-      /* 当前穴标签默认放穴点下方；下方近距离有其他穴点时放上方 */
       const blocked = codes.some(c => c !== focus && Math.abs(H.pts[c][0] - x) < 60 && H.pts[c][1] > y + 6 && H.pts[c][1] < y + 62);
       const ty1 = blocked ? y - 26 : y + 34, ty2 = blocked ? y - 8 : y + 53;
       layer = codes.filter(c => c !== focus).map(c =>
@@ -5444,20 +5481,14 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
          <text x="${x}" y="${ty1}" text-anchor="middle" font-size="20" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${info[focus]}</text>
          <text x="${x}" y="${ty2}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${focus}</text>`;
     } else {
-      /* 全景：左侧标签列按穴点 y 排序分配行位（引线不交叉），短引线指到穴点 */
-      const sorted = [...codes].sort((a, b) => H.pts[a][1] - H.pts[b][1]);
-      layer = sorted.map((c, i) => {
-        const [x, y] = H.pts[c];
-        const ly = 632 + i * 46;
-        return `<path d="M759 ${ly - 23} L${x} ${y}" stroke="var(--fig-label)" stroke-width="1.6" opacity=".75" fill="none" marker-end="url(#acuArrH)"/>
-         <text x="730" y="${ly - 23}" text-anchor="middle" font-size="21" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="5" paint-order="stroke">${info[c]}</text>
-         <text x="730" y="${ly - 5}" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".5" stroke="var(--card)" stroke-width="4" paint-order="stroke">${c}</text>`;
-      }).join('');
+      layer = handLabelsLayer(H, codes, info, x0, x1);
     }
-    return `<svg viewBox="${H.vb}" class="fig-hand" role="img" aria-label="手背局部示意图">
-      <defs><marker id="acuArrH" markerWidth="14" markerHeight="14" refX="11" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L12,5 L0,10 z" fill="var(--fig-label)"/></marker></defs>
+    const dots = focus ? '' : codes.map(c =>
+      `<circle cx="${H.pts[c][0]}" cy="${H.pts[c][1]}" r="7" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2"><title>${c} ${info[c]}</title></circle>`).join('');
+    return `<svg viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}" class="fig-hand" role="img" aria-label="手部局部示意图">
       ${AI_BODY_B}
       <path d="${H.line}" fill="none" stroke="var(--fig-dot)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+      ${dots}
       ${layer}
     </svg>`;
   }
@@ -7041,7 +7072,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 71;
+  const APP_VERSION = 73;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
     { v: 71, date: '2026-11-12', items: ['胆经足部五穴重测：丘墟贴踝缘、足临泣/地五会归足背、侠溪落趾蹼、足窍阴归第4趾甲角（此前误画小趾）', '胆经分图拆分「腿 GB31-39」「足 GB40-44」，足部放大展示', '修复视角元数据回归（GB/BL/GV 共27穴，讲解页恢复 AI 示意图）'] },
