@@ -1423,18 +1423,18 @@ window.ACU_POINTS = (window.ACU_POINTS || []).concat([
  op:'浅刺0.1寸，或点刺出血。',spec:'井穴（木）',note:'点刺放血为治急性咽喉肿痛常用法。'},
 
 /* ========== 手阳明大肠经 ========== */
-{c:'LI1',n:'商阳',py:'Shāngyáng',m:'LI',r:'手指',xy:[156,210],side:'f',
+{c:'LI1',n:'商阳',py:'Shāngyáng',m:'LI',r:'手指',xy:[156,210],side:'b',
  loc:'在手指，食指末节桡侧，指甲根角侧上方0.1寸。',
  anat:'食指指甲根角，皮下组织→指骨骨膜；两侧有指掌侧固有神经与指掌侧固有动脉。',
  acts:'咽喉肿痛、齿痛、发热、昏迷、手指麻木。',
  op:'浅刺0.1寸，或点刺出血。',spec:'井穴（金）',note:'井穴点刺放血，为治急性咽喉肿痛、高热之常用法。'},
-{c:'LI4',n:'合谷',py:'Hégǔ',m:'LI',r:'手背',xy:[155,202],side:'f',
+{c:'LI4',n:'合谷',py:'Hégǔ',m:'LI',r:'手背',xy:[155,202],side:'b',
  loc:'在手背，第2掌骨桡侧的中点处。',
  anat:'第2掌骨桡侧中点，皮肤→皮下组织→第1骨间背侧肌→拇收肌；浅层有桡神经浅支与手背静脉网，深层有第1掌背动脉与尺神经深支。',
  acts:'头痛、齿痛、目赤肿痛、咽喉肿痛、口眼歪斜、发热恶寒、经闭、滞产。',
  op:'直刺0.5~1寸，可灸。',spec:'原穴；四总穴之一',
  note:'孕妇慎用（有通经活血之力）；“面口合谷收”。'},
-{c:'LI5',n:'阳溪',py:'Yángxī',m:'LI',r:'腕部',xy:[154,191],side:'f',
+{c:'LI5',n:'阳溪',py:'Yángxī',m:'LI',r:'腕部',xy:[154,191],side:'b',
  loc:'在腕区，腕背侧远端横纹桡侧，解剖学“鼻烟窝”凹陷中。',
  anat:'解剖学鼻烟窝凹陷，皮肤→皮下组织→拇长伸肌腱与拇短伸肌腱之间→舟骨；布有桡神经浅支、头静脉起端与桡动脉分支。',
  acts:'头痛、目赤肿痛、齿痛、手腕痛。',
@@ -2255,12 +2255,12 @@ window.ACU_POINTS = (window.ACU_POINTS || []).concat([
  spec:'经穴（金）',note:'针刺须避开桡动脉。'},
 
 /* ========== 手阳明大肠经 ========== */
-{c:'LI2',n:'二间',py:'Er Jian',m:'LI',r:'手指',xy:[156,206],side:'f',
+{c:'LI2',n:'二间',py:'Er Jian',m:'LI',r:'手指',xy:[156,206],side:'b',
  loc:'在手指，第2掌指关节桡侧远端赤白肉际凹陷中。',
  anat:'食指本节桡侧前方，皮肤→皮下组织→指背腱膜与关节囊；布有桡神经浅支的指背神经与指背动静脉。',
  acts:'齿痛、咽喉肿痛、目痛、热病。',op:'直刺0.2~0.3寸，可灸。',
  spec:'荥穴（水）',note:''},
-{c:'LI3',n:'三间',py:'San Jian',m:'LI',r:'手背',xy:[156,204],side:'f',
+{c:'LI3',n:'三间',py:'San Jian',m:'LI',r:'手背',xy:[156,204],side:'b',
  loc:'在手背，第2掌指关节桡侧近端凹陷中。',
  anat:'第2掌骨桡侧，第2掌指关节后方，皮肤→皮下组织→第1骨间背侧肌；布有桡神经浅支与手背静脉网。',
  acts:'齿痛、目痛、咽喉肿痛、腹胀、手背肿痛。',op:'直刺0.5~0.8寸，可灸。',
@@ -4912,7 +4912,12 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     },
     LI: {
       vb: '0 0 700.7 1470.1',
-      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'LI17', b: 'LI20' }, { t: '肩臂', tEn: 'Shoulder & arm', a: 'LI12', b: 'LI16' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI5', b: 'LI11' }, { t: '手', tEn: 'Hand', a: 'LI1', b: 'LI4', incHand: 1 } ],
+      back: {
+        vb: '0 0 920 1400',
+        pts: { LI1:[903,760], LI2:[884,747], LI3:[882,731], LI4:[870,718], LI5:[856,691] },
+        line: 'M856,691 L870,718 L882,731 L884,747 L903,760',
+      },
+      segs: [ { t: '颈面', tEn: 'Neck & face', a: 'LI17', b: 'LI20' }, { t: '肩臂', tEn: 'Shoulder & arm', a: 'LI12', b: 'LI16' }, { t: '手肘', tEn: 'Hand & elbow', a: 'LI5', b: 'LI11' }, { t: '手', tEn: 'Hand', a: 'LI1', b: 'LI4', bB: 1 } ],
       pts: {LI1:[676,837], LI2:[662,803], LI3:[656,785], LI4:[649,756], LI5:[620,703], LI6:[599,648], LI7:[589,616.7], LI8:[574,569.7], LI9:[569,554], LI10:[564,538.3], LI11:[554,507], LI12:[556,488], LI13:[549,446.3], LI14:[542.3,365.4], LI15:[539,325], LI16:[497,276], LI17:[378,252], LI18:[381,230], LI19:[357,154], LI20:[360,141]},
       line: 'M676,837 L662,803 L656,785 L649,756 L620,703 L599,648 L589,617 L574,570 L569,554 L564,538 L554,507 L556,488 L549,446.3 L542.3,365.4 L539,325 L497,276 L378,252 L381,230 L357,154 L360,141',
       body: AI_BODY_F,
@@ -5478,9 +5483,34 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     </svg>`;
   }
 
+  /* 背面 AI 焦点图：与 bodySVGAi 同构，数据源 M.back（背面底模坐标系） */
+  function bodySVGAiBack(point, M) {
+    const B = M.back;
+    const PV = B.vb.split(' ').map(Number);
+    const xy = B.pts[point.c];
+    const sibs = POINTS.filter(q => q.m === point.m && B.pts[q.c] && q.c !== point.c);
+    const textW = (t, fs) => { let w = 0; for (const ch of t) w += ch.charCodeAt(0) > 0x2e80 ? fs : fs * .62; return w; };
+    const marks = sibs.map(q => `<circle cx="${B.pts[q.c][0]}" cy="${B.pts[q.c][1]}" r="6.5" fill="var(--fig-dot)" opacity=".4"><title>${q.c} ${q.n}</title></circle>`).join('');
+    const nameFS = 32, codeFS = 27;
+    const nameW = textW(point.n, nameFS), codeW = textW(point.c, codeFS);
+    const nameX = Math.max(nameW / 2 + 6, Math.min(xy[0], PV[0] + PV[2] - nameW / 2 - 6));
+    const codeX = Math.max(codeW / 2 + 6, Math.min(xy[0], PV[0] + PV[2] - codeW / 2 - 6));
+    const topPad = 90;
+    return `<svg viewBox="${PV[0]} ${PV[1] - topPad} ${PV[2]} ${PV[3] + topPad}" class="fig-ai" role="img" aria-label="穴位部位示意">
+      ${AI_BODY_B}
+      <path d="${B.line}" fill="none" stroke="var(--fig-dot)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" opacity=".5"/>
+      ${marks}
+      <circle cx="${xy[0]}" cy="${xy[1]}" r="24" fill="var(--fig-dot)" opacity=".16"/>
+      <circle cx="${xy[0]}" cy="${xy[1]}" r="11" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="3"/>
+      <text x="${nameX}" y="${xy[1] - 48}" text-anchor="middle" font-size="${nameFS}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing="1" stroke="var(--card)" stroke-width="6" paint-order="stroke">${point.n}</text>
+      <text x="${codeX}" y="${xy[1] - 17}" text-anchor="middle" font-size="${codeFS}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif" letter-spacing=".8" stroke="var(--card)" stroke-width="6" paint-order="stroke">${point.c}</text>
+    </svg>`;
+  }
+
   function bodySVG(point, side) {
     const M = AI_MAPS[point.m];
     if (M && M.pts[point.c] && side !== 'b') return bodySVGAi(point, M);
+    if (M && M.back && M.back.pts[point.c] && side === 'b') return bodySVGAiBack(point, M);
     const isBack = side === 'b';
     const extra = isBack
       ? `<path d="M100 78 L100 190" stroke="var(--fig-anchor)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
@@ -5995,7 +6025,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     reportCtx = '穴位详情 · Point: ' + p.c + ' ' + p.n;
     mapSide = (viewPoint._code === code) ? mapSide : (p.side || 'f');
     viewPoint._code = code;
-    setTopbar({ title: p.n, titleEn: p.py, back: 'mer/' + p.m, sub: p.c });
+    setTopbar({ title: p.n, titleEn: p.py, back: 'mer/' + (p.m === 'DU' ? 'GV' : p.m), sub: p.c });
     setTab('home');
 
     const sibs = POINTS.filter(q => q.m === p.m)
@@ -7005,10 +7035,10 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 69;
+  const APP_VERSION = 70;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
-    { v: 69, date: '2026-11-11', items: ['删除大肠经手背放大图（手部穴并入「手」分图）', '手部五穴重测：商阳/二间/三间/合谷/阳溪 落到食指桡侧与手背实测位', '肩臂段二次复核：巨骨(肩顶)/肩髃(肩峰下凹陷)/臂臑/手五里 贴外侧轮廓', '三焦经肩臂段同源修正：肩髎/天髎/臑会/消泺/清冷渊 重测，讲解页视角修正'] },
+    { v: 70, date: '2026-11-11', items: ['大肠经「手」分图改为背面底模（手背朝观众，合谷/商阳等手背穴定位直观）', 'LI1-5 讲解页默认背面 AI 视图，可切换正面', '恢复背面穴位 AI 焦点图渲染（胆/膀胱/督脉背面穴讲解页同步修复）'] },
   ];
   function checkUpdate() {
     if (!/^https?:$/.test(location.protocol)) return;
