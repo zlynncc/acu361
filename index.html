@@ -4852,10 +4852,49 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     <path d="M112 110 L141 194 M112 110 L122 195 M112 110 L107 195 M112 110 L94 194 M112 110 L82 194"/>
   </g>`;
 
+  /* 足底仰视特写：足底轮廓 + 五趾跖面（叠加椭圆） + 跖球线 + 足弓 + 足跟（左足底，踇趾在右） */
+  const AI_SOLE = `
+  <g fill="var(--fig-body)" opacity=".06" stroke="none"><path d="M172 96 C196 104 206 124 204 148 C202 176 193 200 180 216 C172 242 152 260 127 260 C102 260 84 242 77 216 C64 200 55 176 53 148 C51 124 62 104 80 96 C110 88 142 88 172 96 Z"/></g>
+  <g fill="none" stroke="var(--fig-body)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M172 96 C196 104 206 124 204 148 C202 176 193 200 180 216 C172 242 152 260 127 260 C102 260 84 242 77 216 C64 200 55 176 53 148 C51 124 62 104 80 96 C110 88 142 88 172 96 Z"/>
+    <ellipse cx="160" cy="78" rx="16" ry="20"/>
+    <ellipse cx="131" cy="73" rx="10" ry="16"/>
+    <ellipse cx="111" cy="77" rx="9" ry="14"/>
+    <ellipse cx="92" cy="84" rx="8" ry="13"/>
+    <ellipse cx="74" cy="92" rx="7.5" ry="11"/>
+  </g>
+  <g fill="none" stroke="var(--fig-label)" stroke-width="1.2" stroke-linecap="round" opacity=".65">
+    <path d="M66 142 C98 130 160 130 196 144"/>
+    <path d="M95 194 C112 202 148 202 168 192"/>
+  </g>
+  <g fill="none" stroke="var(--fig-body)" stroke-width="1" stroke-dasharray="2 4" opacity=".5">
+    <ellipse cx="127" cy="232" rx="26" ry="16"/>
+  </g>`;
+
+  /* 足内侧面特写：小腿下段 + 内踝 + 跟腱 + 舟骨粗隆 + 足弓（左足内侧，趾在左） */
+  const AI_MEDFOOT = `
+  <g fill="var(--fig-body)" opacity=".06" stroke="none"><path d="M122 0 L124 62 C127 84 133 96 146 104 C120 122 84 150 52 172 C30 186 18 194 16 202 L16 214 C42 222 92 222 132 214 C170 206 198 198 212 186 C220 168 218 140 208 120 C202 98 196 58 194 0 Z"/></g>
+  <g fill="none" stroke="var(--fig-body)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M122 0 L124 62 C127 84 133 96 146 104 C120 122 84 150 52 172 C30 186 18 194 16 202 L16 214 C42 222 92 222 132 214 C170 206 198 198 212 186 C220 168 218 140 208 120 C202 98 196 58 194 0"/>
+    <path d="M194 0 C197 40 202 82 208 120"/>
+    <path d="M20 210 C60 202 110 200 160 202 C178 203 196 204 208 200"/>
+    <ellipse cx="141" cy="94" rx="14" ry="12"/>
+    <ellipse cx="95" cy="146" rx="9" ry="7"/>
+  </g>
+  <g fill="none" stroke="var(--fig-label)" stroke-width="1.2" stroke-linecap="round" opacity=".6">
+    <path d="M112 112 L182 112"/>
+    <path d="M150 20 C154 50 156 70 156 90"/>
+  </g>
+  <g fill="none" stroke="var(--fig-body)" stroke-width="1" stroke-dasharray="2 4" opacity=".45">
+    <path d="M60 196 C90 188 120 190 145 198"/>
+  </g>`;
+
   /* 局部特写图注册表：k=键名；vb=画布；lx=标签列起点；t/tEn=图名 */
   const AI_INSETS = {
     face: { vb: '0 0 300 330', lx: 214, t: '头面部特写', tEn: 'Face · detail', body: AI_FACE },
-    foot: { vb: '0 0 300 300', lx: 176, t: '足背特写', tEn: 'Dorsum of foot', body: AI_FOOT }
+    foot: { vb: '0 0 300 300', lx: 176, t: '足背特写', tEn: 'Dorsum of foot', body: AI_FOOT },
+    sole: { vb: '0 0 300 300', lx: 216, t: '足底特写', tEn: 'Sole of foot', body: AI_SOLE },
+    medfoot: { vb: '0 0 320 300', lx: 238, t: '足内侧特写', tEn: 'Medial foot & ankle', body: AI_MEDFOOT }
   };
 
   /* 底模解剖锚点表 + 分段骨度比例尺（准确性保障链条第①环）
@@ -5003,6 +5042,12 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     KI: {
       vb: '0 0 700.7 1470.1',
       segs: [ { t: '胸', tEn: 'Chest', a: 'KI22', b: 'KI27' }, { t: '腹', tEn: 'Abdomen', a: 'KI11', b: 'KI21' }, { t: '足膝', tEn: 'Foot & knee', a: 'KI1', b: 'KI10' } ],
+      /* 足部特写（局部放大）：足内侧（踝区 KI1–KI9）与足底（KI1），正面图难辨时看这两张 */
+      insets: [
+        { k: 'medfoot', pts: { KI9:[168,28], KI8:[154,60], KI7:[168,62], KI3:[160,102], KI4:[174,124], KI5:[158,132], KI6:[142,122], KI2:[98,156], KI1:[42,202] },
+          line: 'M168,28 C165,42 160,52 154,60 M168,62 C164,80 162,90 160,102 C168,112 173,118 174,124 C170,131 163,134 158,132 C153,129 147,126 142,122 C128,134 112,146 98,156 C78,172 58,190 42,202' },
+        { k: 'sole', pts: { KI1:[124,138] }, line: '' },
+      ],
       pts: { KI1:[306.0,1448.0], KI2:[296.0,1426.0], KI3:[314.0,1387.0], KI4:[312.0,1399.0], KI5:[313.0,1409.0], KI6:[305.0,1400.0], KI7:[320.0,1345.0], KI8:[314.0,1343.0], KI9:[317.0,1283.0], KI10:[329.0,1198.0], KI11:[336.4,705.0], KI12:[336.4,680.0], KI13:[336.4,655.0], KI14:[336.4,630.0], KI15:[336.4,605.0], KI16:[336.4,580.0], KI17:[336.4,548.8], KI18:[336.4,533.1], KI19:[336.4,517.5], KI20:[336.4,501.9], KI21:[336.4,486.2], KI22:[304.5,397.0], KI23:[304.5,379.0], KI24:[304.5,361.0], KI25:[304.5,347.0], KI26:[304.5,335.0], KI27:[304.5,310.0] },
       line: 'M306,1448 L296,1426 L314,1387 L312,1399 L313,1409 L305,1400 C307.5,1390.8 318.5,1354.5 320.0,1345.0 C321.5,1335.5 314.5,1353.3 314.0,1343.0 C313.5,1332.7 314.5,1307.2 317.0,1283.0 C319.5,1258.8 325.8,1294.3 329.0,1198.0 C332.2,1101.7 335.2,791.3 336.4,705.0 C337.6,618.7 336.4,688.3 336.4,680.0 C336.4,671.7 336.4,663.3 336.4,655.0 C336.4,646.7 336.4,638.3 336.4,630.0 C336.4,621.7 336.4,613.3 336.4,605.0 C336.4,596.7 336.4,589.4 336.4,580.0 C336.4,570.6 336.4,556.6 336.4,548.8 C336.4,541.0 336.4,538.3 336.4,533.1 C336.4,527.9 336.4,522.7 336.4,517.5 C336.4,512.3 336.4,507.1 336.4,501.9 C336.4,496.7 341.7,503.7 336.4,486.2 C331.1,468.7 309.8,414.9 304.5,397.0 C299.2,379.1 304.5,385.0 304.5,379.0 C304.5,373.0 304.5,366.3 304.5,361.0 C304.5,355.7 304.5,351.3 304.5,347.0 C304.5,342.7 304.5,341.2 304.5,335.0 C304.5,328.8 304.5,314.2 304.5,310.0',
       body: AI_BODY_F,
@@ -5494,7 +5539,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   }
 
   /* 局部特写插图（头面/足背/足底…）：几何示意底模 + 书式右侧标签列，短引线不交叉 */
-  function bodySVGInset(I) {
+  function bodySVGInset(I, focus) {
     const D = AI_INSETS[I.k]; if (!D) return '';
     const pts = Object.keys(I.pts).map(c => POINTS.find(q => q.c === c)).filter(Boolean)
       .sort((a, b) => I.pts[a.c][1] - I.pts[b.c][1]);
@@ -5512,7 +5557,10 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       return `<path d="M${sx} ${sy} L${it.x - dx / L * 7} ${it.y - dy / L * 7}" stroke="var(--fig-label)" stroke-width="1.1" stroke-dasharray="2 3" opacity=".7" fill="none"/>
         <text x="${D.lx}" y="${it.ly}" font-size="${fsN}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".4" stroke="var(--card)" stroke-width="3.5" paint-order="stroke">${it.q.n}<tspan dx="4" font-size="${fsC}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif">${it.q.c}</tspan></text>`;
     }).join('');
-    const dots = items.map(it => `<circle cx="${it.x}" cy="${it.y}" r="4.5" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="1.6"><title>${it.q.c} ${it.q.n}</title></circle>`).join('');
+    const dots = items.map(it => it.q.c === focus
+      ? `<circle cx="${it.x}" cy="${it.y}" r="12" fill="var(--fig-dot)" opacity=".16"/>
+         <circle cx="${it.x}" cy="${it.y}" r="6.5" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="2.6"><title>${it.q.c} ${it.q.n}</title></circle>`
+      : `<circle cx="${it.x}" cy="${it.y}" r="4.5" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="1.6"><title>${it.q.c} ${it.q.n}</title></circle>`).join('');
     return `<svg viewBox="${D.vb}" class="fig-inset" role="img" aria-label="${D.t}">
       ${D.body}
       ${I.line ? `<path d="${I.line}" fill="none" stroke="var(--fig-dot)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>` : ''}
@@ -6222,6 +6270,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
 
     const enp = (window.AC_EN && window.AC_EN.P[p.c]) || {};
     const enMer = (window.AC_EN && window.AC_EN.MER[p.m]) || '';
+    const AMins = ((AMp && AMp.insets) || []).filter(I => I.pts && I.pts[p.c] && AI_INSETS[I.k]);
     view.innerHTML = `
       <div class="pt-head">
         <div class="code-line">${p.c} <span style="opacity:.5">/</span> ${p.mer.name}</div>
@@ -6247,6 +6296,13 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         ${bodySVG(p, mapSide)}
         <div class="map-note">示意图，仅示大致部位与同经穴位分布</div>
       </div>
+
+      ${AMins.map(I => `
+      <div class="map-wrap">
+        <div class="map-head"><span class="map-label">${AI_INSETS[I.k].t} · ${AI_INSETS[I.k].tEn}</span></div>
+        ${bodySVGInset(I, p.c)}
+        <div class="map-note">局部放大示意，便于辨认取穴部位</div>
+      </div>`).join('')}
 
       <div class="card" style="margin-top:14px">
         <div class="field">
@@ -7220,7 +7276,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 81;
+  const APP_VERSION = 82;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
     { v: 81, date: '2025-11-15', items: ['肾经全线重绘：足踝六穴按内踝实测重定位（修复连线出体与绕圈），阴谷归膝内侧，胸段KI22-27改旁开2寸（原误贴中线）', '手部穴全面订正：六经手图逐穴按指甲实测重定（少商/少泽/关冲/商阳等指认纠错），正面全景手穴同步修正'] },
