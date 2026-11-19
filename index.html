@@ -4981,7 +4981,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     <path d="M100 82 L137 84"/>
     <path d="M97 128 L149 130"/>
   </g>
-  <!-- 解剖结构标注（左列） -->
+  <!-- 解剖结构标注（左列，中英文） -->
   <g font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11" fill="var(--fig-label)" letter-spacing=".5">
     <text x="14" y="38">指甲</text>
     <text x="10" y="62">远节指骨</text>
@@ -4990,6 +4990,15 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     <text x="10" y="192">第1掌骨</text>
     <text x="10" y="232">鱼际肌</text>
     <text x="10" y="270">大多角骨</text>
+  </g>
+  <g font-family="Georgia,'Palatino',serif" font-style="italic" font-size="8" fill="var(--fig-label)" opacity=".9" letter-spacing=".3">
+    <text x="14" y="48">Nail</text>
+    <text x="10" y="72">Distal phalanx</text>
+    <text x="10" y="116">Proximal phalanx</text>
+    <text x="10" y="158">MCP joint</text>
+    <text x="10" y="202">1st metacarpal</text>
+    <text x="10" y="242">Thenar muscles</text>
+    <text x="10" y="280">Trapezium</text>
   </g>
   <g fill="none" stroke="var(--fig-label)" stroke-width="1" stroke-dasharray="2 3" opacity=".65">
     <path d="M44 34 L104 42"/>
@@ -6276,6 +6285,11 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   let mapSide = 'f';
 
   /* 学习要点英文：穴性术语与经脉的规则化英译 */
+  /* 部位标签英文（pt-head tag / 搜索筛选等处使用） */
+  const REG_EN = {
+    '胸部':'Chest','肘部':'Elbow','前臂':'Forearm','腕部':'Wrist','手掌':'Palm','手指':'Finger','手背':'Dorsum of hand','上臂':'Upper arm','肩部':'Shoulder','面部':'Face','腋部':'Axilla','背部':'Upper back','耳部':'Ear','颈部':'Neck','头部':'Head','腹部':'Abdomen','大腿':'Thigh','小腿':'Lower leg','踝部':'Ankle','足部':'Foot','足趾':'Toe','腰部':'Lower back','骶部':'Sacrum','膝部':'Knee','颈项':'Nape','胁部':'Hypochondrium','臀部':'Buttock','足底':'Sole','足背':'Foot dorsum','头顶':'Vertex','下腹':'Lower abdomen','上腹':'Upper abdomen','会阴部':'Perineum'
+  };
+
   function acSpecEn(spec) {
     if (!spec) return 'Regular point of its meridian';
     const ORG = { '肺':'Lung','大肠':'Large Intestine','胃':'Stomach','脾':'Spleen','心':'Heart','小肠':'Small Intestine','膀胱':'Bladder','肾':'Kidney','心包':'Pericardium','三焦':'Triple Energizer','胆':'Gallbladder','肝':'Liver','任脉':'Ren Mai','督脉':'Du Mai' };
@@ -6395,7 +6409,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         </div>
         <div class="pt-tags">
           <span class="tag" data-go="mer/${p.m}">${p.mer.short}</span>
-          <span class="tag">${p.r}</span>
+          <span class="tag">${p.r}${REG_EN[p.r] ? ` <i style="font-family:Georgia,serif;font-style:italic;font-size:9px;opacity:.8">${REG_EN[p.r]}</i>` : ''}</span>
           ${p.spec ? `<span class="tag red">${p.spec}</span>` : ''}
         </div>
       </div>
@@ -6409,14 +6423,14 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
           </div>` : ''}
         </div>
         ${bodySVG(p, mapSide)}
-        <div class="map-note">示意图，仅示大致部位与同经穴位分布</div>
+        <div class="map-note">示意图，仅示大致部位与同经穴位分布 · <span style="font-style:italic;font-family:Georgia,serif">Schematic: approximate location and points of this meridian</span></div>
       </div>
 
       ${AMins.map(I => `
       <div class="map-wrap">
         <div class="map-head"><span class="map-label">${AI_INSETS[I.k].t} · ${AI_INSETS[I.k].tEn}</span></div>
         ${bodySVGInset(I, p.c)}
-        <div class="map-note">局部放大示意，便于辨认取穴部位</div>
+        <div class="map-note">局部放大示意，便于辨认取穴部位 · <span style="font-style:italic;font-family:Georgia,serif">Close-up for identifying the point site</span></div>
       </div>`).join('')}
 
       <div class="card" style="margin-top:14px">
@@ -6440,13 +6454,13 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
           <div class="v">${p.spec}</div>
           ${enp.specEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:3px;font-style:italic">${enp.specEn}</div>` : ''}
         </div>` : ''}
-        ${p.note ? `<div class="note-box"><b>注意</b> · ${p.note}${enp.noteEn ? `<span style="display:block;font-size:11px;font-style:italic;margin-top:3px;opacity:.8">${enp.noteEn}</span>` : ''}</div>` : ''}
+        ${p.note ? `<div class="note-box"><b>注意 <span style="font-family:Georgia,serif;font-style:italic;font-size:10px;opacity:.75">Caution</span></b> · ${p.note}${enp.noteEn ? `<span style="display:block;font-size:11px;font-style:italic;margin-top:3px;opacity:.8">${enp.noteEn}</span>` : ''}</div>` : ''}
       </div>
 
       <div class="card" style="margin-top:12px;border-left:3px solid var(--accent,#8a7a5c)">
         <div class="field">
           <div class="k">西医解剖 <span style="font-weight:400;opacity:.7">Western Anatomy</span></div>
-          <div class="v" style="line-height:1.9">${enp.anat || '暂无'}</div>
+          <div class="v" style="line-height:1.9">${enp.anat || '暂无 · N/A'}</div>
           ${enp.anatEn ? `<div class="v" style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:4px;font-style:italic">${enp.anatEn}</div>` : ''}
         </div>
       </div>
@@ -6461,10 +6475,10 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
 
       <div class="actions">
         <button class="btn primary ${isLearned ? 'done' : ''}" data-act="learn">
-          ${isLearned ? ICON.check : ICON.needle}${isLearned ? '已掌握' : '标记已学'}
+          ${isLearned ? ICON.check : ICON.needle}${isLearned ? '已掌握 <i style="font-family:Georgia,serif;font-style:italic;font-size:10px;opacity:.75">Mastered</i>' : '标记已学 <i style="font-family:Georgia,serif;font-style:italic;font-size:10px;opacity:.75">Mark as learned</i>'}
         </button>
         <button class="btn fav ${isFav ? 'on' : ''}" data-act="fav">
-          ${isFav ? ICON.starFill : ICON.star}${isFav ? '已收藏' : '收藏'}
+          ${isFav ? ICON.starFill : ICON.star}${isFav ? '已收藏 <i style="font-family:Georgia,serif;font-style:italic;font-size:10px;opacity:.75">Favorited</i>' : '收藏 <i style="font-family:Georgia,serif;font-style:italic;font-size:10px;opacity:.75">Favorite</i>'}
         </button>
       </div>
 
@@ -6473,8 +6487,8 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       </div>
 
       <div class="pager">
-        <button ${prev ? `data-go="point/${prev.c}"` : 'disabled'} style="justify-content:flex-start">${prev ? `${prev.c} ${prev.n}` : '—'} ←</button>
-        <button ${next ? `data-go="point/${next.c}"` : 'disabled'} style="justify-content:flex-end">${next ? `→ ${next.c} ${next.n}` : '—'}</button>
+        <button ${prev ? `data-go="point/${prev.c}"` : 'disabled'} style="justify-content:flex-start">${prev ? `${prev.c} ${prev.n} <i style="font-style:italic;font-size:9px;opacity:.7;font-family:Georgia,serif">${prev.py}</i>` : '—'} ←</button>
+        <button ${next ? `data-go="point/${next.c}"` : 'disabled'} style="justify-content:flex-end">→ ${next ? `${next.c} ${next.n} <i style="font-style:italic;font-size:9px;opacity:.7;font-family:Georgia,serif">${next.py}</i>` : '—'}</button>
       </div>
       <div style="height:10px"></div>
     `;
@@ -7391,7 +7405,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 89;
+  const APP_VERSION = 90;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
     { v: 81, date: '2025-11-15', items: ['肾经全线重绘：足踝六穴按内踝实测重定位（修复连线出体与绕圈），阴谷归膝内侧，胸段KI22-27改旁开2寸（原误贴中线）', '手部穴全面订正：六经手图逐穴按指甲实测重定（少商/少泽/关冲/商阳等指认纠错），正面全景手穴同步修正'] },
