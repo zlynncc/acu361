@@ -4896,31 +4896,87 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     <path d="M60 198 C90 190 120 192 150 200"/>
   </g>`;
 
-  /* 拇指解剖特写（少商/鱼际试点）：皮肤半透明 + 骨骼层 + 鱼际肌 + 指甲。
-     左侧=解剖结构标注（内嵌），右侧=穴位标签列（bodySVGInset 标签系统） */
+  /* 拇指解剖特写（少商/鱼际）：渐变写实版。底色全部取自站点配色变量，
+     明暗光影用黑白渐变叠加实现（主题自适应）；左侧=解剖标注，右侧=穴位标签列 */
   const AI_THUMB = `
-  <!-- 皮肤与鱼际隆起 -->
+  <defs>
+    <filter id="atB2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="atB5" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+    <linearGradient id="atSkin" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color:#000;stop-opacity:.16"/>
+      <stop offset=".42" style="stop-color:#fff;stop-opacity:.11"/>
+      <stop offset=".78" style="stop-color:#000;stop-opacity:.08"/>
+      <stop offset="1" style="stop-color:#000;stop-opacity:.18"/>
+    </linearGradient>
+    <linearGradient id="atBone" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color:#fff;stop-opacity:.34"/>
+      <stop offset=".5" style="stop-color:#fff;stop-opacity:0"/>
+      <stop offset="1" style="stop-color:#000;stop-opacity:.17"/>
+    </linearGradient>
+    <linearGradient id="atMus" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:#fff;stop-opacity:.13"/>
+      <stop offset=".55" style="stop-color:#000;stop-opacity:0"/>
+      <stop offset="1" style="stop-color:#000;stop-opacity:.22"/>
+    </linearGradient>
+    <linearGradient id="atNail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:#fff;stop-opacity:.5"/>
+      <stop offset=".55" style="stop-color:#fff;stop-opacity:.08"/>
+      <stop offset="1" style="stop-color:#000;stop-opacity:.14"/>
+    </linearGradient>
+  </defs>
+  <!-- 皮肤基底 + 光影 -->
   <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="var(--fig-body)" opacity=".28" stroke="none"/>
-  <!-- 鱼际肌（拇短展肌・拇短屈肌群） -->
-  <path d="M110 154 C120 166 130 184 136 206 C141 226 143 252 142 274 C141 288 136 295 130 294 C118 292 110 276 107 254 C104 228 106 194 109 168 Z" fill="var(--fig-muscle)" opacity=".4" stroke="none"/>
+  <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="url(#atSkin)" stroke="none"/>
+  <!-- 指尖立体高光 -->
+  <ellipse cx="114" cy="34" rx="13" ry="10" fill="#fff" opacity=".14" filter="url(#atB5)"/>
+  <!-- 鱼际肌（拇短展肌・拇短屈肌群）+ 光影与肌纤维 -->
+  <path d="M110 154 C120 166 130 184 136 206 C141 226 143 252 142 274 C141 288 136 295 130 294 C118 292 110 276 107 254 C104 228 106 194 109 168 Z" fill="var(--fig-muscle)" opacity=".42" stroke="none"/>
+  <path d="M110 154 C120 166 130 184 136 206 C141 226 143 252 142 274 C141 288 136 295 130 294 C118 292 110 276 107 254 C104 228 106 194 109 168 Z" fill="url(#atMus)" stroke="none"/>
   <g fill="none" stroke="var(--card)" stroke-width="1" opacity=".5" stroke-linecap="round">
     <path d="M116 168 C118 196 122 226 128 258"/>
     <path d="M126 162 C130 192 134 224 138 256"/>
+    <path d="M134 176 C137 204 140 232 142 258"/>
   </g>
-  <!-- 骨骼层 -->
+  <!-- 骨骼层 + 体积光影 -->
   <g fill="var(--fig-bone)" stroke="var(--fig-body)" stroke-width="1.1" opacity=".92" stroke-linejoin="round">
     <path d="M112 34 C120 34 123 41 122 50 C121 60 120 68 118 76 L107 77 C105 68 104 58 105 48 C106 39 108 34 112 34 Z"/>
     <path d="M120 83 C122 92 122 101 122 109 C122 115 123 119 126 122 L107 124 C106 118 107 110 108 102 C109 93 110 87 111 83 Z"/>
     <path d="M117 131 C123 129 129 130 133 134 C141 162 149 196 159 228 L161 237 C157 243 149 245 143 242 C133 209 122 174 114 142 C112 136 113 132 117 131 Z"/>
     <path d="M148 242 C152 238 160 236 167 238 C174 240 182 246 184 254 C186 261 182 268 175 272 C167 277 156 276 149 271 C142 266 140 258 142 250 C143 246 145 244 148 242 Z"/>
-    <path d="M150 247 L176 251 L170 267 L152 264 Z" fill="none" stroke="var(--fig-body)" stroke-width=".8" opacity=".45"/>
   </g>
-  <!-- 指甲（覆盖远节指骨背侧，带甲半月） -->
+  <g fill="url(#atBone)" stroke="none" opacity=".92">
+    <path d="M112 34 C120 34 123 41 122 50 C121 60 120 68 118 76 L107 77 C105 68 104 58 105 48 C106 39 108 34 112 34 Z"/>
+    <path d="M120 83 C122 92 122 101 122 109 C122 115 123 119 126 122 L107 124 C106 118 107 110 108 102 C109 93 110 87 111 83 Z"/>
+    <path d="M117 131 C123 129 129 130 133 134 C141 162 149 196 159 228 L161 237 C157 243 149 245 143 242 C133 209 122 174 114 142 C112 136 113 132 117 131 Z"/>
+    <path d="M148 242 C152 238 160 236 167 238 C174 240 182 246 184 254 C186 261 182 268 175 272 C167 277 156 276 149 271 C142 266 140 258 142 250 C143 246 145 244 148 242 Z"/>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="1.5" opacity=".45" stroke-linecap="round">
+    <path d="M107 46 C106 56 107 66 109 74"/>
+    <path d="M109 92 C108 102 108 112 110 121"/>
+    <path d="M117 138 C126 172 136 206 146 236"/>
+  </g>
+  <!-- 关节缝隙柔和阴影 -->
+  <g fill="#000" opacity=".14" filter="url(#atB2)">
+    <ellipse cx="114" cy="79.5" rx="11" ry="2.2"/>
+    <ellipse cx="117" cy="124.5" rx="14" ry="2.8"/>
+    <ellipse cx="152" cy="239.5" rx="13" ry="2.6"/>
+  </g>
+  <!-- 大多角骨关节面 -->
+  <path d="M150 247 L176 251 L170 267 L152 264 Z" fill="none" stroke="var(--fig-body)" stroke-width=".8" opacity=".45"/>
+  <!-- 指甲 + 甲半月 + 甲面高光 + 甲襞 -->
   <ellipse cx="114" cy="43" rx="12" ry="17" fill="var(--fig-nail)" stroke="var(--fig-body)" stroke-width="1.2" opacity=".98" transform="rotate(-6 114 43)"/>
   <ellipse cx="116" cy="52" rx="6" ry="4" fill="var(--fig-bone)" opacity=".6" transform="rotate(-6 116 52)"/>
+  <path d="M114 43 L114 43" stroke="none"/>
+  <path d="M110 30 C109 38 109 48 111 55" fill="none" stroke="#fff" stroke-width="2.6" opacity=".38" stroke-linecap="round" filter="url(#atB2)" transform="rotate(-6 114 43)"/>
+  <g fill="none" stroke="var(--fig-body)" stroke-width="1.1" opacity=".6" stroke-linecap="round">
+    <path d="M101 54 C105 61 111 63 120 61"/>
+    <path d="M101 32 C99 39 99 47 101 54"/>
+  </g>
+  <!-- 鱼际纹（拇指腕掌关节纹） -->
+  <path d="M104 140 C114 156 122 182 126 214" fill="none" stroke="var(--fig-body)" stroke-width="1.1" opacity=".38" stroke-linecap="round"/>
   <!-- 皮肤轮廓 -->
   <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="none" stroke="var(--fig-body)" stroke-width="1.7" opacity=".85"/>
-  <!-- 关节纹 -->
+  <!-- 关节横纹 -->
   <g fill="none" stroke="var(--fig-body)" stroke-width="1" stroke-dasharray="2.5 3" opacity=".55" stroke-linecap="round">
     <path d="M100 82 L137 84"/>
     <path d="M97 128 L149 130"/>
@@ -7338,7 +7394,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 87;
+  const APP_VERSION = 88;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
     { v: 81, date: '2025-11-15', items: ['肾经全线重绘：足踝六穴按内踝实测重定位（修复连线出体与绕圈），阴谷归膝内侧，胸段KI22-27改旁开2寸（原误贴中线）', '手部穴全面订正：六经手图逐穴按指甲实测重定（少商/少泽/关冲/商阳等指认纠错），正面全景手穴同步修正'] },
