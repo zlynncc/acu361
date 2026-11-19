@@ -5656,15 +5656,18 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     </svg>`;
   }
 
-  /* 局部特写插图（头面/足背/足底…）：几何示意底模 + 书式右侧标签列，短引线不交叉 */
+  /* 局部特写插图（拇指/足底…）：渐变写实底模 + 右侧标签列。
+     focus=当前穴代号 → 仅标注该穴（不画经线），标签中文名+英文+代号 */
   function bodySVGInset(I, focus) {
     const D = AI_INSETS[I.k]; if (!D) return '';
-    const pts = Object.keys(I.pts).map(c => POINTS.find(q => q.c === c)).filter(Boolean)
-      .sort((a, b) => I.pts[a.c][1] - I.pts[b.c][1]);
-    const fsN = 13, fsC = 9, rowh = 20;
+    const enOf = c => (window.AC_EN && window.AC_EN.P[c] && window.AC_EN.P[c].en) || '';
+    const src = focus && I.pts[focus] ? { [focus]: I.pts[focus] } : I.pts;
+    const pts = Object.keys(src).map(c => POINTS.find(q => q.c === c)).filter(Boolean)
+      .sort((a, b) => src[a.c][1] - src[b.c][1]);
+    const fsN = 13, fsC = 9, rowh = 26;
     let prev = -1e9;
     const items = pts.map(q => {
-      const [x, y] = I.pts[q.c];
+      const [x, y] = src[q.c];
       const ly = Math.max(y + 4, prev + rowh);
       prev = ly;
       return { q, x, y, ly };
@@ -5672,8 +5675,9 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     const labels = items.map(it => {
       const sx = D.lx - 4, sy = it.ly - 4;
       const dx = it.x - sx, dy = it.y - sy, L = Math.hypot(dx, dy) || 1;
+      const en = enOf(it.q.c);
       return `<path d="M${sx} ${sy} L${it.x - dx / L * 7} ${it.y - dy / L * 7}" stroke="var(--fig-label)" stroke-width="1.1" stroke-dasharray="2 3" opacity=".7" fill="none"/>
-        <text x="${D.lx}" y="${it.ly}" font-size="${fsN}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".4" stroke="var(--card)" stroke-width="3.5" paint-order="stroke">${it.q.n}<tspan dx="4" font-size="${fsC}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif">${it.q.c}</tspan></text>`;
+        <text x="${D.lx}" y="${it.ly}" font-size="${fsN}" fill="var(--fig-name)" font-family="'PingFang SC','Microsoft YaHei',sans-serif" letter-spacing=".4" stroke="var(--card)" stroke-width="3.5" paint-order="stroke">${it.q.n}<tspan dx="4" font-size="${fsC}" font-weight="600" fill="var(--fig-code)" font-family="Georgia,serif">${it.q.c}</tspan></text>${en ? `<text x="${D.lx}" y="${it.ly + 13}" font-size="9" font-style="italic" fill="var(--fig-label)" font-family="Georgia,'Palatino',serif" letter-spacing=".4" stroke="var(--card)" stroke-width="3" paint-order="stroke">${en}</text>` : ''}`;
     }).join('');
     const dots = items.map(it => it.q.c === focus
       ? `<circle cx="${it.x}" cy="${it.y}" r="12" fill="var(--fig-dot)" opacity=".16"/>
@@ -5681,7 +5685,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       : `<circle cx="${it.x}" cy="${it.y}" r="4.5" fill="var(--fig-dot)" stroke="var(--fig-dot-ring)" stroke-width="1.6"><title>${it.q.c} ${it.q.n}</title></circle>`).join('');
     return `<svg viewBox="${D.vb}" class="fig-inset" role="img" aria-label="${D.t}">
       ${D.body}
-      ${I.line ? `<path d="${I.line}" fill="none" stroke="var(--fig-dot)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>` : ''}
+      ${(!focus && I.line) ? `<path d="${I.line}" fill="none" stroke="var(--fig-dot)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>` : ''}
       ${dots}${labels}
     </svg>`;
   }
@@ -6240,13 +6244,6 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
       <div class="map-wrap" style="margin-top:6px">
         ${bodySVGSeg(AIM(m.id), S)}
         <div class="seg-cap">${m.name}腧穴（${'一二三四五六七八'[i]}）<span class="seg-en"> ${S.t} · ${S.tEn} · ${S.a}–${S.b}</span></div>
-      </div>`).join('')}` : ''}
-      ${(AIM(m.id) && AIM(m.id).insets) ? `
-      <div class="sec-head"><h3>局部放大图 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Close-up Charts</span></h3><span class="hint">难辨部位 · close-up</span></div>
-      ${AIM(m.id).insets.map(I => `
-      <div class="map-wrap" style="margin-top:6px">
-        ${bodySVGInset(I)}
-        <div class="seg-cap">${AI_INSETS[I.k].t}<span class="seg-en"> ${AI_INSETS[I.k].tEn}</span></div>
       </div>`).join('')}` : ''}
 
       <div class="sec-head"><h3>本经腧穴 <span style="font-size:.78em;color:var(--ink3);font-weight:400;letter-spacing:.06em">Points of This Meridian</span></h3><span class="hint">按循行次序 · in course order</span></div>
@@ -7394,7 +7391,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   /* ---------------- 版本提醒 ---------------- */
   /* 部署目录放 version.json {"ver":N,"notice":"..."}；在线打开且远端 ver 更新时，页脚显示更新提示。
      离线/file:// 打开则静默跳过，不影响任何功能。发新版时改 APP_VERSION 与 version.json 同步。 */
-  const APP_VERSION = 88;
+  const APP_VERSION = 89;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
     { v: 81, date: '2025-11-15', items: ['肾经全线重绘：足踝六穴按内踝实测重定位（修复连线出体与绕圈），阴谷归膝内侧，胸段KI22-27改旁开2寸（原误贴中线）', '手部穴全面订正：六经手图逐穴按指甲实测重定（少商/少泽/关冲/商阳等指认纠错），正面全景手穴同步修正'] },
