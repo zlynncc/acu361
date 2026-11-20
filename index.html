@@ -4905,118 +4905,6 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
 
   /* 拇指解剖特写（少商/鱼际）：渐变写实版。底色全部取自站点配色变量，
      明暗光影用黑白渐变叠加实现（主题自适应）；左侧=解剖标注，右侧=穴位标签列 */
-  const AI_THUMB = `
-  <defs>
-    <filter id="atB2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2"/></filter>
-    <filter id="atB5" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
-    <linearGradient id="atSkin" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" style="stop-color:#000;stop-opacity:.16"/>
-      <stop offset=".42" style="stop-color:#fff;stop-opacity:.11"/>
-      <stop offset=".78" style="stop-color:#000;stop-opacity:.08"/>
-      <stop offset="1" style="stop-color:#000;stop-opacity:.18"/>
-    </linearGradient>
-    <linearGradient id="atBone" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" style="stop-color:#fff;stop-opacity:.34"/>
-      <stop offset=".5" style="stop-color:#fff;stop-opacity:0"/>
-      <stop offset="1" style="stop-color:#000;stop-opacity:.17"/>
-    </linearGradient>
-    <linearGradient id="atMus" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" style="stop-color:#fff;stop-opacity:.13"/>
-      <stop offset=".55" style="stop-color:#000;stop-opacity:0"/>
-      <stop offset="1" style="stop-color:#000;stop-opacity:.22"/>
-    </linearGradient>
-    <linearGradient id="atNail" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" style="stop-color:#fff;stop-opacity:.5"/>
-      <stop offset=".55" style="stop-color:#fff;stop-opacity:.08"/>
-      <stop offset="1" style="stop-color:#000;stop-opacity:.14"/>
-    </linearGradient>
-  </defs>
-  <!-- 皮肤基底 + 光影 -->
-  <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="var(--fig-body)" opacity=".28" stroke="none"/>
-  <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="url(#atSkin)" stroke="none"/>
-  <!-- 指尖立体高光 -->
-  <ellipse cx="114" cy="34" rx="13" ry="10" fill="#fff" opacity=".14" filter="url(#atB5)"/>
-  <!-- 鱼际肌（拇短展肌・拇短屈肌群）+ 光影与肌纤维 -->
-  <path d="M110 154 C120 166 130 184 136 206 C141 226 143 252 142 274 C141 288 136 295 130 294 C118 292 110 276 107 254 C104 228 106 194 109 168 Z" fill="var(--fig-muscle)" opacity=".42" stroke="none"/>
-  <path d="M110 154 C120 166 130 184 136 206 C141 226 143 252 142 274 C141 288 136 295 130 294 C118 292 110 276 107 254 C104 228 106 194 109 168 Z" fill="url(#atMus)" stroke="none"/>
-  <g fill="none" stroke="var(--card)" stroke-width="1" opacity=".5" stroke-linecap="round">
-    <path d="M116 168 C118 196 122 226 128 258"/>
-    <path d="M126 162 C130 192 134 224 138 256"/>
-    <path d="M134 176 C137 204 140 232 142 258"/>
-  </g>
-  <!-- 骨骼层 + 体积光影 -->
-  <g fill="var(--fig-bone)" stroke="var(--fig-body)" stroke-width="1.1" opacity=".92" stroke-linejoin="round">
-    <path d="M112 34 C120 34 123 41 122 50 C121 60 120 68 118 76 L107 77 C105 68 104 58 105 48 C106 39 108 34 112 34 Z"/>
-    <path d="M120 83 C122 92 122 101 122 109 C122 115 123 119 126 122 L107 124 C106 118 107 110 108 102 C109 93 110 87 111 83 Z"/>
-    <path d="M117 131 C123 129 129 130 133 134 C141 162 149 196 159 228 L161 237 C157 243 149 245 143 242 C133 209 122 174 114 142 C112 136 113 132 117 131 Z"/>
-    <path d="M148 242 C152 238 160 236 167 238 C174 240 182 246 184 254 C186 261 182 268 175 272 C167 277 156 276 149 271 C142 266 140 258 142 250 C143 246 145 244 148 242 Z"/>
-  </g>
-  <g fill="url(#atBone)" stroke="none" opacity=".92">
-    <path d="M112 34 C120 34 123 41 122 50 C121 60 120 68 118 76 L107 77 C105 68 104 58 105 48 C106 39 108 34 112 34 Z"/>
-    <path d="M120 83 C122 92 122 101 122 109 C122 115 123 119 126 122 L107 124 C106 118 107 110 108 102 C109 93 110 87 111 83 Z"/>
-    <path d="M117 131 C123 129 129 130 133 134 C141 162 149 196 159 228 L161 237 C157 243 149 245 143 242 C133 209 122 174 114 142 C112 136 113 132 117 131 Z"/>
-    <path d="M148 242 C152 238 160 236 167 238 C174 240 182 246 184 254 C186 261 182 268 175 272 C167 277 156 276 149 271 C142 266 140 258 142 250 C143 246 145 244 148 242 Z"/>
-  </g>
-  <g fill="none" stroke="#fff" stroke-width="1.5" opacity=".45" stroke-linecap="round">
-    <path d="M107 46 C106 56 107 66 109 74"/>
-    <path d="M109 92 C108 102 108 112 110 121"/>
-    <path d="M117 138 C126 172 136 206 146 236"/>
-  </g>
-  <!-- 关节缝隙柔和阴影 -->
-  <g fill="#000" opacity=".14" filter="url(#atB2)">
-    <ellipse cx="114" cy="79.5" rx="11" ry="2.2"/>
-    <ellipse cx="117" cy="124.5" rx="14" ry="2.8"/>
-    <ellipse cx="152" cy="239.5" rx="13" ry="2.6"/>
-  </g>
-  <!-- 大多角骨关节面 -->
-  <path d="M150 247 L176 251 L170 267 L152 264 Z" fill="none" stroke="var(--fig-body)" stroke-width=".8" opacity=".45"/>
-  <!-- 指甲 + 甲半月 + 甲面高光 + 甲襞 -->
-  <ellipse cx="114" cy="43" rx="12" ry="17" fill="var(--fig-nail)" stroke="var(--fig-body)" stroke-width="1.2" opacity=".98" transform="rotate(-6 114 43)"/>
-  <ellipse cx="116" cy="52" rx="6" ry="4" fill="var(--fig-bone)" opacity=".6" transform="rotate(-6 116 52)"/>
-  <path d="M114 43 L114 43" stroke="none"/>
-  <path d="M110 30 C109 38 109 48 111 55" fill="none" stroke="#fff" stroke-width="2.6" opacity=".38" stroke-linecap="round" filter="url(#atB2)" transform="rotate(-6 114 43)"/>
-  <g fill="none" stroke="var(--fig-body)" stroke-width="1.1" opacity=".6" stroke-linecap="round">
-    <path d="M101 54 C105 61 111 63 120 61"/>
-    <path d="M101 32 C99 39 99 47 101 54"/>
-  </g>
-  <!-- 鱼际纹（拇指腕掌关节纹） -->
-  <path d="M104 140 C114 156 122 182 126 214" fill="none" stroke="var(--fig-body)" stroke-width="1.1" opacity=".38" stroke-linecap="round"/>
-  <!-- 皮肤轮廓 -->
-  <path d="M112 24 C100 28 94 44 94 60 C93 76 92 96 96 116 C99 130 102 142 106 152 C112 172 122 200 128 232 C131 252 133 278 134 300 L216 300 C214 272 208 240 198 214 C190 192 180 172 170 156 C162 144 152 134 146 124 C140 112 136 92 134 74 C132 54 128 34 120 26 C117 23 114 22 112 24 Z" fill="none" stroke="var(--fig-body)" stroke-width="1.7" opacity=".85"/>
-  <!-- 关节横纹 -->
-  <g fill="none" stroke="var(--fig-body)" stroke-width="1" stroke-dasharray="2.5 3" opacity=".55" stroke-linecap="round">
-    <path d="M100 82 L137 84"/>
-    <path d="M97 128 L149 130"/>
-  </g>
-  <!-- 解剖结构标注（左列，中英文） -->
-  <g font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11" fill="var(--fig-label)" letter-spacing=".5">
-    <text x="14" y="38">指甲</text>
-    <text x="10" y="62">远节指骨</text>
-    <text x="10" y="106">近节指骨</text>
-    <text x="10" y="148">掌指关节</text>
-    <text x="10" y="192">第1掌骨</text>
-    <text x="10" y="232">鱼际肌</text>
-    <text x="10" y="270">大多角骨</text>
-  </g>
-  <g font-family="Georgia,'Palatino',serif" font-style="italic" font-size="8" fill="var(--fig-label)" opacity=".9" letter-spacing=".3">
-    <text x="14" y="48">Nail</text>
-    <text x="10" y="72">Distal phalanx</text>
-    <text x="10" y="116">Proximal phalanx</text>
-    <text x="10" y="158">MCP joint</text>
-    <text x="10" y="202">1st metacarpal</text>
-    <text x="10" y="242">Thenar muscles</text>
-    <text x="10" y="280">Trapezium</text>
-  </g>
-  <g fill="none" stroke="var(--fig-label)" stroke-width="1" stroke-dasharray="2 3" opacity=".65">
-    <path d="M44 34 L104 42"/>
-    <path d="M66 58 L122 64"/>
-    <path d="M66 102 L114 99"/>
-    <path d="M66 144 L112 130"/>
-    <path d="M62 188 L137 187"/>
-    <path d="M52 228 L124 223"/>
-    <path d="M66 266 L156 261"/>
-  </g>`;
-
   /* 肩胸解剖特写（中府/云门）样张：Netter 简化风。外侧在左、右缘直边=前正中线。
      分层从深到浅：躯干底→深层肋骨→胸小肌→胸大肌（扇形纤维+止点腱）→三角肌（V形多束）→
      肱骨头透视→锁骨/肩峰/喙突成型。表层肌 --fig-musc1、深层肌 --fig-musc2、肌腱 --fig-tendon */
@@ -5503,7 +5391,6 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
     foot: { vb: '0 0 300 300', lx: 176, t: '足背特写', tEn: 'Dorsum of foot', body: AI_FOOT },
     sole: { vb: '0 0 300 300', lx: 216, t: '足底特写', tEn: 'Sole of foot', body: AI_SOLE },
     medfoot: { vb: '0 0 320 300', lx: 238, t: '足内侧特写', tEn: 'Medial foot & ankle', body: AI_MEDFOOT },
-    thumb: { vb: '0 0 320 300', lx: 252, t: '拇指解剖特写', tEn: 'Thumb · anatomy', body: AI_THUMB },
     shoulder: { vb: '0 0 398 280', lx: 318, t: '肩胸解剖特写', tEn: 'Shoulder & chest · anatomy', body: AI_SHOULDER },
     uparm: { vb: '0 0 340 320', lx: 258, t: '上臂解剖特写', tEn: 'Upper arm · anatomy', body: AI_UPARM },
     elbow: { vb: '0 0 340 310', lx: 258, t: '肘前解剖特写', tEn: 'Elbow · anatomy', body: AI_ELBOW },
@@ -5558,8 +5445,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
         { k: 'uparm', pts: { LU3: [100, 139], LU4: [99, 165] }, line: '' },
         { k: 'elbow', pts: { LU5: [126, 170] }, line: '' },
         { k: 'forearm', pts: { LU6: [148, 150], LU7: [140, 276], LU8: [142, 287] }, line: '' },
-        { k: 'wrist', pts: { LU9: [92, 56], LU10: [80, 170] }, line: '' },
-        { k: 'thumb', pts: { LU11: [99, 62] }, line: '' }
+        { k: 'wrist', pts: { LU9: [92, 56], LU10: [80, 170] }, line: '' }
       ],
       lf: [660, 882],
       pts: { LU1:[214,306], LU2:[214,290], LU3:[163,429], LU4:[161,443], LU5:[150,514], LU6:[122,591], LU7:[92,676], LU8:[90,683], LU9:[78,715], LU10:[50,740], LU11:[7,766] },
@@ -7922,7 +7808,7 @@ m115 -270 c3 -5 1 -10 -4 -10 -6 0 -11 5 -11 10 0 6 2 10 4 10 3 0 8 -4 11
   const APP_VERSION = 92;
   /* 更新日志：只保留最新一条（v、date、items），「我的」页显示 */
   const CHANGELOG = [
-    { v: 92, date: '2026-11-20', items: ['少商详情页新增 AI 解剖实绘取穴图：豆包底图+程序标注，10 组中英文解剖结构、红点定位甲根角旁 0.1 寸'] },
+    { v: 92, date: '2026-11-20', items: ['少商详情页新增 AI 解剖实绘取穴图：豆包底图+程序标注，10 组中英文解剖结构、红点定位甲根角旁 0.1 寸；同时移除原矢量拇指特写图'] },
     { v: 91, date: '2026-11-19', items: ['肺经 11 穴详情页新增区域解剖取穴图：肩胸（中府/云门）、上臂（天府/侠白）、肘前（尺泽）、前臂（孔最/列缺/经渠）、腕掌（太渊/鱼际）五张渐变写实解剖图，骨性标志与肌肉中英文标注', '拇指解剖图改为少商专图；穴位特写图统一改为焦点模式（只标本穴）', '修复列表卡片标题排版：中文名不再被英文挤压折行，中文一行、英文移至下一行'] },
   ];
   function checkUpdate() {
